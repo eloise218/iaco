@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
@@ -50,6 +51,13 @@ export default async function DashboardPage({ params }: Props) {
         redirect(`/${locale}/onboarding`);
     }
 
+    // Normalisation : JSON -> string[]
+    const objectives: string[] = Array.isArray(userProfile.investmentObjectives)
+        ? userProfile.investmentObjectives.filter(
+            (x): x is string => typeof x === "string"
+            )
+        : [];
+
     return (
         <DashboardContent
             user={{
@@ -60,7 +68,7 @@ export default async function DashboardPage({ params }: Props) {
             }}
             profile={{
                 experienceLevel: userProfile.experienceLevel,
-                objectives: userProfile.investmentObjectives || [],
+                objectives,
             }}
         />
     );

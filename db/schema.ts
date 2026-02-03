@@ -1,90 +1,112 @@
 import { sql } from "drizzle-orm";
 import {
+  mysqlTable,
   timestamp,
-  pgTable,
   text,
-  integer,
+  varchar,
   boolean,
-  uuid,
+  char,
   json,
-  primaryKey,
+  decimal,
   index,
   uniqueIndex,
-  decimal,
-  jsonb,
-} from "drizzle-orm/pg-core";
-export const users = pgTable("users", {
-  id: text("id").primaryKey(),
-  phone: text("phone"),
-  email: text("email").notNull(),
+} from "drizzle-orm/mysql-core";
+
+// Users
+export const users = mysqlTable("users", {
+  // In MySQL/MariaDB, prefer varchar/char for IDs
+  id: varchar("id", { length: 255 }).primaryKey(),
+
+  phone: varchar("phone", { length: 50 }),
+  email: varchar("email", { length: 255 }).notNull(),
+
   emailVerified: boolean("email_verified").default(false),
   verified: boolean("verified").default(false),
-  verificationStatus: text("verification_status").default("pending"),
-  name: text("name"),
+  verificationStatus: varchar("verification_status", { length: 50 }).default(
+    "pending"
+  ),
+
+  name: varchar("name", { length: 255 }),
   image: text("image"),
 
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  // MySQL “ON UPDATE CURRENT_TIMESTAMP” support varies; safest is app-level updates.
+  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
 });
 
 // Sessions table - required by better-auth (singular name to match existing DB)
-export const session = pgTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
+export const session = mysqlTable("session", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  userId: varchar("user_id", { length: 255 })
     .references(() => users.id)
     .notNull(),
+
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull(),
+
   createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
-  ipAddress: text("ip_address"),
+  updatedAt: timestamp("updated_at").notNull().$onUpdate(() => new Date()),
+
+  ipAddress: varchar("ip_address", { length: 255 }),
   userAgent: text("user_agent"),
 });
 
 // Accounts table - required for OAuth (singular name to match existing DB)
-export const account = pgTable("account", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
+export const account = mysqlTable("account", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  userId: varchar("user_id", { length: 255 })
     .references(() => users.id)
     .notNull(),
-  accountId: text("account_id").notNull(),
-  providerId: text("provider_id").notNull(),
+
+  accountId: varchar("account_id", { length: 255 }).notNull(),
+  providerId: varchar("provider_id", { length: 255 }).notNull(),
+
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
+
   accessTokenExpiresAt: timestamp("access_token_expires_at"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: text("scope"),
+
+  scope: varchar("scope", { length: 255 }),
   password: text("password"),
+
   createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull().$onUpdate(() => new Date()),
 });
 
 // Verification table - required by better-auth
-export const verification = pgTable("verification", {
-  id: text("id").primaryKey(),
-  identifier: text("identifier").notNull(),
+export const verification = mysqlTable("verification", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  identifier: varchar("identifier", { length: 255 }).notNull(),
   value: text("value").notNull(),
+
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at"),
-  updatedAt: timestamp("updated_at"),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
 // User profiles for onboarding data
-export const userProfiles = pgTable(
+export const userProfiles = mysqlTable(
   "user_profiles",
   {
-    userId: text("user_id")
+    userId: varchar("user_id", { length: 255 })
       .primaryKey()
       .references(() => users.id, { onDelete: "cascade" }),
-    experienceLevel: text("experience_level").notNull().default("beginner"),
-    investmentObjectives: text("investment_objectives")
-      .array()
-      .default([]),
-    riskTolerance: text("risk_tolerance").default("low"),
+
+    experienceLevel: varchar("experience_level", { length: 50 })
+      .notNull()
+      .default("beginner"),
+
+    // MySQL/MariaDB: no text[] arrays -> store as JSON
+    investmentObjectives: json("investment_objectives")
+      .default(sql`(JSON_ARRAY())`),
+
+    riskTolerance: varchar("risk_tolerance", { length: 50 }).default("low"),
     completedOnboarding: boolean("completed_onboarding").default(false),
+
     createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
   },
   (table) => ({
     experienceLevelIdx: index("user_profiles_experience_level_idx").on(
@@ -97,18 +119,21 @@ export const userProfiles = pgTable(
 );
 
 // Encrypted Binance API credentials
-export const binanceCredentials = pgTable(
+export const binanceCredentials = mysqlTable(
   "binance_credentials",
   {
-    userId: text("user_id")
+    userId: varchar("user_id", { length: 255 })
       .primaryKey()
       .references(() => users.id, { onDelete: "cascade" }),
+
     apiKeyEncrypted: text("api_key_encrypted").notNull(),
     apiSecretEncrypted: text("api_secret_encrypted").notNull(),
+
     isActive: boolean("is_active").default(true),
     lastSync: timestamp("last_sync"),
+
     createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
   },
   (table) => ({
     isActiveIdx: index("binance_credentials_is_active_idx").on(table.isActive),
@@ -117,18 +142,24 @@ export const binanceCredentials = pgTable(
 );
 
 // Portfolio holdings
-export const portfolioAssets = pgTable(
+export const portfolioAssets = mysqlTable(
   "portfolio_assets",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: text("user_id")
+    // Replace uuid() with char(36) and generate in app
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    symbol: text("symbol").notNull(),
+
+    symbol: varchar("symbol", { length: 50 }).notNull(),
     amount: decimal("amount", { precision: 20, scale: 8 }).notNull(),
+
     lastSync: timestamp("last_sync").defaultNow(),
     createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
   },
   (table) => ({
     userSymbolIdx: uniqueIndex("portfolio_assets_user_symbol_idx").on(
@@ -142,16 +173,23 @@ export const portfolioAssets = pgTable(
 );
 
 // Chat message history
-export const chatMessages = pgTable(
+export const chatMessages = mysqlTable(
   "chat_messages",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: text("user_id")
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
+
     content: text("content").notNull(),
-    role: text("role").notNull().$type<"user" | "assistant">(),
-    metadata: jsonb("metadata").default(sql`'{}'::jsonb`),
+    role: varchar("role", { length: 20 }).notNull().$type<"user" | "assistant">(),
+
+    // jsonb -> json (default empty object)
+    metadata: json("metadata").default(sql`(JSON_OBJECT())`),
+
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => ({
@@ -161,17 +199,18 @@ export const chatMessages = pgTable(
   })
 );
 
-// Price cache for performance
-export const priceCache = pgTable(
+// Price cache
+export const priceCache = mysqlTable(
   "price_cache",
   {
-    symbol: text("symbol").primaryKey(),
+    symbol: varchar("symbol", { length: 50 }).primaryKey(),
     price: decimal("price", { precision: 20, scale: 8 }).notNull(),
     change24h: decimal("change_24h", { precision: 20, scale: 8 }).notNull(),
     changePercent24h: decimal("change_percent_24h", {
       precision: 10,
       scale: 4,
     }).notNull(),
+
     lastUpdated: timestamp("last_updated").defaultNow(),
   },
   (table) => ({

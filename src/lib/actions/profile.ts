@@ -105,7 +105,7 @@ export async function createUserProfile(
     }
 
     // Create new profile
-    const newProfile = await db
+    await db
       .insert(userProfiles)
       .values({
         userId: session.user.id,
@@ -113,8 +113,13 @@ export async function createUserProfile(
         investmentObjectives: validatedInput.investmentObjectives,
         riskTolerance: validatedInput.riskTolerance,
         completedOnboarding: false,
-      })
-      .returning();
+      });
+
+    const newProfile = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, session.user.id))
+      .limit(1);
 
     // Revalidate relevant paths
     revalidatePath("/onboarding");
@@ -178,14 +183,19 @@ export async function updateUserProfile(
     }
 
     // Update profile
-    const updatedProfile = await db
+    await db
       .update(userProfiles)
       .set({
         ...validatedInput,
         updatedAt: new Date(),
       })
+      .where(eq(userProfiles.userId, session.user.id));
+
+    const updatedProfile = await db
+      .select()
+      .from(userProfiles)
       .where(eq(userProfiles.userId, session.user.id))
-      .returning();
+      .limit(1);
 
     // Revalidate relevant paths
     revalidatePath("/profile");
@@ -253,8 +263,8 @@ export async function completeOnboarding(
           investmentObjectives: validatedInput.investmentObjectives,
           riskTolerance: validatedInput.riskTolerance,
           completedOnboarding: true,
-        })
-        .returning();
+        });
+
     } else {
       // Update existing profile and mark onboarding as complete
       profile = await db
@@ -266,9 +276,15 @@ export async function completeOnboarding(
           completedOnboarding: true,
           updatedAt: new Date(),
         })
-        .where(eq(userProfiles.userId, session.user.id))
-        .returning();
+        .where(eq(userProfiles.userId, session.user.id));
+
     }
+
+    profile = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, session.user.id))
+      .limit(1);
 
     // Revalidate relevant paths
     revalidatePath("/onboarding");
@@ -320,11 +336,9 @@ export async function skipOnboarding(): Promise<ActionResponse> {
       .where(eq(userProfiles.userId, session.user.id))
       .limit(1);
 
-    let profile;
-
     if (existingProfile.length === 0) {
       // Create new profile with default settings
-      profile = await db
+      await db
         .insert(userProfiles)
         .values({
           userId: session.user.id,
@@ -332,19 +346,23 @@ export async function skipOnboarding(): Promise<ActionResponse> {
           investmentObjectives: ["learning"],
           riskTolerance: "low",
           completedOnboarding: true,
-        })
-        .returning();
+        });
     } else {
       // Update existing profile to mark onboarding as complete
-      profile = await db
+      await db
         .update(userProfiles)
         .set({
           completedOnboarding: true,
           updatedAt: new Date(),
         })
-        .where(eq(userProfiles.userId, session.user.id))
-        .returning();
+        .where(eq(userProfiles.userId, session.user.id));
     }
+
+    const profile = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, session.user.id))
+      .limit(1);
 
     // Revalidate relevant paths
     revalidatePath("/onboarding");

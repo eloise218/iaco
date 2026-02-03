@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { auth } from '@/lib/auth';
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -63,6 +64,7 @@ export async function POST(req: Request) {
 
     // Subtask 3.2: Load user profile for context personalization
     let profile;
+;
     try {
       const dbProfile = await db.query.userProfiles.findFirst({
         where: eq(userProfiles.userId, session.user.id),
@@ -70,9 +72,15 @@ export async function POST(req: Request) {
 
       // Transform database profile to match expected UserProfile type
       if (dbProfile && dbProfile.investmentObjectives) {
+    
+        const objectives: string[] = Array.isArray(dbProfile.investmentObjectives)
+          ? dbProfile.investmentObjectives.filter(
+            (x): x is string => typeof x === "string"
+            )
+          : [];        
         profile = {
           experienceLevel: dbProfile.experienceLevel,
-          investmentObjectives: dbProfile.investmentObjectives,
+          investmentObjectives: objectives,
           riskTolerance: dbProfile.riskTolerance || 'low',
         };
       }

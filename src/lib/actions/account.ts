@@ -23,15 +23,20 @@ export async function updateUserDetails(input: UpdateUserDetailsInput): Promise<
 
     const validated = updateUserDetailsSchema.parse(input);
 
-    const updated = await db
+    await db
       .update(users)
       .set({
         ...(validated.name ? { name: validated.name } : {}),
         ...(validated.phone ? { phone: validated.phone } : {}),
         updatedAt: new Date(),
       })
+      .where(eq(users.id, session.user.id));
+
+    const updated = await db
+      .select()
+      .from(users)
       .where(eq(users.id, session.user.id))
-      .returning();
+      .limit(1);
 
     revalidatePath('/account');
     return { success: true, data: updated[0], message: 'Account updated' };
@@ -53,7 +58,7 @@ export async function saveBinanceCredentials(input: BinanceCredentialsInput): Pr
     const encKey = encrypt(validated.apiKey);
     const encSecret = encrypt(validated.apiSecret);
 
-    const upserted = await db
+    await db
       .insert(binanceCredentials)
       .values({
         userId: session.user.id,
@@ -62,16 +67,20 @@ export async function saveBinanceCredentials(input: BinanceCredentialsInput): Pr
         isActive: true,
         updatedAt: new Date(),
       })
-      .onConflictDoUpdate({
-        target: binanceCredentials.userId,
-        set: {
+      .onDuplicateKeyUpdate({
+        set: {          
           apiKeyEncrypted: encKey,
           apiSecretEncrypted: encSecret,
           isActive: true,
           updatedAt: new Date(),
         },
-      })
-      .returning();
+      });
+    
+    const upserted = await db
+      .select()
+      .from(binanceCredentials)
+      .where(eq(binanceCredentials.userId, session.user.id))
+      .limit(1);
 
     revalidatePath('/account');
     return { success: true, data: upserted[0], message: 'Binance credentials saved' };
