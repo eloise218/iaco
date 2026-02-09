@@ -1,0 +1,2 @@
+wsl
+cd /home/eloise/iaco
