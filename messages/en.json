@@ -335,14 +335,83 @@
             "subtitle": "Sign in to continue your crypto learning journey",
             "google": "Continue with Google",
             "noAccount": "Don't have an account?",
-            "signUp": "Sign up"
+            "signUp": "Sign up",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "your@email.com",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Your password",
+            "forgotPassword": "Forgot password?",
+            "submitEmail": "Sign in",
+            "or": "or",
+            "loading": "Signing in...",
+            "genericError": "Incorrect email or password",
+            "termsNotice": "By continuing, you agree to our Terms of Service and Privacy Policy."
         },
         "signUp": {
             "title": "Create your account",
             "subtitle": "Start your 21-day crypto learning challenge",
             "google": "Continue with Google",
             "hasAccount": "Already have an account?",
-            "signIn": "Sign in"
+            "signIn": "Sign in",
+            "nameLabel": "Full name",
+            "namePlaceholder": "Your name",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "your@email.com",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Minimum 8 characters",
+            "confirmPasswordLabel": "Confirm password",
+            "confirmPasswordPlaceholder": "Repeat your password",
+            "submitEmail": "Sign up",
+            "or": "or",
+            "loading": "Signing up...",
+            "passwordMismatch": "Passwords do not match",
+            "passwordTooShort": "Password must be at least 8 characters",
+            "genericError": "An error occurred. Please try again.",
+            "termsLabel": "I agree to IACO's Terms and Conditions",
+            "termsDescription": "By creating an account, you accept our",
+            "termsLink": "Terms of Service",
+            "and": "and",
+            "privacyLink": "Privacy Policy",
+            "verificationSent": {
+                "title": "Check your email",
+                "message": "A verification link has been sent to {email}",
+                "checkSpam": "Check your spam folder if you don't see the email.",
+                "backToSignIn": "Back to sign in"
+            }
+        },
+        "verifyEmail": {
+            "loading": {
+                "title": "Verifying...",
+                "message": "We are verifying your email address"
+            },
+            "success": {
+                "title": "Email verified!",
+                "message": "Your email address has been verified successfully. You can now use your account.",
+                "continue": "Continue"
+            },
+            "error": {
+                "title": "Verification error",
+                "message": "The verification link is invalid or has expired.",
+                "retry": "Try again"
+            }
+        }
+    },
+    "learn": {
+        "title": "Learning Center",
+        "subtitle": "Discover our educational videos to master cryptocurrency at your own pace",
+        "search": "Search for a video...",
+        "filters": {
+            "title": "Filters",
+            "allLevels": "All levels",
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "allTopics": "All topics",
+            "reset": "Reset"
+        },
+        "results": "{count, plural, =0 {No videos} one {# video} other {# videos}}",
+        "noResults": {
+            "title": "No videos found",
+            "message": "Try adjusting your filters or search"
         }
     }
 }

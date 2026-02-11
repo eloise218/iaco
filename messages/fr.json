@@ -335,14 +335,83 @@
             "subtitle": "Connecte-toi pour continuer ton parcours d'apprentissage crypto",
             "google": "Continuer avec Google",
             "noAccount": "Tu n'as pas de compte ?",
-            "signUp": "S'inscrire"
+            "signUp": "S'inscrire",
+            "emailLabel": "Adresse email",
+            "emailPlaceholder": "ton@email.com",
+            "passwordLabel": "Mot de passe",
+            "passwordPlaceholder": "Ton mot de passe",
+            "forgotPassword": "Mot de passe oublié ?",
+            "submitEmail": "Se connecter",
+            "or": "ou",
+            "loading": "Connexion...",
+            "genericError": "Email ou mot de passe incorrect",
+            "termsNotice": "En continuant, tu acceptes nos Conditions d'utilisation et notre Politique de confidentialité."
         },
         "signUp": {
             "title": "Crée ton compte",
             "subtitle": "Commence ton défi d'apprentissage crypto de 21 jours",
             "google": "Continuer avec Google",
             "hasAccount": "Tu as déjà un compte ?",
-            "signIn": "Se connecter"
+            "signIn": "Se connecter",
+            "nameLabel": "Nom complet",
+            "namePlaceholder": "Ton nom",
+            "emailLabel": "Adresse email",
+            "emailPlaceholder": "ton@email.com",
+            "passwordLabel": "Mot de passe",
+            "passwordPlaceholder": "Minimum 8 caractères",
+            "confirmPasswordLabel": "Confirmer le mot de passe",
+            "confirmPasswordPlaceholder": "Répète ton mot de passe",
+            "submitEmail": "S'inscrire",
+            "or": "ou",
+            "loading": "Inscription...",
+            "passwordMismatch": "Les mots de passe ne correspondent pas",
+            "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+            "genericError": "Une erreur est survenue. Réessaie.",
+            "termsLabel": "J'accepte les Conditions Générales d'IACO",
+            "termsDescription": "En créant un compte, tu acceptes nos",
+            "termsLink": "Conditions d'utilisation",
+            "and": "et notre",
+            "privacyLink": "Politique de confidentialité",
+            "verificationSent": {
+                "title": "Vérifie ton email",
+                "message": "Un lien de vérification a été envoyé à {email}",
+                "checkSpam": "Vérifie aussi tes spams si tu ne trouves pas l'email.",
+                "backToSignIn": "Retour à la connexion"
+            }
+        },
+        "verifyEmail": {
+            "loading": {
+                "title": "Vérification en cours...",
+                "message": "Nous vérifions ton adresse email"
+            },
+            "success": {
+                "title": "Email vérifié !",
+                "message": "Ton adresse email a été vérifiée avec succès. Tu peux maintenant utiliser ton compte.",
+                "continue": "Continuer"
+            },
+            "error": {
+                "title": "Erreur de vérification",
+                "message": "Le lien de vérification est invalide ou a expiré.",
+                "retry": "Réessayer"
+            }
+        }
+    },
+    "learn": {
+        "title": "Centre d'Apprentissage",
+        "subtitle": "Découvre nos vidéos éducatives pour maîtriser les cryptomonnaies à ton rythme",
+        "search": "Rechercher une vidéo...",
+        "filters": {
+            "title": "Filtres",
+            "allLevels": "Tous les niveaux",
+            "beginner": "Débutant",
+            "intermediate": "Intermédiaire",
+            "allTopics": "Tous les sujets",
+            "reset": "Réinitialiser"
+        },
+        "results": "{count, plural, =0 {Aucune vidéo} one {# vidéo} other {# vidéos}}",
+        "noResults": {
+            "title": "Aucune vidéo trouvée",
+            "message": "Essaie de modifier tes filtres ou ta recherche"
         }
     }
 }

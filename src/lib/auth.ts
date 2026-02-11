@@ -8,7 +8,7 @@ import { users, session, account, verification } from "@/db/schema";
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   database: drizzleAdapter(db, {
-    provider: "pg",
+    provider: "mysql",
     schema: {
       user: users,
       session: session,
@@ -16,11 +16,33 @@ export const auth = betterAuth({
       verification: verification,
     },
   }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      // Pour les tests : afficher le lien dans la console
+      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      console.log("🔑 RESET PASSWORD LINK");
+      console.log(`📧 Email: ${user.email}`);
+      console.log(`🔗 Link: ${url}`);
+      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url, token }) => {
+      // Pour les tests : afficher le lien dans la console (console.error pour ne pas être filtré par Turbopack)
+      console.error("\n\n========== EMAIL VERIFICATION LINK ==========");
+      console.error("Email: " + user.email);
+      console.error("Link: " + url);
+      console.error("==============================================\n\n");
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      // Ensure Google account chooser is shown each time and allow offline access for refresh tokens
       prompt: "select_account",
       accessType: "offline",
     },
