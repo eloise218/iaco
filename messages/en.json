@@ -247,7 +247,8 @@
         },
         "dailyChallenge": {
             "title": "Daily Challenge",
-            "todaysChallenge": "Today's Challenge: Crypto Basics",
+            "dayTitle": "Day {day} / 14",
+            "completed": "All challenges completed!",
             "duration": "5 min read",
             "xp": "+50 XP"
         },
@@ -394,6 +395,16 @@
                 "message": "The verification link is invalid or has expired.",
                 "retry": "Try again"
             }
+        }
+    },
+    "challenge": {
+        "backToDashboard": "Back to dashboard",
+        "dayLabel": "Day {current} of {total}",
+        "progress": "Progress",
+        "reading": "Today's reading",
+        "completed": {
+            "title": "Congrats, you completed all 14 challenges!",
+            "message": "You've completed all daily challenges. Keep learning with videos and the AI coach!"
         }
     },
     "learn": {

@@ -247,7 +247,8 @@
         },
         "dailyChallenge": {
             "title": "Défi du jour",
-            "todaysChallenge": "Défi du jour : Les bases des cryptos",
+            "dayTitle": "Jour {day} / 14",
+            "completed": "Tous les défis terminés !",
             "duration": "5 min de lecture",
             "xp": "+50 XP"
         },
@@ -394,6 +395,16 @@
                 "message": "Le lien de vérification est invalide ou a expiré.",
                 "retry": "Réessayer"
             }
+        }
+    },
+    "challenge": {
+        "backToDashboard": "Retour au dashboard",
+        "dayLabel": "Jour {current} sur {total}",
+        "progress": "Progression",
+        "reading": "Lecture du jour",
+        "completed": {
+            "title": "Bravo, tu as terminé les 14 défis !",
+            "message": "Tu as complété tous les défis quotidiens. Continue ton apprentissage avec les vidéos et le coach IA !"
         }
     },
     "learn": {

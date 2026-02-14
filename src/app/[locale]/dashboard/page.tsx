@@ -58,6 +58,16 @@ export default async function DashboardPage({ params }: Props) {
             )
         : [];
 
+    // Calculate challenge day from user's createdAt
+    const userData = await db.query.users.findFirst({
+        where: eq(users.id, session.user.id),
+        columns: { createdAt: true },
+    });
+    const createdAt = userData?.createdAt ? new Date(userData.createdAt) : new Date();
+    const diffMs = new Date().getTime() - createdAt.getTime();
+    const challengeDay = Math.min(Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1, 14);
+    const challengeCompleted = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1 > 14;
+
     return (
         <DashboardContent
             user={{
@@ -70,6 +80,8 @@ export default async function DashboardPage({ params }: Props) {
                 experienceLevel: userProfile.experienceLevel,
                 objectives,
             }}
+            challengeDay={challengeDay}
+            challengeCompleted={challengeCompleted}
         />
     );
 }

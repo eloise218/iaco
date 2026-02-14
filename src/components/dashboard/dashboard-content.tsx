@@ -35,9 +35,11 @@ interface DashboardContentProps {
         experienceLevel: string;
         objectives: string[];
     };
+    challengeDay: number;
+    challengeCompleted: boolean;
 }
 
-export function DashboardContent({ user, profile }: DashboardContentProps) {
+export function DashboardContent({ user, profile, challengeDay, challengeCompleted }: DashboardContentProps) {
     const router = useRouter();
     const t = useTranslations('dashboard');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -312,36 +314,41 @@ export function DashboardContent({ user, profile }: DashboardContentProps) {
                             <BookOpenIcon className="w-5 h-5 text-purple-400" />
                             {t('dailyChallenge.title')}
                         </h2>
-                        <div className="learning-card bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300 cursor-pointer group">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 rounded-xl bg-slate-800">
-                                    <TargetIcon className="w-6 h-6 text-purple-400" />
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors">
-                                        {t('dailyChallenge.todaysChallenge')}
-                                    </h3>
-                                    <div className="flex items-center gap-3 text-sm text-slate-400">
-                                        <span>{t('dailyChallenge.duration')}</span>
-                                        <span>•</span>
-                                        <span>{t('dailyChallenge.xp')}</span>
+                        <Link href="/challenge" className="learning-card block group">
+                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300">
+                                <div className="flex items-center gap-4">
+                                    <div className={`p-3 rounded-xl ${challengeCompleted ? 'bg-emerald-500/20' : 'bg-slate-800'}`}>
+                                        <TargetIcon className={`w-6 h-6 ${challengeCompleted ? 'text-emerald-400' : 'text-purple-400'}`} />
                                     </div>
+                                    <div className="flex-1">
+                                        <h3 className={`text-lg font-semibold text-white transition-colors ${challengeCompleted ? 'group-hover:text-emerald-400' : 'group-hover:text-purple-400'}`}>
+                                            {challengeCompleted
+                                                ? t('dailyChallenge.completed')
+                                                : t('dailyChallenge.dayTitle', { day: challengeDay })}
+                                        </h3>
+                                        <div className="flex items-center gap-3 text-sm text-slate-400">
+                                            <span>{t('dailyChallenge.duration')}</span>
+                                            <span>•</span>
+                                            <span>{t('dailyChallenge.xp')}</span>
+                                        </div>
+                                    </div>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="bg-slate-800 hover:bg-slate-700 text-white"
+                                    >
+                                        <PlayIcon className="w-4 h-4" weight="fill" />
+                                    </Button>
                                 </div>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="bg-slate-800 hover:bg-slate-700 text-white"
-                                >
-                                    <PlayIcon className="w-4 h-4" weight="fill" />
-                                </Button>
+                                {/* Progress bar */}
+                                <div className="mt-4 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-500 ${challengeCompleted ? 'bg-gradient-to-r from-emerald-500 to-green-400 w-full' : 'bg-gradient-to-r from-purple-500 to-pink-500'}`}
+                                        style={challengeCompleted ? undefined : { width: `${Math.round((challengeDay / 14) * 100)}%` }}
+                                    />
+                                </div>
                             </div>
-                            {/* Progress bar */}
-                            <div className="mt-4 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[0%]"
-                                />
-                            </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
 

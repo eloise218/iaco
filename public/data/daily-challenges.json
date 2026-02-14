@@ -1,0 +1,156 @@
+[
+  {
+    "day": 1,
+    "title": {
+      "fr": "Jour 1 : Pourquoi la crypto existe",
+      "en": "Day 1: Why crypto exists"
+    },
+    "content": {
+      "fr": "# 📅 Jour 1 — Pourquoi la crypto existe\n\n## 🎬 Introduction\n\nAujourd'hui, on commence par une question simple mais essentielle : **pourquoi la crypto existe ?**\n\nAvant de parler d'investissement, de projets ou de stratégies, il est important de comprendre **l'origine de la crypto**. C'est cette compréhension qui va te permettre de prendre de **meilleures décisions** et d'éviter beaucoup d'erreurs.\n\n## 🪙 Pourquoi Bitcoin a été créé\n\n**Bitcoin**, la première crypto, n'a pas été créé pour devenir riche rapidement.\n\nIl a été créé pour répondre à un problème précis : **la confiance dans le système financier**.\n\nPendant longtemps, notre argent dépendait d'**intermédiaires** :\n\n- Les banques 🏦\n- Les États\n- Les institutions financières\n\nLe problème, c'est que ces intermédiaires peuvent :\n\n- Faire faillite\n- Bloquer des comptes\n- Créer de l'argent sans limite\n\n**Bitcoin** propose une **alternative** :\n\n👉 Un système où **personne ne contrôle ton argent** à ta place.\n\n## 🏦 Le problème des banques et de la confiance\n\nDans le système bancaire classique, tu dois faire **confiance** :\n\n- À ta banque\n- Au gouvernement\n- Aux règles en place\n\nMais cette confiance n'est pas toujours méritée.\n\nLes **crises financières** ont montré que :\n\n- Les banques peuvent prendre des risques énormes\n- Les pertes sont souvent payées par les citoyens\n- L'argent peut perdre de la valeur avec le temps\n\n**Bitcoin** part d'une idée simple 💡\n\n👉 Et si on n'avait plus besoin de faire confiance à quelqu'un ?\n\nÀ la place, on fait confiance :\n\n- Aux **mathématiques**\n- À un **système transparent**\n- À des **règles écrites directement dans le code**\n\n## 🔁 La notion de système alternatif\n\n**Bitcoin** n'est pas là pour remplacer tout le système du jour au lendemain.\n\nC'est une **option en plus**.\n\nUn **système alternatif** signifie :\n\n- Pas de chef\n- Pas de décision arbitraire\n- Des règles connues à l'avance\n\nPersonne ne peut :\n\n- Créer plus de **Bitcoin** que prévu\n- Bloquer ton argent sans raison\n- Modifier les règles en secret\n\nC'est cette logique qui a donné naissance à tout l'univers de la **crypto** 🌍\n\n## 📚 Anecdote — 2008, le déclic\n\n**Bitcoin** est né juste après la **crise financière de 2008**.\n\nÀ cette époque :\n\n- De grandes banques ont pris des risques énormes\n- Le système financier s'est effondré\n- Les États ont sauvé les banques avec l'argent public\n\nC'est dans ce contexte que **Satoshi Nakamoto** publie le **livre blanc** du projet.\n\nDans le tout premier bloc de **Bitcoin**, il inscrit cette phrase :\n\n\"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.\"\n\nCette phrase fait référence à un article parlant du sauvetage des banques par les États.\n\nCe n'était pas un hasard.\n\nC'était une manière de rappeler **pourquoi Bitcoin a été créé**.\n\n## 🎯 Objectif du jour\n\nÀ la fin de ce premier jour, tu as posé la **première brique** de ton parcours crypto 🧱\n\nTu comprends désormais le **sens et l'utilité de la crypto**, au-delà du prix ou de la spéculation.\n\n---\n\n👉 Demain, tu commenceras à comprendre comment ce système fonctionne concrètement et pourquoi la **blockchain** est au cœur de toute la crypto.",
+      "en": "Day 1 content to fill..."
+    }
+  },
+  {
+    "day": 2,
+    "title": {
+      "fr": "Jour 2 : La blockchain, simplement",
+      "en": "Day 2: Blockchain, simply explained"
+    },
+    "content": {
+      "fr": "# 📅 Jour 2 — La blockchain, simplement\n\n## 🎬 Introduction\n\nHier, tu as compris pourquoi la **crypto** existe.\nAujourd'hui, on va répondre à une nouvelle question essentielle :\n\n👉 **Comment ce système fonctionne concrètement ?**\n\nAu cœur de toute la **crypto**, il y a un élément central : la **blockchain**.\nL'objectif du jour est de comprendre **ce que c'est**, simplement.\n\n## 📘 La blockchain : un registre public\n\nUne **blockchain**, c'est avant tout un **registre**.\nUn registre, c'est une liste d'informations organisées dans le temps et consultables par tout le monde.\n\nDans le cas de la blockchain, ce registre peut contenir :\n\n- **Des transactions** (ex : Alice envoie 0,1 bitcoin à Bob)\n- **Des échanges de valeur** (ex : payer un service, des frais sur une application, l'accès à une fonctionnalité)\n- **Des informations vérifiables** (ex : prouver qui possède un **NFT**, un objet de jeu, une œuvre numérique)\n\nLa différence majeure, c'est que ce registre est **public** 🌍\n👉 Tout le monde peut le consulter, et **personne ne peut le modifier à sa guise**.\n\n## 🌍 Plusieurs blockchains (pas automatiquement connectées)\n\nQuand on parle de \"la blockchain\", on parle en réalité d'un **principe**, pas d'un seul réseau.\n\nIl existe **plusieurs blockchains**, chacune avec son rôle :\n\n- Certaines servent à **transférer de la valeur** (comme un virement, mais **sans banque**)\n- D'autres servent à **créer des applications** (plateformes d'échange, jeux, services **DeFi**)\n- D'autres servent à **connecter des services** (ex : transmettre des données fiables comme des prix, ou relier plusieurs réseaux)\n\n👉 Elles fonctionnent sur le **même principe de base**, mais elles n'ont pas toutes le même usage.\n\n👉 **Bitcoin** a sa propre blockchain.\n👉 **Ethereum** en a une autre.\n👉 Et il en existe beaucoup d'autres.\n\nElles ne sont **pas connectées automatiquement** entre elles.\nPour les faire communiquer, il existe des solutions spécifiques (ponts, infrastructures, protocoles de connexion) qui permettent d'échanger des informations ou de la valeur.\n\n👉 Sans ces solutions, chaque blockchain fonctionnerait de manière **isolée**.\n\n## 🔐 Pourquoi la blockchain est (presque) infalsifiable\n\nSi la **blockchain** est si importante, c'est parce qu'elle est très difficile à falsifier.\n\nPourquoi ?\nParce que les informations sont regroupées en **blocs**, liés les uns aux autres, et **vérifiées par l'ensemble du réseau**.\n\nSi quelqu'un essaie de modifier une information :\n\n- Le bloc devient **invalide**\n- Les blocs suivants aussi\n- Le réseau **rejette** la modification\n\n👉 Résultat : tricher devient **pratiquement impossible**.\n\nC'est pour cela qu'on dit que la blockchain repose sur trois piliers essentiels :\n\n- **La transparence**\n- **La vérification collective**\n- **Les mathématiques** 📐\n\n## 🗄️ Blockchain vs base de données classique\n\nUne base de données classique fonctionne différemment :\nelle appartient à une entreprise, elle est contrôlée par une autorité centrale, et elle peut être modifiée ou supprimée.\n\nLa **blockchain**, elle :\n\n- N'appartient à **personne**\n- Est **partagée** entre tous\n- Conserve l'**historique complet**\n\n👉 C'est cette différence qui permet à la **crypto** d'exister **sans intermédiaire**.\n\n👉 C'est aussi pour ça que les gens font confiance à la blockchain :\nles règles sont **publiques**, les informations sont **vérifiables**, et personne ne peut modifier l'historique à sa guise.\n\n## 🧠 Mini QCM — Vérifier la compréhension\n\n**Question 1**\nLa blockchain est avant tout :\nA) un site internet\nB) un registre public\nC) une application bancaire\n\n**Question 2**\nPourquoi est-elle difficile à falsifier ?\nA) parce qu'elle est privée\nB) parce qu'elle est vérifiée par le réseau\nC) parce qu'elle est protégée par un mot de passe\n\n**Question 3**\nQuelle est la principale différence avec une base de données classique ?\nA) la vitesse\nB) le design\nC) l'absence de contrôle central\n\n## 🎯 Objectif du jour\n\nÀ la fin de ce deuxième jour, tu comprends comment l'information est sécurisée en **crypto**.\nLa **blockchain** n'est plus un mot flou : tu sais à quoi elle sert et pourquoi elle est essentielle.\n\n---\n\n👉 Demain, tu découvriras comment les transactions sont validées et pourquoi la crypto peut fonctionner sans autorité centrale.",
+      "en": "Day 2 content to fill..."
+    }
+  },
+  {
+    "day": 3,
+    "title": {
+      "fr": "Jour 3 : Décentralisation & transactions",
+      "en": "Day 3: Decentralization & transactions"
+    },
+    "content": {
+      "fr": "# 📅 Jour 3 — Décentralisation & transactions\n\n## 🎬 Introduction\n\nHier, tu as compris ce qu'est la **blockchain** et pourquoi elle est si importante 🔗\n\nAujourd'hui, on va aller un peu plus loin et répondre à une question clé :\n\n👉 **Comment ce système peut fonctionner sans chef ?**\n\nPour ça, on va parler de deux notions essentielles :\n\n- **La décentralisation**\n- **La validation des transactions**\n\n## 🌐 La décentralisation, simplement\n\nDans un système classique, il y a toujours un centre :\n\n- Une **banque**\n- Une **entreprise**\n- Un **serveur principal**\n\nC'est ce centre qui décide, valide et contrôle.\n\nLa **crypto** fonctionne différemment.\nOn parle de **décentralisation** car il n'y a pas de chef 👥\n\nConcrètement, cela signifie que :\n\n- Personne ne contrôle le réseau seul\n- Les règles sont les mêmes pour tout le monde\n- Le système continue de fonctionner même si une partie s'arrête\n\n👉 Le pouvoir est réparti entre des **milliers d'ordinateurs** partout dans le monde 🌍\n\n## 💸 Comment une transaction est validée\n\nQuand tu envoies une **crypto-monnaie** (par exemple du **bitcoin** ou de l'**ether**),\nla transaction ne passe pas par une banque ni par un gouvernement.\nElle est envoyée au **réseau**.\n\nCe réseau va alors :\n\n- Vérifier que tu as bien les fonds\n- Vérifier que la transaction respecte les règles\n- L'ajouter à la **blockchain**\n\nUne fois validée, la transaction devient :\n\n- **Publique**\n- **Vérifiable**\n- **Impossible à modifier**\n\n👉 C'est le réseau lui-même qui fait le travail, pas une autorité centrale.\n\n## ⛏️ Minage vs staking\n\nPour sécuriser le réseau et valider les transactions, il existe deux grandes méthodes.\nDans les deux cas, le but est le même : empêcher la triche et protéger le réseau 🔐\n\n### ⛏️ Le minage (exemple : Bitcoin)\n\nLe **minage** consiste à utiliser de la puissance de calcul pour résoudre un problème mathématique précis.\n\nConcrètement, les ordinateurs du réseau cherchent une clé spéciale\nqui respecte certaines conditions imposées.\nTrouver cette clé demande beaucoup de calculs, donc du temps et de l'énergie.\n\n👉 Celui qui trouve la bonne clé gagne le droit :\n\n- D'enregistrer un groupe de transactions\n- D'ajouter un nouveau bloc à la **blockchain**\n\nCe mécanisme est volontairement coûteux.\nIl rend la triche trop chère et trop difficile.\n\n👉 Les participants doivent dépenser de vraies ressources (électricité, matériel)\npour enregistrer les transactions.\n\n### 🔒 Le staking\n\nLe **staking** fonctionne différemment.\n\nIci, on ne sécurise pas le réseau avec des machines,\nmais avec de la **crypto immobilisée**.\n\nLes participants bloquent une partie de leurs cryptos\npour montrer qu'ils agissent honnêtement.\n\nSi tout se passe bien :\n\n- Ils participent à la validation des transactions\n- Ils reçoivent une récompense\n\nS'ils trichent :\n\n- Ils risquent de perdre une partie de leurs fonds bloqués\n\n👉 Le staking repose sur un **engagement financier** plutôt que sur la puissance de calcul.\n\n## 🎯 Ce qu'il faut retenir\n\nLa **décentralisation**, c'est le fait que le réseau fonctionne sans chef, sans banque centrale et sans autorité unique.\nLe pouvoir est réparti entre des milliers d'ordinateurs, ce qui rend le système plus résistant et plus indépendant 🌍\n\nLes **transactions** sont validées directement par le réseau.\nElles sont vérifiées, enregistrées sur la blockchain et deviennent publiques et impossibles à modifier.\n\nMême si le **minage** et le **staking** sont différents,\nils servent exactement le même objectif :\n\n👉 Assurer que le réseau reste **fiable**, **sécurisé** et **décentralisé**.\n\n## 📚 Anecdote crypto — La pizza la plus chère de l'histoire 🍕\n\nEn 2010, alors que **Bitcoin** vient à peine d'exister,\nun développeur nommé **Laszlo Hanyecz** décide de faire un test simple :\n\n👉 Utiliser Bitcoin pour acheter quelque chose de réel.\n\nIl propose alors **10 000 bitcoins** en échange de deux pizzas 🍕🍕\nQuelqu'un accepte, les pizzas sont livrées… et la transaction est validée sur le réseau Bitcoin.\n\nÀ l'époque, ces 10 000 bitcoins valaient seulement quelques dizaines d'euros.\nAujourd'hui, ils vaudraient des centaines de millions.\n\nCette histoire montre que Bitcoin n'a pas été créé pour spéculer,\nmais pour permettre des échanges libres, directs et indépendants.\n\n👉 Demain, tu découvriras pourquoi toutes les cryptos ne servent pas à la même chose\net comment les classer pour mieux les comprendre 🧠",
+      "en": "Day 3 content to fill..."
+    }
+  },
+  {
+    "day": 4,
+    "title": {
+      "fr": "Jour 4 : Placeholder",
+      "en": "Day 4: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 4 a remplir...",
+      "en": "Day 4 content to fill..."
+    }
+  },
+  {
+    "day": 5,
+    "title": {
+      "fr": "Jour 5 : Placeholder",
+      "en": "Day 5: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 5 a remplir...",
+      "en": "Day 5 content to fill..."
+    }
+  },
+  {
+    "day": 6,
+    "title": {
+      "fr": "Jour 6 : Placeholder",
+      "en": "Day 6: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 6 a remplir...",
+      "en": "Day 6 content to fill..."
+    }
+  },
+  {
+    "day": 7,
+    "title": {
+      "fr": "Jour 7 : Placeholder",
+      "en": "Day 7: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 7 a remplir...",
+      "en": "Day 7 content to fill..."
+    }
+  },
+  {
+    "day": 8,
+    "title": {
+      "fr": "Jour 8 : Placeholder",
+      "en": "Day 8: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 8 a remplir...",
+      "en": "Day 8 content to fill..."
+    }
+  },
+  {
+    "day": 9,
+    "title": {
+      "fr": "Jour 9 : Placeholder",
+      "en": "Day 9: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 9 a remplir...",
+      "en": "Day 9 content to fill..."
+    }
+  },
+  {
+    "day": 10,
+    "title": {
+      "fr": "Jour 10 : Placeholder",
+      "en": "Day 10: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 10 a remplir...",
+      "en": "Day 10 content to fill..."
+    }
+  },
+  {
+    "day": 11,
+    "title": {
+      "fr": "Jour 11 : Placeholder",
+      "en": "Day 11: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 11 a remplir...",
+      "en": "Day 11 content to fill..."
+    }
+  },
+  {
+    "day": 12,
+    "title": {
+      "fr": "Jour 12 : Placeholder",
+      "en": "Day 12: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 12 a remplir...",
+      "en": "Day 12 content to fill..."
+    }
+  },
+  {
+    "day": 13,
+    "title": {
+      "fr": "Jour 13 : Placeholder",
+      "en": "Day 13: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 13 a remplir...",
+      "en": "Day 13 content to fill..."
+    }
+  },
+  {
+    "day": 14,
+    "title": {
+      "fr": "Jour 14 : Placeholder",
+      "en": "Day 14: Placeholder"
+    },
+    "content": {
+      "fr": "Contenu du jour 14 a remplir...",
+      "en": "Day 14 content to fill..."
+    }
+  }
+]
