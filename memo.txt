@@ -1,2 +1,15 @@
+local:
+------
 wsl
 cd /home/eloise/iaco
+
+
+
+site.fr:
+--------
+upload tgz
+cd /home/lgcg11afcd/iaco.app
+rm -rf .next standalone public server.js
+tar -xzvf deploy-next.tgz -C .
+mkdir -p tmp
+touch tmp/restart.txt
