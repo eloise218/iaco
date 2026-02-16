@@ -109,6 +109,33 @@ export interface PortfolioSummary {
 }
 
 /**
+ * Crypto Alert Types
+ */
+export type AlertSide = "above" | "below";
+
+export interface CryptoAlert {
+  id: string;
+  userId: string;
+  symbol: string;
+  pairSymbol: string;
+  threshold: string;
+  initialPrice: string;
+  initialSide: AlertSide;
+  triggered: boolean | null;
+  triggeredAt: Date | null;
+  triggeredPrice: string | null;
+  acknowledged: boolean | null;
+  acknowledgedAt: Date | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+}
+
+export interface BinanceSymbolInfo {
+  symbol: string;
+  baseAsset: string;
+}
+
+/**
  * API Error Types
  */
 export interface APIError {

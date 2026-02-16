@@ -218,6 +218,48 @@ export const priceCache = mysqlTable(
   })
 );
 
+// Crypto price alerts
+export const cryptoAlerts = mysqlTable(
+  "crypto_alerts",
+  {
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+
+    symbol: varchar("symbol", { length: 20 }).notNull(),
+    pairSymbol: varchar("pair_symbol", { length: 20 }).notNull(),
+
+    threshold: decimal("threshold", { precision: 20, scale: 8 }).notNull(),
+    initialPrice: decimal("initial_price", { precision: 20, scale: 8 }).notNull(),
+    initialSide: varchar("initial_side", { length: 5 })
+      .notNull()
+      .$type<"above" | "below">(),
+
+    triggered: boolean("triggered").default(false),
+    triggeredAt: timestamp("triggered_at"),
+    triggeredPrice: decimal("triggered_price", { precision: 20, scale: 8 }),
+
+    acknowledged: boolean("acknowledged").default(false),
+    acknowledgedAt: timestamp("acknowledged_at"),
+
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
+  },
+  (table) => ({
+    userIdIdx: index("crypto_alerts_user_id_idx").on(table.userId),
+    symbolIdx: index("crypto_alerts_symbol_idx").on(table.symbol),
+    userActiveIdx: index("crypto_alerts_user_active_idx").on(
+      table.userId,
+      table.triggered,
+      table.acknowledged
+    ),
+  })
+);
+
 // Note: Relations are commented out due to TypeScript compatibility issues with current Drizzle version
 // The foreign key constraints in the schema provide the necessary database-level relationships
 // Relations can be added back when using Drizzle queries if needed

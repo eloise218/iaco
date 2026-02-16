@@ -252,6 +252,51 @@
             "duration": "5 min read",
             "xp": "+50 XP"
         },
+        "alerts": {
+            "title": "Price Alerts",
+            "create": {
+                "button": "Create Alert",
+                "title": "Create Price Alert",
+                "searchPlaceholder": "Search crypto (e.g. BTC, SOL)...",
+                "noResults": "No matching symbols found",
+                "selectedSymbol": "Selected",
+                "currentPrice": "Current price",
+                "threshold": "Alert threshold (USD)",
+                "thresholdPlaceholder": "Enter price threshold",
+                "submit": "Create Alert",
+                "creating": "Creating...",
+                "success": "Alert created successfully",
+                "error": "Failed to create alert",
+                "limitReached": "Maximum alerts limit reached"
+            },
+            "status": {
+                "active": "Active",
+                "triggered": "Triggered",
+                "acknowledged": "Acknowledged"
+            },
+            "card": {
+                "threshold": "Threshold",
+                "initialSide": "Crosses from {side}",
+                "sideAbove": "above",
+                "sideBelow": "below",
+                "triggeredAt": "Triggered at {price} on {date}",
+                "createdAt": "Created {date}"
+            },
+            "actions": {
+                "acknowledge": "Acknowledge",
+                "delete": "Delete",
+                "acknowledgeSuccess": "Alert acknowledged",
+                "deleteSuccess": "Alert deleted",
+                "error": "Action failed"
+            },
+            "triggered": {
+                "notification": "{symbol} crossed your alert threshold at ${price}!"
+            },
+            "empty": {
+                "title": "No alerts yet",
+                "description": "Create your first price alert to get notified when a crypto crosses your target price."
+            }
+        },
         "educationalBanner": {
             "title": "📚 Remember: Education First",
             "description": "This app is designed to help you learn about cryptocurrency. All content is for educational purposes only and should not be considered financial advice. Always do your own research before making any investment decisions."

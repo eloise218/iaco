@@ -22,6 +22,7 @@ import {
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
+import { AlertsSection } from './alerts/alerts-section';
 import { authClient } from '@/lib/auth-client';
 
 interface DashboardContentProps {
@@ -263,6 +264,11 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                         </p>
                         <p className="text-sm text-slate-400">{t('stats.focusArea')}</p>
                     </div>
+                </div>
+
+                {/* Price Alerts Section */}
+                <div className="mb-8">
+                    <AlertsSection />
                 </div>
 
                 {/* Two Column Layout */}

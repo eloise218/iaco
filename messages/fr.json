@@ -252,6 +252,51 @@
             "duration": "5 min de lecture",
             "xp": "+50 XP"
         },
+        "alerts": {
+            "title": "Alertes de prix",
+            "create": {
+                "button": "Créer une alerte",
+                "title": "Créer une alerte de prix",
+                "searchPlaceholder": "Rechercher une crypto (ex. BTC, SOL)...",
+                "noResults": "Aucun symbole trouvé",
+                "selectedSymbol": "Sélectionné",
+                "currentPrice": "Prix actuel",
+                "threshold": "Seuil d'alerte (USD)",
+                "thresholdPlaceholder": "Entrer le seuil de prix",
+                "submit": "Créer l'alerte",
+                "creating": "Création...",
+                "success": "Alerte créée avec succès",
+                "error": "Échec de la création de l'alerte",
+                "limitReached": "Nombre maximum d'alertes atteint"
+            },
+            "status": {
+                "active": "Active",
+                "triggered": "Déclenchée",
+                "acknowledged": "Acquittée"
+            },
+            "card": {
+                "threshold": "Seuil",
+                "initialSide": "Croise depuis {side}",
+                "sideAbove": "au-dessus",
+                "sideBelow": "en dessous",
+                "triggeredAt": "Déclenchée à {price} le {date}",
+                "createdAt": "Créée le {date}"
+            },
+            "actions": {
+                "acknowledge": "Acquitter",
+                "delete": "Supprimer",
+                "acknowledgeSuccess": "Alerte acquittée",
+                "deleteSuccess": "Alerte supprimée",
+                "error": "L'action a échoué"
+            },
+            "triggered": {
+                "notification": "{symbol} a croisé ton seuil d'alerte à {price} $ !"
+            },
+            "empty": {
+                "title": "Aucune alerte",
+                "description": "Crée ta première alerte de prix pour être notifié quand une crypto croise ton prix cible."
+            }
+        },
         "educationalBanner": {
             "title": "📚 Rappel : L'éducation d'abord",
             "description": "Cette application est conçue pour t'aider à apprendre les cryptomonnaies. Tout le contenu est à but éducatif uniquement et ne doit pas être considéré comme un conseil financier. Fais toujours tes propres recherches avant de prendre des décisions d'investissement."
