@@ -19,54 +19,45 @@ export function HeroSection() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Set initial states
-            gsap.set('.hero-badge', { opacity: 0, y: 20 });
-            gsap.set('.hero-headline', { opacity: 0, y: 40 });
-            gsap.set('.hero-subtitle', { opacity: 0, y: 30 });
-            gsap.set('.hero-cta', { opacity: 0, y: 20 });
-            gsap.set('.hero-trust', { opacity: 0, y: 10 });
-            gsap.set('.hero-mockup', { opacity: 0, x: 60, scale: 0.95 });
+            const tl = gsap.timeline({ delay: 0.1 });
 
-            // Animate in sequence
-            const tl = gsap.timeline({ delay: 0.2 });
-
-            tl.to('.hero-badge', {
+            tl.fromTo('.hero-badge', { opacity: 0, y: 15 }, {
                 opacity: 1,
                 y: 0,
-                duration: 0.5,
+                duration: 0.3,
                 ease: 'power3.out',
             })
-                .to('.hero-headline', {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                    ease: 'power3.out',
-                }, '-=0.3')
-                .to('.hero-subtitle', {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.5,
-                    ease: 'power3.out',
-                }, '-=0.4')
-                .to('.hero-cta', {
+                .fromTo('.hero-headline', { opacity: 0, y: 25 }, {
                     opacity: 1,
                     y: 0,
                     duration: 0.4,
-                    ease: 'power2.out',
-                }, '-=0.3')
-                .to('.hero-trust', {
+                    ease: 'power3.out',
+                }, '-=0.2')
+                .fromTo('.hero-subtitle', { opacity: 0, y: 20 }, {
                     opacity: 1,
                     y: 0,
-                    duration: 0.4,
+                    duration: 0.3,
+                    ease: 'power3.out',
+                }, '-=0.25')
+                .fromTo('.hero-cta', { opacity: 0, y: 15 }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.3,
                     ease: 'power2.out',
                 }, '-=0.2')
-                .to('.hero-mockup', {
+                .fromTo('.hero-trust', { opacity: 0, y: 10 }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.25,
+                    ease: 'power2.out',
+                }, '-=0.2')
+                .fromTo('.hero-mockup', { opacity: 0, x: 40, scale: 0.97 }, {
                     opacity: 1,
                     x: 0,
                     scale: 1,
-                    duration: 0.8,
+                    duration: 0.5,
                     ease: 'power3.out',
-                }, '-=0.6');
+                }, '-=0.4');
         }, sectionRef);
 
         return () => ctx.revert();
@@ -100,7 +91,7 @@ export function HeroSection() {
                     {/* Left - Content */}
                     <div className="text-left">
                         {/* Eyebrow Badge */}
-                        <div className="hero-badge mb-6">
+                        <div className="hero-badge opacity-0 mb-6">
                             <Badge
                                 variant="outline"
                                 className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider border-primary/30 bg-primary/5"
@@ -110,7 +101,7 @@ export function HeroSection() {
                         </div>
 
                         {/* Headline */}
-                        <h1 className="hero-headline text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
+                        <h1 className="hero-headline opacity-0 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
                             {t('headline')}{' '}
                             <span className="text-primary">{t('headlineDays')}</span>.
                             <br />
@@ -118,12 +109,12 @@ export function HeroSection() {
                         </h1>
 
                         {/* Subtitle - Darker text, medium weight */}
-                        <p className="hero-subtitle text-lg md:text-xl text-foreground/70 font-medium leading-relaxed mb-8 max-w-xl">
+                        <p className="hero-subtitle opacity-0 text-lg md:text-xl text-foreground/70 font-medium leading-relaxed mb-8 max-w-xl">
                             {t('subtitle', { assistant: 'Iaco' })}
                         </p>
 
                         {/* CTA */}
-                        <div className="hero-cta mb-4">
+                        <div className="hero-cta opacity-0 mb-4">
                             <Button
                                 size="lg"
                                 className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
@@ -134,14 +125,14 @@ export function HeroSection() {
                         </div>
 
                         {/* Trust Signal - Below button */}
-                        <div className="hero-trust inline-flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="hero-trust opacity-0 inline-flex items-center gap-2 text-sm text-muted-foreground">
                             <ShieldCheckIcon className="w-5 h-5 text-emerald-500" weight="fill" />
                             <span className="font-medium">{t('trust')}</span>
                         </div>
                     </div>
 
                     {/* Right - Hero Image */}
-                    <div className="hero-mockup relative flex justify-center lg:justify-end">
+                    <div className="hero-mockup opacity-0 relative flex justify-center lg:justify-end">
                         {/* Hero image with floating animation */}
                         <Image
                             src="/images/newhero.png"
