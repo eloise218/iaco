@@ -1,7 +1,7 @@
 /**
  * Alert Server Actions
  *
- * Server actions for crypto price alert CRUD operations and threshold checking.
+ * Server actions for crypto price/volatility alert CRUD operations and threshold checking.
  */
 
 "use server";
@@ -14,9 +14,11 @@ import {
   createAlertSchema,
   acknowledgeAlertSchema,
   deleteAlertSchema,
+  toggleAlertSchema,
   type CreateAlertInput,
   type AcknowledgeAlertInput,
   type DeleteAlertInput,
+  type ToggleAlertInput,
 } from "../validations/alerts";
 import type { ActionResponse, CryptoAlert } from "../types";
 import { auth } from "../auth";
@@ -25,7 +27,7 @@ import { revalidatePath } from "next/cache";
 const MAX_ACTIVE_ALERTS = 10;
 
 /**
- * Create a new crypto price alert
+ * Create a new crypto alert (price or volatility)
  */
 export async function createAlert(
   input: CreateAlertInput
@@ -74,13 +76,22 @@ export async function createAlert(
       return { success: false, error: "Invalid price data from Binance" };
     }
 
+    const alertType = validatedInput.alertType || "price";
+
+    // For price alerts: initialSide based on current price vs threshold
+    // For volatility alerts: initialSide is not meaningful, default to "above"
     const initialSide =
-      currentPrice >= validatedInput.threshold ? "above" : "below";
+      alertType === "volatility"
+        ? "above"
+        : currentPrice >= validatedInput.threshold
+          ? "above"
+          : "below";
 
     await db.insert(cryptoAlerts).values({
       userId: session.user.id,
       symbol: validatedInput.symbol,
       pairSymbol: validatedInput.pairSymbol,
+      alertType,
       threshold: String(validatedInput.threshold),
       initialPrice: String(currentPrice),
       initialSide,
@@ -237,9 +248,64 @@ export async function deleteAlert(
   }
 }
 
+/**
+ * Toggle alert active state
+ */
+export async function toggleAlert(
+  input: ToggleAlertInput
+): Promise<ActionResponse> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user?.id) {
+      return { success: false, error: "Authentication required" };
+    }
+
+    const validated = toggleAlertSchema.parse(input);
+
+    // Verify ownership
+    const alert = await db
+      .select()
+      .from(cryptoAlerts)
+      .where(
+        and(
+          eq(cryptoAlerts.id, validated.alertId),
+          eq(cryptoAlerts.userId, session.user.id)
+        )
+      )
+      .limit(1);
+
+    if (alert.length === 0) {
+      return { success: false, error: "Alert not found" };
+    }
+
+    await db
+      .update(cryptoAlerts)
+      .set({ isActive: validated.isActive })
+      .where(eq(cryptoAlerts.id, validated.alertId));
+
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: validated.isActive ? "Alert activated" : "Alert deactivated",
+    };
+  } catch (error) {
+    console.error("Error toggling alert:", error);
+    return { success: false, error: "Failed to toggle alert" };
+  }
+}
+
 interface BinancePriceTicker {
   symbol: string;
   price: string;
+}
+
+interface Binance24hrTicker {
+  symbol: string;
+  priceChangePercent: string;
+  lastPrice: string;
 }
 
 /**
@@ -249,7 +315,7 @@ export async function checkAndTriggerAlerts(
   userId: string
 ): Promise<ActionResponse<CryptoAlert[]>> {
   try {
-    // Get active (non-triggered, non-acknowledged) alerts
+    // Get active (non-triggered, non-acknowledged, isActive) alerts
     const activeAlerts = await db
       .select()
       .from(cryptoAlerts)
@@ -257,7 +323,8 @@ export async function checkAndTriggerAlerts(
         and(
           eq(cryptoAlerts.userId, userId),
           eq(cryptoAlerts.triggered, false),
-          eq(cryptoAlerts.acknowledged, false)
+          eq(cryptoAlerts.acknowledged, false),
+          eq(cryptoAlerts.isActive, true)
         )
       );
 
@@ -265,45 +332,98 @@ export async function checkAndTriggerAlerts(
       return { success: true, data: [] };
     }
 
-    // Fetch current prices from Binance (bulk)
-    const priceResponse = await fetch(
-      "https://api.binance.com/api/v3/ticker/price"
+    const priceAlerts = activeAlerts.filter(
+      (a) => !a.alertType || a.alertType === "price"
     );
-    if (!priceResponse.ok) {
-      return { success: false, error: "Failed to fetch prices" };
-    }
-
-    const allPrices: BinancePriceTicker[] = await priceResponse.json();
-    const priceMap = new Map(
-      allPrices.map((p) => [p.symbol, parseFloat(p.price)])
+    const volatilityAlerts = activeAlerts.filter(
+      (a) => a.alertType === "volatility"
     );
 
     const newlyTriggered: CryptoAlert[] = [];
 
-    for (const alert of activeAlerts) {
-      const currentPrice = priceMap.get(alert.pairSymbol);
-      if (currentPrice === undefined) continue;
+    // --- Check price alerts ---
+    if (priceAlerts.length > 0) {
+      const priceResponse = await fetch(
+        "https://api.binance.com/api/v3/ticker/price"
+      );
+      if (priceResponse.ok) {
+        const allPrices: BinancePriceTicker[] = await priceResponse.json();
+        const priceMap = new Map(
+          allPrices.map((p) => [p.symbol, parseFloat(p.price)])
+        );
 
-      const threshold = parseFloat(alert.threshold);
-      const currentSide = currentPrice >= threshold ? "above" : "below";
+        for (const alert of priceAlerts) {
+          const currentPrice = priceMap.get(alert.pairSymbol);
+          if (currentPrice === undefined) continue;
 
-      if (currentSide !== alert.initialSide) {
-        // Threshold has been crossed
-        await db
-          .update(cryptoAlerts)
-          .set({
+          const threshold = parseFloat(alert.threshold);
+          const currentSide = currentPrice >= threshold ? "above" : "below";
+
+          if (currentSide !== alert.initialSide) {
+            await db
+              .update(cryptoAlerts)
+              .set({
+                triggered: true,
+                triggeredAt: new Date(),
+                triggeredPrice: String(currentPrice),
+              })
+              .where(eq(cryptoAlerts.id, alert.id));
+
+            newlyTriggered.push({
+              ...alert,
+              triggered: true,
+              triggeredAt: new Date(),
+              triggeredPrice: String(currentPrice),
+            } as CryptoAlert);
+          }
+        }
+      }
+    }
+
+    // --- Check volatility alerts ---
+    if (volatilityAlerts.length > 0) {
+      // Get unique symbols needed
+      const symbols = [...new Set(volatilityAlerts.map((a) => a.pairSymbol))];
+
+      // Fetch 24hr tickers for needed symbols
+      const tickerPromises = symbols.map(async (symbol) => {
+        const res = await fetch(
+          `https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`
+        );
+        if (!res.ok) return null;
+        return (await res.json()) as Binance24hrTicker;
+      });
+
+      const tickers = await Promise.all(tickerPromises);
+      const tickerMap = new Map<string, Binance24hrTicker>();
+      for (const t of tickers) {
+        if (t) tickerMap.set(t.symbol, t);
+      }
+
+      for (const alert of volatilityAlerts) {
+        const ticker = tickerMap.get(alert.pairSymbol);
+        if (!ticker) continue;
+
+        const changePercent = Math.abs(parseFloat(ticker.priceChangePercent));
+        const threshold = parseFloat(alert.threshold);
+
+        if (changePercent >= threshold) {
+          await db
+            .update(cryptoAlerts)
+            .set({
+              triggered: true,
+              triggeredAt: new Date(),
+              triggeredPrice: ticker.lastPrice,
+            })
+            .where(eq(cryptoAlerts.id, alert.id));
+
+          newlyTriggered.push({
+            ...alert,
             triggered: true,
             triggeredAt: new Date(),
-            triggeredPrice: String(currentPrice),
-          })
-          .where(eq(cryptoAlerts.id, alert.id));
-
-        newlyTriggered.push({
-          ...alert,
-          triggered: true,
-          triggeredAt: new Date(),
-          triggeredPrice: String(currentPrice),
-        } as CryptoAlert);
+            triggeredPrice: ticker.lastPrice,
+          } as CryptoAlert);
+        }
       }
     }
 

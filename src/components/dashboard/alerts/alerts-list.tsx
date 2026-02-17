@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { acknowledgeAlert, deleteAlert } from "@/lib/actions/alerts";
+import { acknowledgeAlert, deleteAlert, toggleAlert } from "@/lib/actions/alerts";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,6 +10,10 @@ import {
   TrashIcon,
   WarningCircleIcon,
   CircleIcon,
+  ToggleLeftIcon,
+  ToggleRightIcon,
+  TrendUpIcon,
+  CurrencyDollarIcon,
 } from "@phosphor-icons/react";
 import type { CryptoAlert } from "@/lib/types";
 
@@ -71,6 +75,26 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
     }
   };
 
+  const handleToggle = async (alertId: string, isActive: boolean) => {
+    const result = await toggleAlert({ alertId, isActive });
+    if (result.success) {
+      toast.success(result.message || t("actions.toggleSuccess"));
+      onRefresh();
+    } else {
+      toast.error(result.error || t("actions.error"));
+    }
+  };
+
+  const isVolatility = (alert: CryptoAlert) => alert.alertType === "volatility";
+
+  const formatThreshold = (alert: CryptoAlert) => {
+    if (isVolatility(alert)) {
+      return `${parseFloat(alert.threshold)}%`;
+    }
+    const num = parseFloat(alert.threshold);
+    return `$${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
+  };
+
   const formatPrice = (price: string) => {
     const num = parseFloat(price);
     return `$${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
@@ -80,6 +104,24 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
     if (!date) return "";
     return new Date(date).toLocaleString();
   };
+
+  const TypeBadge = ({ alert }: { alert: CryptoAlert }) => (
+    <Badge
+      variant="outline"
+      className={
+        isVolatility(alert)
+          ? "border-purple-500/50 text-purple-400 text-xs"
+          : "border-blue-500/50 text-blue-400 text-xs"
+      }
+    >
+      {isVolatility(alert) ? (
+        <TrendUpIcon className="w-3 h-3 mr-1" />
+      ) : (
+        <CurrencyDollarIcon className="w-3 h-3 mr-1" />
+      )}
+      {isVolatility(alert) ? t("type.volatility") : t("type.price")}
+    </Badge>
+  );
 
   return (
     <div className="space-y-4">
@@ -102,6 +144,7 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                       <span className="font-semibold text-white">
                         {alert.symbol}
                       </span>
+                      <TypeBadge alert={alert} />
                       <Badge
                         variant="outline"
                         className="border-amber-500/50 text-amber-400 text-xs"
@@ -110,7 +153,9 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                       </Badge>
                     </div>
                     <p className="text-sm text-slate-400">
-                      {t("card.threshold")}: {formatPrice(alert.threshold)}
+                      {isVolatility(alert)
+                        ? `${t("card.volatilityThreshold")}: ${formatThreshold(alert)}`
+                        : `${t("card.threshold")}: ${formatThreshold(alert)}`}
                     </p>
                     {alert.triggeredPrice && (
                       <p className="text-xs text-amber-400/80">
@@ -152,47 +197,83 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
           {active.map((alert) => (
             <div
               key={alert.id}
-              className="bg-slate-900/60 rounded-xl border border-slate-800/50 p-4"
+              className={`rounded-xl border p-4 ${
+                alert.isActive === false
+                  ? "bg-slate-900/30 border-slate-800/30 opacity-60"
+                  : "bg-slate-900/60 border-slate-800/50"
+              }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
-                  </span>
+                  {alert.isActive === false ? (
+                    <CircleIcon className="w-3 h-3 text-slate-600" />
+                  ) : (
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                    </span>
+                  )}
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-white">
                         {alert.symbol}
                       </span>
+                      <TypeBadge alert={alert} />
                       <Badge
                         variant="outline"
-                        className="border-emerald-500/50 text-emerald-400 text-xs"
+                        className={
+                          alert.isActive === false
+                            ? "border-slate-600 text-slate-500 text-xs"
+                            : "border-emerald-500/50 text-emerald-400 text-xs"
+                        }
                       >
-                        {t("status.active")}
+                        {alert.isActive === false
+                          ? t("status.paused")
+                          : t("status.active")}
                       </Badge>
                     </div>
                     <p className="text-sm text-slate-400">
-                      {t("card.threshold")}: {formatPrice(alert.threshold)}
-                      <span className="text-slate-500 ml-2">
-                        ({t("card.initialSide", {
-                          side:
-                            alert.initialSide === "above"
-                              ? t("card.sideAbove")
-                              : t("card.sideBelow"),
-                        })})
-                      </span>
+                      {isVolatility(alert)
+                        ? `${t("card.volatilityThreshold")}: ${formatThreshold(alert)}`
+                        : (
+                          <>
+                            {t("card.threshold")}: {formatThreshold(alert)}
+                            <span className="text-slate-500 ml-2">
+                              ({t("card.initialSide", {
+                                side:
+                                  alert.initialSide === "above"
+                                    ? t("card.sideAbove")
+                                    : t("card.sideBelow"),
+                              })})
+                            </span>
+                          </>
+                        )}
                     </p>
                   </div>
                 </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleDelete(alert.id)}
-                  className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
-                >
-                  <TrashIcon className="w-4 h-4" />
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleToggle(alert.id, !alert.isActive)}
+                    className="text-slate-400 hover:text-white"
+                    title={alert.isActive ? t("actions.pause") : t("actions.activate")}
+                  >
+                    {alert.isActive === false ? (
+                      <ToggleLeftIcon className="w-5 h-5" />
+                    ) : (
+                      <ToggleRightIcon className="w-5 h-5 text-emerald-400" weight="fill" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleDelete(alert.id)}
+                    className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -215,6 +296,7 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                       <span className="font-semibold text-slate-400">
                         {alert.symbol}
                       </span>
+                      <TypeBadge alert={alert} />
                       <Badge
                         variant="outline"
                         className="border-slate-600 text-slate-500 text-xs"
@@ -223,7 +305,9 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                       </Badge>
                     </div>
                     <p className="text-sm text-slate-500">
-                      {t("card.threshold")}: {formatPrice(alert.threshold)}
+                      {isVolatility(alert)
+                        ? `${t("card.volatilityThreshold")}: ${formatThreshold(alert)}`
+                        : `${t("card.threshold")}: ${formatThreshold(alert)}`}
                     </p>
                   </div>
                 </div>

@@ -13,6 +13,7 @@ export const createAlertSchema = z.object({
     .number()
     .positive("Threshold must be a positive number")
     .finite("Threshold must be a finite number"),
+  alertType: z.enum(["price", "volatility"]).default("price"),
 });
 
 export const acknowledgeAlertSchema = z.object({
@@ -23,6 +24,12 @@ export const deleteAlertSchema = z.object({
   alertId: z.string().length(36, "Invalid alert ID"),
 });
 
+export const toggleAlertSchema = z.object({
+  alertId: z.string().length(36, "Invalid alert ID"),
+  isActive: z.boolean(),
+});
+
 export type CreateAlertInput = z.infer<typeof createAlertSchema>;
 export type AcknowledgeAlertInput = z.infer<typeof acknowledgeAlertSchema>;
 export type DeleteAlertInput = z.infer<typeof deleteAlertSchema>;
+export type ToggleAlertInput = z.infer<typeof toggleAlertSchema>;

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useAlertsPolling } from "@/hooks/use-alerts-polling";
 import { CreateAlertForm } from "./create-alert-form";
+import { CreateVolatilityForm } from "./create-volatility-form";
 import { AlertsList } from "./alerts-list";
 import { BellIcon } from "@phosphor-icons/react";
 
@@ -35,7 +36,10 @@ export function AlertsSection() {
           <BellIcon className="w-5 h-5 text-amber-400" weight="fill" />
           {t("title")}
         </h2>
-        <CreateAlertForm onAlertCreated={refetch} />
+        <div className="flex items-center gap-2">
+          <CreateAlertForm onAlertCreated={refetch} />
+          <CreateVolatilityForm onAlertCreated={refetch} />
+        </div>
       </div>
       <AlertsList alerts={alerts} isLoading={isLoading} onRefresh={refetch} />
     </div>

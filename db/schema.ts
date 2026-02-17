@@ -233,6 +233,11 @@ export const cryptoAlerts = mysqlTable(
     symbol: varchar("symbol", { length: 20 }).notNull(),
     pairSymbol: varchar("pair_symbol", { length: 20 }).notNull(),
 
+    alertType: varchar("alert_type", { length: 20 })
+      .default("price")
+      .$type<"price" | "volatility">(),
+    isActive: boolean("is_active").default(true),
+
     threshold: decimal("threshold", { precision: 20, scale: 8 }).notNull(),
     initialPrice: decimal("initial_price", { precision: 20, scale: 8 }).notNull(),
     initialSide: varchar("initial_side", { length: 5 })

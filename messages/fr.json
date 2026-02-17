@@ -253,9 +253,13 @@
             "xp": "+50 XP"
         },
         "alerts": {
-            "title": "Alertes de prix",
+            "title": "Alertes",
+            "type": {
+                "price": "Prix",
+                "volatility": "Volatilité"
+            },
             "create": {
-                "button": "Créer une alerte",
+                "button": "Alerte prix",
                 "title": "Créer une alerte de prix",
                 "searchPlaceholder": "Rechercher une crypto (ex. BTC, SOL)...",
                 "noResults": "Aucun symbole trouvé",
@@ -269,13 +273,25 @@
                 "error": "Échec de la création de l'alerte",
                 "limitReached": "Nombre maximum d'alertes atteint"
             },
+            "createVolatility": {
+                "button": "Alerte volatilité",
+                "title": "Créer une alerte de volatilité",
+                "threshold": "Seuil de variation (24h)",
+                "thresholdPlaceholder": "Ex: 5 pour 5%",
+                "hint": "L'alerte se déclenche si la variation 24h dépasse ce pourcentage",
+                "submit": "Créer l'alerte",
+                "success": "Alerte de volatilité créée",
+                "error": "Échec de la création de l'alerte"
+            },
             "status": {
                 "active": "Active",
+                "paused": "En pause",
                 "triggered": "Déclenchée",
                 "acknowledged": "Acquittée"
             },
             "card": {
                 "threshold": "Seuil",
+                "volatilityThreshold": "Variation >",
                 "initialSide": "Croise depuis {side}",
                 "sideAbove": "au-dessus",
                 "sideBelow": "en dessous",
@@ -285,8 +301,11 @@
             "actions": {
                 "acknowledge": "Acquitter",
                 "delete": "Supprimer",
+                "pause": "Mettre en pause",
+                "activate": "Activer",
                 "acknowledgeSuccess": "Alerte acquittée",
                 "deleteSuccess": "Alerte supprimée",
+                "toggleSuccess": "Alerte mise à jour",
                 "error": "L'action a échoué"
             },
             "triggered": {
@@ -294,7 +313,7 @@
             },
             "empty": {
                 "title": "Aucune alerte",
-                "description": "Crée ta première alerte de prix pour être notifié quand une crypto croise ton prix cible."
+                "description": "Crée ta première alerte pour être notifié quand une crypto atteint un prix ou une variation cible."
             }
         },
         "educationalBanner": {

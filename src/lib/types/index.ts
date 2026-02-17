@@ -113,11 +113,15 @@ export interface PortfolioSummary {
  */
 export type AlertSide = "above" | "below";
 
+export type AlertType = "price" | "volatility";
+
 export interface CryptoAlert {
   id: string;
   userId: string;
   symbol: string;
   pairSymbol: string;
+  alertType: AlertType | null;
+  isActive: boolean | null;
   threshold: string;
   initialPrice: string;
   initialSide: AlertSide;

@@ -253,9 +253,13 @@
             "xp": "+50 XP"
         },
         "alerts": {
-            "title": "Price Alerts",
+            "title": "Alerts",
+            "type": {
+                "price": "Price",
+                "volatility": "Volatility"
+            },
             "create": {
-                "button": "Create Alert",
+                "button": "Price Alert",
                 "title": "Create Price Alert",
                 "searchPlaceholder": "Search crypto (e.g. BTC, SOL)...",
                 "noResults": "No matching symbols found",
@@ -269,13 +273,25 @@
                 "error": "Failed to create alert",
                 "limitReached": "Maximum alerts limit reached"
             },
+            "createVolatility": {
+                "button": "Volatility Alert",
+                "title": "Create Volatility Alert",
+                "threshold": "Variation threshold (24h)",
+                "thresholdPlaceholder": "E.g. 5 for 5%",
+                "hint": "Alert triggers when the 24h change exceeds this percentage",
+                "submit": "Create Alert",
+                "success": "Volatility alert created",
+                "error": "Failed to create alert"
+            },
             "status": {
                 "active": "Active",
+                "paused": "Paused",
                 "triggered": "Triggered",
                 "acknowledged": "Acknowledged"
             },
             "card": {
                 "threshold": "Threshold",
+                "volatilityThreshold": "Variation >",
                 "initialSide": "Crosses from {side}",
                 "sideAbove": "above",
                 "sideBelow": "below",
@@ -285,8 +301,11 @@
             "actions": {
                 "acknowledge": "Acknowledge",
                 "delete": "Delete",
+                "pause": "Pause",
+                "activate": "Activate",
                 "acknowledgeSuccess": "Alert acknowledged",
                 "deleteSuccess": "Alert deleted",
+                "toggleSuccess": "Alert updated",
                 "error": "Action failed"
             },
             "triggered": {
@@ -294,7 +313,7 @@
             },
             "empty": {
                 "title": "No alerts yet",
-                "description": "Create your first price alert to get notified when a crypto crosses your target price."
+                "description": "Create your first alert to get notified when a crypto reaches a target price or variation."
             }
         },
         "educationalBanner": {

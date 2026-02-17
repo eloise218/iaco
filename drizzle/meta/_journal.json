@@ -1,33 +1,12 @@
 {
   "version": "7",
-  "dialect": "postgresql",
+  "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
-      "version": "7",
-      "when": 1758984993747,
-      "tag": "0000_acoustic_iceman",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1758988928564,
-      "tag": "0001_conscious_toro",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1758989205326,
-      "tag": "0002_silly_omega_red",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1758989414397,
-      "tag": "0003_perpetual_solo",
+      "version": "5",
+      "when": 1771350067377,
+      "tag": "0000_aromatic_invaders",
       "breakpoints": true
     }
   ]
