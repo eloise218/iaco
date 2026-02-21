@@ -2,8 +2,11 @@ export const runtime = "nodejs";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
+import { Resend } from "resend";
 import db from "@/db/drizzle";
 import { users, session, account, verification } from "@/db/schema";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
@@ -20,23 +23,35 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
-      // Pour les tests : afficher le lien dans la console
-      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      console.log("🔑 RESET PASSWORD LINK");
-      console.log(`📧 Email: ${user.email}`);
-      console.log(`🔗 Link: ${url}`);
-      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      console.log("🔑 RESET PASSWORD LINK:", url);
+      await resend.emails.send({
+        from: "IACO <onboarding@resend.dev>",
+        to: user.email,
+        subject: "Réinitialise ton mot de passe - IACO",
+        html: `<h2>Réinitialisation de mot de passe</h2>
+          <p>Clique sur le lien ci-dessous pour réinitialiser ton mot de passe :</p>
+          <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Réinitialiser mon mot de passe</a>
+          <p style="margin-top:16px;color:#666;">Si tu n'as pas demandé cette réinitialisation, ignore cet email.</p>`,
+      });
     },
   },
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({ user, url, token }) => {
-      // Pour les tests : afficher le lien dans la console (console.error pour ne pas être filtré par Turbopack)
-      console.error("\n\n========== EMAIL VERIFICATION LINK ==========");
+    sendVerificationEmail: async ({ user, url }) => {
+      console.error("\n========== EMAIL VERIFICATION LINK ==========");
       console.error("Email: " + user.email);
       console.error("Link: " + url);
-      console.error("==============================================\n\n");
+      console.error("==============================================\n");
+      await resend.emails.send({
+        from: "IACO <onboarding@resend.dev>",
+        to: user.email,
+        subject: "Vérifie ton adresse email - IACO",
+        html: `<h2>Bienvenue sur IACO !</h2>
+          <p>Clique sur le lien ci-dessous pour vérifier ton adresse email :</p>
+          <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Vérifier mon email</a>
+          <p style="margin-top:16px;color:#666;">Si tu n'as pas créé de compte, ignore cet email.</p>`,
+      });
     },
   },
   socialProviders: {

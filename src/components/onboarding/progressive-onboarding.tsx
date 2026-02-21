@@ -178,13 +178,9 @@ export function ProgressiveOnboarding() {
       }));
 
       // Animate transition
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setCurrentStep(1);
-          setSelectedOption(null);
-        },
-      });
+      const tl = gsap.timeline();
 
+      // Phase 1: Animate old content out
       tl.to('.option-card', {
         opacity: 0,
         y: -20,
@@ -205,6 +201,12 @@ export function ProgressiveOnboarding() {
         '-=0.2'
       );
 
+      // Switch content between out/in animations
+      tl.call(() => {
+        setCurrentStep(1);
+        setSelectedOption(null);
+      });
+
       // Progress bar animation
       tl.to(
         '.progress-fill',
@@ -216,10 +218,11 @@ export function ProgressiveOnboarding() {
         '-=0.3'
       );
 
+      // Phase 2: Animate new content in (after React re-render)
       tl.fromTo(
         questionRef.current,
         { opacity: 0, x: 50 },
-        { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' }
+        { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out', delay: 0.05 }
       );
 
       tl.fromTo(

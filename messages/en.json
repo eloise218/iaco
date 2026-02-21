@@ -28,7 +28,7 @@
         "headlineDays": "21 days",
         "subheadline": "No jargon. No stress.",
         "subtitle": "Master the basics, spot the scams, and invest with confidence guided by {assistant}, your personal AI coach.",
-        "cta": "Join the Beta Waiting List",
+        "cta": "Join the Challenge",
         "trust": "Refunded if you succeed in the challenge"
     },
     "youHesitate": {
@@ -180,8 +180,8 @@
     "finalCta": {
         "title": "Ready to understand crypto",
         "titleHighlight": "without stress",
-        "subtitle": "Sign up for the beta waiting list and be among the first to join the challenge.",
-        "cta": "Join the Waiting List",
+        "subtitle": "Join the challenge and be among the first beta testers.",
+        "cta": "Join the Challenge",
         "assurance": "No spam. No commitment. Just early access."
     },
     "betaModal": {
@@ -250,7 +250,8 @@
             "dayTitle": "Day {day} / 14",
             "completed": "All challenges completed!",
             "duration": "5 min read",
-            "xp": "+50 XP"
+            "xp": "+20 XP",
+            "cta": "Start reading"
         },
         "alerts": {
             "title": "Alerts",

@@ -64,7 +64,6 @@ export async function POST(req: Request) {
 
     // Subtask 3.2: Load user profile for context personalization
     let profile;
-;
     try {
       const dbProfile = await db.query.userProfiles.findFirst({
         where: eq(userProfiles.userId, session.user.id),
@@ -136,123 +135,26 @@ export async function POST(req: Request) {
     }
 
     // Subtask 3.3: Call streamText with OpenAI model
-    let result;
-    try {
-      result = streamText({
-        model: openai('gpt-4-turbo'),
-        system: buildSystemPrompt(profile),
-        messages: contextMessages,
-        temperature: 0.7,
-      });
-    } catch (aiError: unknown) {
-      console.error('AI API error:', aiError);
-
-      // Subtask 3.5: Handle rate limit errors with retry-after
-      const error = aiError as { status?: number; code?: string; message?: string };
-      if (error?.status === 429 || error?.code === 'rate_limit_exceeded') {
-        return new Response(
-          JSON.stringify({
-            error: 'Too many requests. Please wait a moment and try again.',
-            retryAfter: 60
-          }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
-              'Retry-After': '60'
-            },
-          }
-        );
-      }
-
-      // Handle quota exceeded errors
-      if (error?.status === 402 || error?.code === 'insufficient_quota') {
-        return new Response(
-          JSON.stringify({
-            error: 'Service temporarily unavailable. Please try again later.'
-          }),
-          {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' }
-          }
-        );
-      }
-
-      // Handle invalid API key or authentication errors
-      if (error?.status === 401 || error?.code === 'invalid_api_key') {
-        console.error('AI API authentication error - check API key configuration');
-        return new Response(
-          JSON.stringify({
-            error: 'Service configuration error. Please contact support.'
-          }),
-          {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' }
-          }
-        );
-      }
-
-      // Handle model not found or invalid model errors
-      if (error?.status === 404 || error?.code === 'model_not_found') {
-        console.error('AI model not found - check model configuration');
-        return new Response(
-          JSON.stringify({
-            error: 'Service configuration error. Please contact support.'
-          }),
-          {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' }
-          }
-        );
-      }
-
-      // Handle timeout errors
-      if (error?.code === 'timeout' || error?.message?.includes('timeout')) {
-        return new Response(
-          JSON.stringify({
-            error: 'Request timed out. Please try again with a shorter message.'
-          }),
-          {
-            status: 504,
-            headers: { 'Content-Type': 'application/json' }
-          }
-        );
-      }
-
-      // Generic AI API error
-      return new Response(
-        JSON.stringify({
-          error: 'Unable to generate a response. Please try again.'
-        }),
-        {
-          status: 500,
-          headers: { 'Content-Type': 'application/json' }
+    const userId = session.user.id;
+    const result = streamText({
+      model: openai('gpt-4-turbo'),
+      system: buildSystemPrompt(profile),
+      messages: contextMessages,
+      temperature: 0.7,
+      onFinish: async ({ text }) => {
+        try {
+          await db.insert(chatMessages).values({
+            userId,
+            role: 'assistant',
+            content: text,
+          });
+        } catch (dbError) {
+          console.error('Error saving assistant message to database:', dbError);
         }
-      );
-    }
+      },
+    });
 
-    // Subtask 3.4: Save assistant response after streaming completes
-    // Collect the full response text asynchronously
-    (async () => {
-      try {
-        let fullResponse = '';
-        for await (const chunk of result.textStream) {
-          fullResponse += chunk;
-        }
-
-        // Save the complete response to database
-        await db.insert(chatMessages).values({
-          userId: session.user.id,
-          role: 'assistant',
-          content: fullResponse,
-        });
-      } catch (dbError) {
-        console.error('Error saving assistant message to database:', dbError);
-        // Don't throw - we've already started streaming to the client
-      }
-    })();
-
-    // Subtask 3.3: Return streaming response with proper headers
+    // Return plain text streaming response
     return result.toTextStreamResponse();
 
   } catch (error) {

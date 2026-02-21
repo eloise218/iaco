@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -161,12 +161,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/terms"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('termsOfService')}
-                </a>
+                </Link>
               </li>
               <li>
                 <a

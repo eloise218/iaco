@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useRouter } from '@/i18n/navigation';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -9,16 +9,15 @@ import {
     ChatCircleIcon,
     BookOpenIcon,
     WalletIcon,
-    TrendUpIcon,
     SparkleIcon,
     LightningIcon,
     ChartLineIcon,
     TargetIcon,
-    ChartBarIcon,
     GearIcon,
     SignOutIcon,
     CaretRightIcon,
-    PlayIcon
+    PlayIcon,
+    FireIcon
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
@@ -38,16 +37,22 @@ interface DashboardContentProps {
     };
     challengeDay: number;
     challengeCompleted: boolean;
+    challengeTitle: string;
+    userXp: number;
+    streak: number;
 }
 
-export function DashboardContent({ user, profile, challengeDay, challengeCompleted }: DashboardContentProps) {
+export function DashboardContent({ user, profile, challengeDay, challengeCompleted, challengeTitle, userXp, streak }: DashboardContentProps) {
     const router = useRouter();
     const t = useTranslations('dashboard');
     const containerRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
-    const statsRef = useRef<HTMLDivElement>(null);
+    const heroRef = useRef<HTMLDivElement>(null);
     const actionsRef = useRef<HTMLDivElement>(null);
-    const learningRef = useRef<HTMLDivElement>(null);
+    const xpBadgeRef = useRef<HTMLDivElement>(null);
+    const streakBadgeRef = useRef<HTMLDivElement>(null);
+    const [displayedXp, setDisplayedXp] = useState(0);
+    const [displayedStreak, setDisplayedStreak] = useState(0);
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -70,16 +75,15 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
             );
 
             gsap.fromTo(
-                statsRef.current?.children || [],
-                { opacity: 0, y: 30, scale: 0.95 },
+                heroRef.current,
+                { opacity: 0, y: 40, scale: 0.98 },
                 {
                     opacity: 1,
                     y: 0,
                     scale: 1,
-                    duration: 0.5,
-                    stagger: 0.1,
+                    duration: 0.8,
                     delay: 0.2,
-                    ease: 'back.out(1.2)'
+                    ease: 'power3.out'
                 }
             );
 
@@ -95,23 +99,87 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                     ease: 'power2.out'
                 }
             );
-
-            gsap.fromTo(
-                '.learning-card',
-                { opacity: 0, x: 30 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.5,
-                    stagger: 0.1,
-                    delay: 0.6,
-                    ease: 'power2.out'
-                }
-            );
         }, containerRef);
 
         return () => ctx.revert();
     }, []);
+
+    // XP counter animation
+    useEffect(() => {
+        const prevXp = parseInt(localStorage.getItem('iaco-xp') || '0', 10);
+        localStorage.setItem('iaco-xp', String(userXp));
+
+        const hasGained = userXp > prevXp;
+        const startValue = hasGained ? prevXp : userXp;
+
+        if (hasGained) {
+            // Count up animation
+            const obj = { val: startValue };
+            gsap.to(obj, {
+                val: userXp,
+                duration: 1.2,
+                delay: 0.8,
+                ease: 'power2.out',
+                onUpdate: () => setDisplayedXp(Math.round(obj.val)),
+            });
+
+            // Pulse glow on the badge
+            if (xpBadgeRef.current) {
+                gsap.fromTo(
+                    xpBadgeRef.current,
+                    { scale: 1, boxShadow: '0 0 0px rgba(52, 211, 153, 0)' },
+                    {
+                        scale: 1.15,
+                        boxShadow: '0 0 20px rgba(52, 211, 153, 0.6)',
+                        duration: 0.4,
+                        delay: 0.8,
+                        yoyo: true,
+                        repeat: 3,
+                        ease: 'power2.inOut',
+                    }
+                );
+            }
+        } else {
+            setDisplayedXp(userXp);
+        }
+    }, [userXp]);
+
+    // Streak counter animation
+    useEffect(() => {
+        const prevStreak = parseInt(localStorage.getItem('iaco-streak') || '0', 10);
+        localStorage.setItem('iaco-streak', String(streak));
+
+        const hasIncreased = streak > prevStreak;
+
+        if (hasIncreased && streak > 0) {
+            const obj = { val: prevStreak };
+            gsap.to(obj, {
+                val: streak,
+                duration: 0.8,
+                delay: 1.2,
+                ease: 'power2.out',
+                onUpdate: () => setDisplayedStreak(Math.round(obj.val)),
+            });
+
+            if (streakBadgeRef.current) {
+                gsap.fromTo(
+                    streakBadgeRef.current,
+                    { scale: 1, boxShadow: '0 0 0px rgba(249, 115, 22, 0)' },
+                    {
+                        scale: 1.15,
+                        boxShadow: '0 0 20px rgba(249, 115, 22, 0.6)',
+                        duration: 0.4,
+                        delay: 1.2,
+                        yoyo: true,
+                        repeat: 3,
+                        ease: 'power2.inOut',
+                    }
+                );
+            }
+        } else {
+            setDisplayedStreak(streak);
+        }
+    }, [streak]);
 
     const quickActions = [
         {
@@ -171,18 +239,30 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                         </div>
 
                         {/* User Menu */}
-                        <div className="flex items-center gap-4">
-                            <Link href="/account">
-                                <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                                    <GearIcon className="w-5 h-5" />
-                                </Button>
-                            </Link>
-                            <button
-                                onClick={handleSignOut}
-                                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-                            >
-                                <SignOutIcon className="w-5 h-5" />
-                            </button>
+                        <div className="flex items-center gap-2 sm:gap-4">
+                            <div ref={xpBadgeRef} className="flex items-center gap-1 px-2 py-1.5 sm:gap-1.5 sm:px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                                <SparkleIcon className="w-4 h-4 text-emerald-400" weight="fill" />
+                                <span className="text-xs sm:text-sm font-semibold text-emerald-300">{displayedXp} XP</span>
+                            </div>
+                            <div ref={streakBadgeRef} className="flex items-center gap-1 px-2 py-1.5 sm:gap-1.5 sm:px-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                                <FireIcon className="w-4 h-4 text-orange-400" weight="fill" />
+                                {streak > 0 && (
+                                    <span className="text-xs sm:text-sm font-semibold text-orange-300">{displayedStreak}</span>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-0">
+                                <Link href="/account">
+                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                                        <GearIcon className="w-5 h-5" />
+                                    </Button>
+                                </Link>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors p-2"
+                                >
+                                    <SignOutIcon className="w-5 h-5" />
+                                </button>
+                            </div>
                             <div className="flex items-center gap-3">
                                 {user.image ? (
                                     <Image
@@ -225,136 +305,115 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                     </p>
                 </div>
 
-                {/* Stats Overview */}
-                <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    {/* Portfolio Card */}
-                    <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 rounded-lg bg-emerald-500/20">
-                                <TrendUpIcon className="w-5 h-5 text-emerald-400" />
-                            </div>
-                            <span className="text-xs text-slate-500">{t('stats.portfolio')}</span>
+                {/* Daily Challenge Hero */}
+                <Link href="/challenge" className="block mb-8">
+                    <div
+                        ref={heroRef}
+                        className="relative overflow-hidden rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-slate-900/80 to-blue-900/40 backdrop-blur-sm p-8 md:p-12 min-h-0 flex flex-col justify-between group cursor-pointer hover:border-purple-400/50 transition-all duration-500"
+                    >
+                        {/* Decorative background */}
+                        <div className="absolute inset-0 pointer-events-none">
+                            <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl" />
+                            <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-blue-500/15 rounded-full blur-3xl" />
                         </div>
-                        <p className="text-2xl font-bold text-white mb-1">{t('stats.notConnected')}</p>
-                        <p className="text-sm text-slate-400">{t('stats.connectBinance')}</p>
-                    </div>
 
-                    {/* Learning Progress */}
-                    <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 rounded-lg bg-purple-500/20">
-                                <ChartBarIcon className="w-5 h-5 text-purple-400" />
+                        {/* Top: Badge + Title */}
+                        <div className="relative z-10">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-6">
+                                <TargetIcon className="w-4 h-4 text-purple-400" />
+                                <span className="text-purple-300 text-sm font-medium">
+                                    {t('dailyChallenge.title')}
+                                </span>
                             </div>
-                            <span className="text-xs text-slate-500">{t('stats.progress')}</span>
+                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
+                                {challengeCompleted
+                                    ? t('dailyChallenge.completed')
+                                    : t('dailyChallenge.dayTitle', { day: challengeDay })}
+                            </h2>
+                            <p className="text-xl md:text-2xl text-slate-300 font-medium max-w-2xl">
+                                {challengeTitle}
+                            </p>
                         </div>
-                        <p className="text-2xl font-bold text-white mb-1">0%</p>
-                        <p className="text-sm text-slate-400">{t('stats.startLearning')}</p>
-                    </div>
 
-                    {/* Goals */}
-                    <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="p-2 rounded-lg bg-amber-500/20">
-                                <TargetIcon className="w-5 h-5 text-amber-400" />
+                        {/* Bottom: Metadata + CTA + Progress */}
+                        <div className="relative z-10 mt-8">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60">
+                                    <BookOpenIcon className="w-4 h-4 text-slate-400" />
+                                    <span className="text-sm text-slate-300">{t('dailyChallenge.duration')}</span>
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10">
+                                    <SparkleIcon className="w-4 h-4 text-emerald-400" weight="fill" />
+                                    <span className="text-sm text-emerald-300">{t('dailyChallenge.xp')}</span>
+                                </div>
                             </div>
-                            <span className="text-xs text-slate-500">{t('stats.yourGoal')}</span>
+
+                            <div className="mb-6">
+                                <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-lg ${challengeCompleted ? 'bg-emerald-600 text-white' : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'} group-hover:scale-105 transition-transform duration-300`}>
+                                    <PlayIcon className="w-5 h-5" weight="fill" />
+                                    <span>{t('dailyChallenge.cta')}</span>
+                                </div>
+                            </div>
+
+                            <div className="max-w-md">
+                                <div className="flex justify-between text-sm text-slate-400 mb-2">
+                                    <span>{challengeDay} / 14</span>
+                                    <span>{Math.round((challengeDay / 14) * 100)}%</span>
+                                </div>
+                                <div className="h-2 bg-slate-800/80 rounded-full overflow-hidden">
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-700 ${challengeCompleted ? 'bg-gradient-to-r from-emerald-500 to-green-400 w-full' : 'bg-gradient-to-r from-purple-500 to-pink-500'}`}
+                                        style={challengeCompleted ? undefined : { width: `${Math.round((challengeDay / 14) * 100)}%` }}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-2xl font-bold text-white mb-1 capitalize">
-                            {profile.objectives[0]?.replace('defi', 'DeFi').replace('-', ' ') || 'Learning'}
-                        </p>
-                        <p className="text-sm text-slate-400">{t('stats.focusArea')}</p>
                     </div>
-                </div>
+                </Link>
 
                 {/* Price Alerts Section */}
                 <div className="mb-8">
                     <AlertsSection />
                 </div>
 
-                {/* Two Column Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Quick Actions */}
-                    <div ref={actionsRef}>
-                        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                            <LightningIcon className="w-5 h-5 text-amber-400" weight="fill" />
-                            {t('quickActions.title')}
-                        </h2>
-                        <div className="space-y-4">
-                            {quickActions.map((action) => {
-                                const Icon = action.icon;
-                                return (
-                                    <Link
-                                        key={action.id}
-                                        href={action.href}
-                                        onClick={(e) => {
-                                            if (action.action) {
-                                                e.preventDefault();
-                                                action.action();
-                                            }
-                                        }}
-                                        className="action-card block group"
-                                    >
-                                        <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300 hover:scale-[1.02]">
-                                            <div className="flex items-center gap-4">
-                                                <div className={`p-3 rounded-xl bg-gradient-to-br ${action.gradient}`}>
-                                                    <Icon className="w-6 h-6 text-white" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
-                                                        {action.title}
-                                                    </h3>
-                                                    <p className="text-sm text-slate-400">{action.description}</p>
-                                                </div>
-                                                <CaretRightIcon className="w-5 h-5 text-slate-600 group-hover:text-slate-400 group-hover:translate-x-1 transition-all" />
+                {/* Quick Actions */}
+                <div ref={actionsRef} className="mb-8">
+                    <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                        <LightningIcon className="w-5 h-5 text-amber-400" weight="fill" />
+                        {t('quickActions.title')}
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {quickActions.map((action) => {
+                            const Icon = action.icon;
+                            return (
+                                <Link
+                                    key={action.id}
+                                    href={action.href}
+                                    onClick={(e) => {
+                                        if (action.action) {
+                                            e.preventDefault();
+                                            action.action();
+                                        }
+                                    }}
+                                    className="action-card block group"
+                                >
+                                    <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300 hover:scale-[1.02]">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`p-3 rounded-xl bg-gradient-to-br ${action.gradient}`}>
+                                                <Icon className="w-6 h-6 text-white" />
                                             </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Learning Modules */}
-                    <div ref={learningRef}>
-                        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                            <BookOpenIcon className="w-5 h-5 text-purple-400" />
-                            {t('dailyChallenge.title')}
-                        </h2>
-                        <Link href="/challenge" className="learning-card block group">
-                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300">
-                                <div className="flex items-center gap-4">
-                                    <div className={`p-3 rounded-xl ${challengeCompleted ? 'bg-emerald-500/20' : 'bg-slate-800'}`}>
-                                        <TargetIcon className={`w-6 h-6 ${challengeCompleted ? 'text-emerald-400' : 'text-purple-400'}`} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className={`text-lg font-semibold text-white transition-colors ${challengeCompleted ? 'group-hover:text-emerald-400' : 'group-hover:text-purple-400'}`}>
-                                            {challengeCompleted
-                                                ? t('dailyChallenge.completed')
-                                                : t('dailyChallenge.dayTitle', { day: challengeDay })}
-                                        </h3>
-                                        <div className="flex items-center gap-3 text-sm text-slate-400">
-                                            <span>{t('dailyChallenge.duration')}</span>
-                                            <span>•</span>
-                                            <span>{t('dailyChallenge.xp')}</span>
+                                            <div className="flex-1">
+                                                <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
+                                                    {action.title}
+                                                </h3>
+                                                <p className="text-sm text-slate-400">{action.description}</p>
+                                            </div>
+                                            <CaretRightIcon className="w-5 h-5 text-slate-600 group-hover:text-slate-400 group-hover:translate-x-1 transition-all" />
                                         </div>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="bg-slate-800 hover:bg-slate-700 text-white"
-                                    >
-                                        <PlayIcon className="w-4 h-4" weight="fill" />
-                                    </Button>
-                                </div>
-                                {/* Progress bar */}
-                                <div className="mt-4 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                    <div
-                                        className={`h-full rounded-full transition-all duration-500 ${challengeCompleted ? 'bg-gradient-to-r from-emerald-500 to-green-400 w-full' : 'bg-gradient-to-r from-purple-500 to-pink-500'}`}
-                                        style={challengeCompleted ? undefined : { width: `${Math.round((challengeDay / 14) * 100)}%` }}
-                                    />
-                                </div>
-                            </div>
-                        </Link>
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
 

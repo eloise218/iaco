@@ -8,6 +8,7 @@ import {
   char,
   json,
   decimal,
+  int,
   index,
   uniqueIndex,
 } from "drizzle-orm/mysql-core";
@@ -262,6 +263,30 @@ export const cryptoAlerts = mysqlTable(
       table.triggered,
       table.acknowledged
     ),
+  })
+);
+
+// Challenge progress tracking (XP system)
+export const challengeProgress = mysqlTable(
+  "challenge_progress",
+  {
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+
+    day: int("day").notNull(),
+    openedAt: timestamp("opened_at").defaultNow(),
+  },
+  (table) => ({
+    userDayIdx: uniqueIndex("challenge_progress_user_day_idx").on(
+      table.userId,
+      table.day
+    ),
+    userIdIdx: index("challenge_progress_user_id_idx").on(table.userId),
   })
 );
 

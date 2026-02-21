@@ -1,18 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/ui/button';
-import { BetaModal } from '../beta-modal';
 import { RocketIcon, ArrowRightIcon } from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function FinalCtaSection() {
     const sectionRef = useRef<HTMLElement>(null);
-    const [showBetaModal, setShowBetaModal] = useState(false);
     const t = useTranslations('finalCta');
 
     useEffect(() => {
@@ -37,16 +36,6 @@ export function FinalCtaSection() {
         return () => ctx.revert();
     }, []);
 
-    const handleBetaClick = () => {
-        if (typeof window !== 'undefined' && (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag) {
-            (window as unknown as { gtag: (...args: unknown[]) => void }).gtag('event', 'beta_signup_click', {
-                event_category: 'engagement',
-                event_label: 'final_cta',
-            });
-        }
-        setShowBetaModal(true);
-    };
-
     return (
         <section ref={sectionRef} className="py-24 md:py-32">
             <div className="container mx-auto px-4 lg:px-8">
@@ -65,14 +54,15 @@ export function FinalCtaSection() {
                             {t('subtitle')}
                         </p>
 
-                        <Button
-                            size="lg"
-                            className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow group"
-                            onClick={handleBetaClick}
-                        >
-                            {t('cta')}
-                            <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
+                        <Link href="/sign-up">
+                            <Button
+                                size="lg"
+                                className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow group"
+                            >
+                                {t('cta')}
+                                <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                        </Link>
 
                         <p className="mt-6 text-sm text-muted-foreground">
                             {t('assurance')}
@@ -81,7 +71,6 @@ export function FinalCtaSection() {
                 </div>
             </div>
 
-            <BetaModal open={showBetaModal} onOpenChange={setShowBetaModal} />
         </section>
     );
 }

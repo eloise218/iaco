@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { BetaModal } from '../beta-modal';
 import { ShieldCheckIcon } from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function HeroSection() {
     const sectionRef = useRef<HTMLElement>(null);
-    const [showBetaModal, setShowBetaModal] = useState(false);
     const t = useTranslations('hero');
 
     useEffect(() => {
@@ -63,16 +62,6 @@ export function HeroSection() {
         return () => ctx.revert();
     }, []);
 
-    const handleBetaClick = () => {
-        // Track click event
-        if (typeof window !== 'undefined' && (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag) {
-            (window as unknown as { gtag: (...args: unknown[]) => void }).gtag('event', 'beta_signup_click', {
-                event_category: 'engagement',
-                event_label: 'hero_cta',
-            });
-        }
-        setShowBetaModal(true);
-    };
 
     return (
         <section
@@ -115,13 +104,14 @@ export function HeroSection() {
 
                         {/* CTA */}
                         <div className="hero-cta opacity-0 mb-4">
-                            <Button
-                                size="lg"
-                                className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
-                                onClick={handleBetaClick}
-                            >
-                                {t('cta')}
-                            </Button>
+                            <Link href="/sign-up">
+                                <Button
+                                    size="lg"
+                                    className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
+                                >
+                                    {t('cta')}
+                                </Button>
+                            </Link>
                         </div>
 
                         {/* Trust Signal - Below button */}
@@ -161,7 +151,6 @@ export function HeroSection() {
                 </div>
             </div>
 
-            <BetaModal open={showBetaModal} onOpenChange={setShowBetaModal} />
         </section>
     );
 }

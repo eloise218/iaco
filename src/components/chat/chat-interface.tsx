@@ -114,7 +114,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         return;
       }
 
-      // Subtask 6.2: Parse streaming response from API
+      // Parse streaming response (plain text from toTextStreamResponse)
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
 
@@ -123,9 +123,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       }
 
       let accumulatedContent = "";
-      let buffer = "";
 
-      // Subtask 6.2: Update UI progressively as text streams
       while (true) {
         const { done, value } = await reader.read();
 
@@ -134,38 +132,8 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         }
 
         const chunk = decoder.decode(value, { stream: true });
-        buffer += chunk;
-        const lines = buffer.split("\n");
-
-        // Keep the last line in buffer if it doesn't end with newline (incomplete)
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (line.startsWith("0:")) {
-            // Text chunk from AI SDK
-            // AI SDK encodes quotes as ", so simple replace might be risking it.
-            // Using JSON.parse approach for safety if possible, or robust unquoting.
-            try {
-              // The format is 0:"string content"
-              // JSON.parse the string part
-              const jsonStr = line.substring(2);
-              if (jsonStr.startsWith('"') && jsonStr.endsWith('"')) {
-                const content = JSON.parse(jsonStr);
-                if (content) {
-                  accumulatedContent += content;
-                  setStreamingContent(accumulatedContent);
-                }
-              }
-            } catch (e) {
-              // Fallback manual parse if JSON parse fails (though 0:"..." should be valid JSON string)
-              const content = line.slice(2).replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"').replace(/\\n/g, '\n');
-              if (content) {
-                accumulatedContent += content;
-                setStreamingContent(accumulatedContent);
-              }
-            }
-          }
-        }
+        accumulatedContent += chunk;
+        setStreamingContent(accumulatedContent);
       }
 
       // Subtask 6.2: Handle stream completion

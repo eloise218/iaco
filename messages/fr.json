@@ -28,7 +28,7 @@
         "headlineDays": "21 jours",
         "subheadline": "Sans jargon. Sans stress.",
         "subtitle": "Maîtrise les bases, repère les arnaques et investis en confiance  accompagné par {assistant}, ton coach IA personnel.",
-        "cta": "Rejoindre la liste d'attente bêta",
+        "cta": "Rejoindre le challenge",
         "trust": "Remboursé si tu réussis le défi"
     },
     "youHesitate": {
@@ -180,8 +180,8 @@
     "finalCta": {
         "title": "Prêt à comprendre les cryptos",
         "titleHighlight": "sans stress",
-        "subtitle": "Inscris-toi sur la liste d'attente bêta et sois parmi les premiers à rejoindre le défi.",
-        "cta": "Rejoindre la liste d'attente",
+        "subtitle": "Rejoins le challenge et fais partie des premiers bêta testeurs.",
+        "cta": "Rejoindre le challenge",
         "assurance": "Pas de spam. Pas d'engagement. Juste un accès anticipé."
     },
     "betaModal": {
@@ -250,7 +250,8 @@
             "dayTitle": "Jour {day} / 14",
             "completed": "Tous les défis terminés !",
             "duration": "5 min de lecture",
-            "xp": "+50 XP"
+            "xp": "+20 XP",
+            "cta": "Commencer la lecture"
         },
         "alerts": {
             "title": "Alertes",
