@@ -12,12 +12,14 @@ import {
     ShieldCheckIcon,
     CaretLeftIcon,
     SparkleIcon,
+    BellIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import UserDetailsForm from '@/components/account/user-details-form';
 import ProfileSettingsForm from '@/components/account/profile-settings-form';
 import BinanceKeysForm from '@/components/account/binance-keys-form';
+import { PushPermission } from '@/components/push/push-permission';
 
 interface AccountContentProps {
     user: {
@@ -44,6 +46,7 @@ export function AccountContent({ user, profile }: AccountContentProps) {
     const navItems = [
         { id: 'profile', label: t('sections.profile'), icon: UserIcon },
         { id: 'preferences', label: t('sections.preferences'), icon: GearIcon },
+        { id: 'notifications', label: t('sections.notifications'), icon: BellIcon },
         { id: 'binance', label: t('sections.binance'), icon: KeyIcon },
         { id: 'security', label: t('sections.security'), icon: ShieldCheckIcon },
     ];
@@ -208,6 +211,30 @@ export function AccountContent({ user, profile }: AccountContentProps) {
                                             riskTolerance: profile?.riskTolerance || 'low',
                                         }}
                                     />
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Notifications Section */}
+                        <section id="notifications" className="settings-card scroll-mt-24">
+                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 overflow-hidden">
+                                <div className="px-6 py-5 border-b border-slate-800/50 flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-cyan-500/20">
+                                        <BellIcon className="w-5 h-5 text-cyan-400" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-white">{t('notifications.title')}</h2>
+                                        <p className="text-sm text-slate-400">{t('notifications.description')}</p>
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex items-center justify-between bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
+                                        <div>
+                                            <p className="font-medium text-white">{t('notifications.push')}</p>
+                                            <p className="text-sm text-slate-400 mt-1">{t('notifications.pushDescription')}</p>
+                                        </div>
+                                        <PushPermission />
+                                    </div>
                                 </div>
                             </div>
                         </section>

@@ -328,6 +328,7 @@
         "sections": {
             "profile": "Profile",
             "preferences": "Preferences",
+            "notifications": "Notifications",
             "binance": "Binance",
             "security": "Security"
         },
@@ -344,6 +345,12 @@
             "experienceLevel": "Experience Level",
             "interests": "Interests",
             "riskTolerance": "Risk Tolerance"
+        },
+        "notifications": {
+            "title": "Notifications",
+            "description": "Manage your push notification settings",
+            "push": "Push Notifications",
+            "pushDescription": "Receive alerts on your device when a crypto reaches your target price"
         },
         "binance": {
             "title": "Binance Integration",

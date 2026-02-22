@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/themes/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ServiceWorkerRegistrar } from "@/components/service-worker-registrar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,12 +15,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: '#0f172a',
+  viewportFit: 'cover',
+};
+
 export const metadata: Metadata = {
-  title: "AI Crypto Assistant",
+  title: "IACO - AI Crypto Assistant",
   description: "Your personal AI-powered crypto learning and portfolio tracking companion",
   icons: {
     icon: "/logo.png",
-    apple: "/logo.png",
+    apple: "/icons/icon-192.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "IACO",
+    statusBarStyle: "black-translucent",
   },
 };
 
@@ -41,6 +52,7 @@ export default function RootLayout({
           >
             {children}
             <Toaster />
+            <ServiceWorkerRegistrar />
           </ThemeProvider>
       </body>
     </html>

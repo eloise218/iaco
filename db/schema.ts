@@ -290,6 +290,28 @@ export const challengeProgress = mysqlTable(
   })
 );
 
+// Push notification subscriptions (Web Push)
+export const pushSubscriptions = mysqlTable(
+  "push_subscriptions",
+  {
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+
+    endpoint: text("endpoint").notNull(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index("push_subscriptions_user_id_idx").on(table.userId),
+  })
+);
+
 // Note: Relations are commented out due to TypeScript compatibility issues with current Drizzle version
 // The foreign key constraints in the schema provide the necessary database-level relationships
 // Relations can be added back when using Drizzle queries if needed
