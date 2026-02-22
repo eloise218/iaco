@@ -1,40 +1,44 @@
 /**
  * AI SDK Configuration
- * 
- * This file configures the AI providers and models used throughout the application.
- * Currently supports OpenAI with the ability to add other providers (Anthropic, Mistral, etc.)
+ *
+ * Supports OpenAI, Google Gemini and Mistral. Set AI_PROVIDER in .env.local to switch.
  */
 
 import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google';
+import { mistral } from '@ai-sdk/mistral';
 
-/**
- * Default AI model configuration
- */
 export const AI_CONFIG = {
-  // Primary model for chat responses
-  chatModel: openai('gpt-4-turbo'),
-  
-  // Model parameters
   temperature: 0.7,
   maxTokens: 1000,
-  
-  // Context window settings
   maxHistoryMessages: 20,
 } as const;
 
 /**
- * Validate that required environment variables are set
+ * Returns the chat model based on AI_PROVIDER env variable.
+ * - "gemini"  → Google Gemini 2.0 Flash  (requires GOOGLE_GENERATIVE_AI_API_KEY)
+ * - "mistral" → Mistral Small Latest     (requires MISTRAL_API_KEY)
+ * - "openai"  → OpenAI GPT-4o Mini       (requires OPENAI_API_KEY)
  */
-export function validateAIConfig() {
+export function getChatModel() {
+  const provider = process.env.AI_PROVIDER || 'openai';
+
+  if (provider === 'gemini') {
+    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+      throw new Error('GOOGLE_GENERATIVE_AI_API_KEY environment variable is not set');
+    }
+    return google('gemini-2.0-flash');
+  }
+
+  if (provider === 'mistral') {
+    if (!process.env.MISTRAL_API_KEY) {
+      throw new Error('MISTRAL_API_KEY environment variable is not set');
+    }
+    return mistral('mistral-small-latest');
+  }
+
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY environment variable is not set');
   }
-}
-
-/**
- * Get the configured chat model
- */
-export function getChatModel() {
-  validateAIConfig();
-  return AI_CONFIG.chatModel;
+  return openai('gpt-4o-mini');
 }

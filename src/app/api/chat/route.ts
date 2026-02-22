@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 import { auth } from '@/lib/auth';
 import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { getChatModel } from '@/lib/ai/config';
 import db from '@/db/drizzle';
 import { chatMessages, userProfiles } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
@@ -102,9 +102,10 @@ export async function POST(req: Request) {
       history = [];
     }
 
-    // Subtask 3.2: Build context messages array
+    // Subtask 3.2: Build context messages array (filter out empty messages)
     const contextMessages = history
-      .reverse() // Convert to chronological order
+      .reverse()
+      .filter(msg => msg.content && msg.content.trim().length > 0)
       .map(msg => ({
         role: msg.role as 'user' | 'assistant',
         content: msg.content,
@@ -137,7 +138,7 @@ export async function POST(req: Request) {
     // Subtask 3.3: Call streamText with OpenAI model
     const userId = session.user.id;
     const result = streamText({
-      model: openai('gpt-4-turbo'),
+      model: getChatModel(),
       system: buildSystemPrompt(profile),
       messages: contextMessages,
       temperature: 0.7,

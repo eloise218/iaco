@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Drawer,
@@ -48,6 +49,7 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl h-[600px] p-0 flex flex-col" showCloseButton={false}>
+        <DialogTitle className="sr-only">CryptoCoach</DialogTitle>
         <ChatInterface onClose={() => onOpenChange(false)} />
       </DialogContent>
     </Dialog>
