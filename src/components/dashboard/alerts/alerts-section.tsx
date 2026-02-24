@@ -31,12 +31,12 @@ export function AlertsSection() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <BellIcon className="w-5 h-5 text-amber-400" weight="fill" />
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h2 className="text-base sm:text-xl font-semibold text-white flex items-center gap-2">
+          <BellIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" weight="fill" />
           {t("title")}
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <CreateAlertForm onAlertCreated={refetch} />
           <CreateVolatilityForm onAlertCreated={refetch} />
         </div>

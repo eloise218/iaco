@@ -23,9 +23,9 @@
         "theChallenge": "Le Défi"
     },
     "hero": {
-        "badge": "Défi 21 Jours",
+        "badge": "Défi 14 Jours",
         "headline": "Comprends les cryptos en",
-        "headlineDays": "21 jours",
+        "headlineDays": "14 jours",
         "subheadline": "Sans jargon. Sans stress.",
         "subtitle": "Maîtrise les bases, repère les arnaques et investis en confiance  accompagné par {assistant}, ton coach IA personnel.",
         "cta": "Rejoindre le challenge",
@@ -47,11 +47,11 @@
     },
     "whatYouGet": {
         "title": "Ce que tu obtiens avec le",
-        "titleHighlight": "défi 21 jours",
+        "titleHighlight": "défi 14 jours",
         "benefits": {
             "stepByStep": {
                 "title": "Avance étape par étape",
-                "description": "Pendant 21 jours, tu progresses à ton rythme pour enfin comprendre les cryptos sans te sentir perdu."
+                "description": "Pendant 14 jours, tu progresses à ton rythme pour enfin comprendre les cryptos sans te sentir perdu."
             },
             "clear": {
                 "title": "Des explications claires et accessibles",
@@ -67,7 +67,7 @@
             },
             "confidence": {
                 "title": "De la confiance, pas de l'expertise",
-                "description": "À la fin des 21 jours, tu sais ce que tu fais, pourquoi tu le fais et comment avancer."
+                "description": "À la fin des 14 jours, tu sais ce que tu fais, pourquoi tu le fais et comment avancer."
             }
         }
     },
@@ -76,7 +76,7 @@
         "steps": {
             "signup": {
                 "title": "Inscris-toi au défi",
-                "description": "Rejoins et avance pendant 21 jours, étape par étape."
+                "description": "Rejoins et avance pendant 14 jours, étape par étape."
             },
             "daily": {
                 "title": "Un concept par jour",
@@ -320,6 +320,11 @@
         "educationalBanner": {
             "title": "📚 Rappel : L'éducation d'abord",
             "description": "Cette application est conçue pour t'aider à apprendre les cryptomonnaies. Tout le contenu est à but éducatif uniquement et ne doit pas être considéré comme un conseil financier. Fais toujours tes propres recherches avant de prendre des décisions d'investissement."
+        },
+        "tips": {
+            "xpStreak": "Ici tu peux voir le nombre d'XP que tu as gagné et le nombre de jours consécutifs où tu as suivi le challenge ! 🔥",
+            "chatAssistant": "Si tu as des questions, tu peux les poser à IACO, notre assistant IA 🤖",
+            "dismiss": "Compris !"
         }
     },
     "account": {
@@ -330,7 +335,8 @@
             "preferences": "Préférences",
             "notifications": "Notifications",
             "binance": "Binance",
-            "security": "Sécurité"
+            "security": "Sécurité",
+            "legal": "Mentions légales"
         },
         "profile": {
             "title": "Informations personnelles",
@@ -364,6 +370,14 @@
         "security": {
             "title": "Sécurité",
             "description": "Gère la sécurité de ton compte"
+        },
+        "legal": {
+            "title": "Mentions légales",
+            "description": "Consulte nos documents juridiques",
+            "privacyPolicy": "Politique de confidentialité",
+            "termsOfService": "Conditions d'utilisation",
+            "cookiePolicy": "Politique des cookies",
+            "disclaimer": "Avertissement"
         }
     },
     "onboarding": {
@@ -396,6 +410,18 @@
             "cta": "Aller au tableau de bord"
         }
     },
+    "notificationsPrompt": {
+        "title": "Tu veux vraiment progresser en crypto ?",
+        "description": "Pour atteindre ton objectif, je peux te rappeler",
+        "point1": "quand apprendre,",
+        "point2": "quand observer le marché",
+        "point3": "quand passer à l'action.",
+        "impact": "Ces notifications peuvent faire toute la différence.",
+        "question": "Tu m'autorises à t'aider ?",
+        "accept": "Oui, je veux progresser",
+        "decline": "Non merci",
+        "hint": "Tu peux les désactiver à tout moment"
+    },
     "chat": {
         "title": "CryptoCoach",
         "disclaimer": "Ceci est un assistant IA à but éducatif uniquement. Pas un conseil financier.",
@@ -423,7 +449,7 @@
         },
         "signUp": {
             "title": "Crée ton compte",
-            "subtitle": "Commence ton défi d'apprentissage crypto de 21 jours",
+            "subtitle": "Commence ton défi d'apprentissage crypto de 14 jours",
             "google": "Continuer avec Google",
             "hasAccount": "Tu as déjà un compte ?",
             "signIn": "Se connecter",
@@ -497,5 +523,11 @@
             "title": "Aucune vidéo trouvée",
             "message": "Essaie de modifier tes filtres ou ta recherche"
         }
+    },
+    "cookieBanner": {
+        "message": "Nous utilisons des cookies pour assurer le bon fonctionnement de notre site et mesurer l'audience.",
+        "accept": "Accepter",
+        "decline": "Refuser",
+        "learnMore": "Politique des cookies"
     }
 }

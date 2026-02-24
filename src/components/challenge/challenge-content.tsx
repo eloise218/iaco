@@ -10,6 +10,7 @@ import {
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';
+import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 
 interface ChallengeContentProps {
     challengeDay: number;
@@ -120,9 +121,9 @@ export function ChallengeContent({
                                 p: ({ children }) => <p className="mb-4">{children}</p>,
                                 strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
                                 em: ({ children }) => <em className="italic">{children}</em>,
-                                h1: ({ children }) => <h1 className="text-2xl font-bold text-white mb-4 mt-6">{children}</h1>,
-                                h2: ({ children }) => <h2 className="text-xl font-bold text-white mb-3 mt-5">{children}</h2>,
-                                h3: ({ children }) => <h3 className="text-lg font-bold text-white mb-2 mt-4">{children}</h3>,
+                                h1: ({ children }) => <h1 className="text-2xl font-bold text-white mb-4 mt-14">{children}</h1>,
+                                h2: ({ children }) => <h2 className="text-xl font-bold text-white mb-3 mt-12">{children}</h2>,
+                                h3: ({ children }) => <h3 className="text-lg font-bold text-white mb-2 mt-7">{children}</h3>,
                                 ul: ({ children }) => <ul className="list-disc list-inside mb-4 space-y-1">{children}</ul>,
                                 ol: ({ children }) => <ol className="list-decimal list-inside mb-4 space-y-1">{children}</ol>,
                                 li: ({ children }) => <li className="ml-2">{children}</li>,
@@ -138,7 +139,7 @@ export function ChallengeContent({
                     <Link href="/dashboard">
                         <Button
                             variant="ghost"
-                            className="text-slate-400 hover:text-white"
+                            className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
                         >
                             <ArrowLeftIcon className="w-4 h-4 mr-2" />
                             {t('backToDashboard')}
@@ -146,6 +147,9 @@ export function ChallengeContent({
                     </Link>
                 </div>
             </div>
+
+            {/* AI Assistant bubble */}
+            <ChatBubbleWrapper />
         </div>
     );
 }

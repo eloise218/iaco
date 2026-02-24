@@ -6,23 +6,20 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
 import {
-    ChatCircleIcon,
-    BookOpenIcon,
-    WalletIcon,
     SparkleIcon,
-    LightningIcon,
     ChartLineIcon,
     TargetIcon,
     GearIcon,
     SignOutIcon,
-    CaretRightIcon,
     PlayIcon,
-    FireIcon
+    FireIcon,
+    BookOpenIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import { AlertsSection } from './alerts/alerts-section';
 import { authClient } from '@/lib/auth-client';
+import { OnboardingTips } from './onboarding-tips';
 
 interface DashboardContentProps {
     user: {
@@ -48,7 +45,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
     const containerRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLDivElement>(null);
-    const actionsRef = useRef<HTMLDivElement>(null);
     const xpBadgeRef = useRef<HTMLDivElement>(null);
     const streakBadgeRef = useRef<HTMLDivElement>(null);
     const [displayedXp, setDisplayedXp] = useState(0);
@@ -87,18 +83,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                 }
             );
 
-            gsap.fromTo(
-                '.action-card',
-                { opacity: 0, x: -30 },
-                {
-                    opacity: 1,
-                    x: 0,
-                    duration: 0.5,
-                    stagger: 0.1,
-                    delay: 0.4,
-                    ease: 'power2.out'
-                }
-            );
         }, containerRef);
 
         return () => ctx.revert();
@@ -181,34 +165,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
         }
     }, [streak]);
 
-    const quickActions = [
-        {
-            id: 'chat',
-            title: t('quickActions.askAI.title'),
-            description: t('quickActions.askAI.description'),
-            icon: ChatCircleIcon,
-            gradient: 'from-blue-500 to-cyan-500',
-            href: '#',
-            action: () => window.dispatchEvent(new Event('open-chat-dialog')),
-        },
-        {
-            id: 'learn',
-            title: t('quickActions.startLearning.title'),
-            description: t('quickActions.startLearning.description'),
-            icon: BookOpenIcon,
-            gradient: 'from-purple-500 to-pink-500',
-            href: '/learn',
-        },
-        {
-            id: 'connect',
-            title: t('quickActions.connectBinance.title'),
-            description: t('quickActions.connectBinance.description'),
-            icon: WalletIcon,
-            gradient: 'from-amber-500 to-orange-500',
-            href: '/account',
-        },
-    ];
-
     return (
         <div
             ref={containerRef}
@@ -222,7 +178,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
             </div>
 
             {/* Header */}
-            <header ref={headerRef} className="relative z-10 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl">
+            <header ref={headerRef} className="relative z-10 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl opacity-0">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
@@ -286,10 +242,10 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
             </header>
 
             {/* Main Content */}
-            <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
                 {/* Welcome Section */}
-                <div className="mb-8">
-                    <div className="flex items-center gap-2 mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <div className="hidden sm:flex items-center gap-2 mb-2">
                         <SparkleIcon className="w-5 h-5 text-amber-400" weight="fill" />
                         <span className="text-amber-400 text-sm font-medium">
                             {profile.experienceLevel === 'beginner'
@@ -297,19 +253,19 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                                 : t('experienceLevel.intermediate')} {t('explorer')}
                         </span>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
                         {getGreeting()}, {user.name.split(' ')[0]}! 👋
                     </h1>
-                    <p className="text-slate-400 text-lg">
+                    <p className="hidden sm:block text-slate-400 text-lg">
                         {t('welcome')}
                     </p>
                 </div>
 
                 {/* Daily Challenge Hero */}
-                <Link href="/challenge" className="block mb-8">
+                <Link href="/challenge" className="block mb-8 sm:mb-10">
                     <div
                         ref={heroRef}
-                        className="relative overflow-hidden rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-slate-900/80 to-blue-900/40 backdrop-blur-sm p-8 md:p-12 min-h-0 flex flex-col justify-between group cursor-pointer hover:border-purple-400/50 transition-all duration-500"
+                        className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-900/40 via-slate-900/80 to-blue-900/40 backdrop-blur-sm px-5 py-5 sm:px-8 sm:py-7 md:px-12 md:py-10 min-h-0 flex flex-col justify-between group cursor-pointer hover:border-purple-400/50 transition-all duration-500 opacity-0"
                     >
                         {/* Decorative background */}
                         <div className="absolute inset-0 pointer-events-none">
@@ -319,48 +275,48 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
 
                         {/* Top: Badge + Title */}
                         <div className="relative z-10">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-6">
-                                <TargetIcon className="w-4 h-4 text-purple-400" />
-                                <span className="text-purple-300 text-sm font-medium">
+                            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-3 sm:mb-4">
+                                <TargetIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
+                                <span className="text-purple-300 text-xs sm:text-sm font-medium">
                                     {t('dailyChallenge.title')}
                                 </span>
                             </div>
-                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
+                            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-1 sm:mb-2">
                                 {challengeCompleted
                                     ? t('dailyChallenge.completed')
                                     : t('dailyChallenge.dayTitle', { day: challengeDay })}
                             </h2>
-                            <p className="text-xl md:text-2xl text-slate-300 font-medium max-w-2xl">
+                            <p className="text-base sm:text-xl md:text-2xl text-slate-300 font-medium max-w-2xl">
                                 {challengeTitle}
                             </p>
                         </div>
 
                         {/* Bottom: Metadata + CTA + Progress */}
-                        <div className="relative z-10 mt-8">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60">
-                                    <BookOpenIcon className="w-4 h-4 text-slate-400" />
-                                    <span className="text-sm text-slate-300">{t('dailyChallenge.duration')}</span>
+                        <div className="relative z-10 mt-4 sm:mt-6">
+                            <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-slate-800/60">
+                                    <BookOpenIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
+                                    <span className="text-xs sm:text-sm text-slate-300">{t('dailyChallenge.duration')}</span>
                                 </div>
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10">
-                                    <SparkleIcon className="w-4 h-4 text-emerald-400" weight="fill" />
-                                    <span className="text-sm text-emerald-300">{t('dailyChallenge.xp')}</span>
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10">
+                                    <SparkleIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" weight="fill" />
+                                    <span className="text-xs sm:text-sm text-emerald-300">{t('dailyChallenge.xp')}</span>
                                 </div>
                             </div>
 
-                            <div className="mb-6">
-                                <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-lg ${challengeCompleted ? 'bg-emerald-600 text-white' : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'} group-hover:scale-105 transition-transform duration-300`}>
-                                    <PlayIcon className="w-5 h-5" weight="fill" />
+                            <div className="mb-3 sm:mb-4">
+                                <div className={`inline-flex items-center gap-2 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-base sm:text-lg ${challengeCompleted ? 'bg-emerald-600 text-white' : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'} group-hover:scale-105 transition-transform duration-300`}>
+                                    <PlayIcon className="w-4 h-4 sm:w-5 sm:h-5" weight="fill" />
                                     <span>{t('dailyChallenge.cta')}</span>
                                 </div>
                             </div>
 
                             <div className="max-w-md">
-                                <div className="flex justify-between text-sm text-slate-400 mb-2">
+                                <div className="flex justify-between text-xs sm:text-sm text-slate-400 mb-1.5 sm:mb-2">
                                     <span>{challengeDay} / 14</span>
                                     <span>{Math.round((challengeDay / 14) * 100)}%</span>
                                 </div>
-                                <div className="h-2 bg-slate-800/80 rounded-full overflow-hidden">
+                                <div className="h-1.5 sm:h-2 bg-slate-800/80 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full rounded-full transition-all duration-700 ${challengeCompleted ? 'bg-gradient-to-r from-emerald-500 to-green-400 w-full' : 'bg-gradient-to-r from-purple-500 to-pink-500'}`}
                                         style={challengeCompleted ? undefined : { width: `${Math.round((challengeDay / 14) * 100)}%` }}
@@ -372,62 +328,21 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                 </Link>
 
                 {/* Price Alerts Section */}
-                <div className="mb-8">
+                <div className="mb-6 sm:mb-8">
                     <AlertsSection />
                 </div>
 
-                {/* Quick Actions */}
-                <div ref={actionsRef} className="mb-8">
-                    <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                        <LightningIcon className="w-5 h-5 text-amber-400" weight="fill" />
-                        {t('quickActions.title')}
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {quickActions.map((action) => {
-                            const Icon = action.icon;
-                            return (
-                                <Link
-                                    key={action.id}
-                                    href={action.href}
-                                    onClick={(e) => {
-                                        if (action.action) {
-                                            e.preventDefault();
-                                            action.action();
-                                        }
-                                    }}
-                                    className="action-card block group"
-                                >
-                                    <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 p-5 hover:border-slate-700 transition-all duration-300 hover:scale-[1.02]">
-                                        <div className="flex items-center gap-4">
-                                            <div className={`p-3 rounded-xl bg-gradient-to-br ${action.gradient}`}>
-                                                <Icon className="w-6 h-6 text-white" />
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
-                                                    {action.title}
-                                                </h3>
-                                                <p className="text-sm text-slate-400">{action.description}</p>
-                                            </div>
-                                            <CaretRightIcon className="w-5 h-5 text-slate-600 group-hover:text-slate-400 group-hover:translate-x-1 transition-all" />
-                                        </div>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </div>
-
                 {/* Educational Banner */}
-                <div className="mt-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl border border-blue-500/20 p-6">
-                    <div className="flex items-start gap-4">
-                        <div className="p-3 rounded-xl bg-blue-500/20">
-                            <ChartLineIcon className="w-6 h-6 text-blue-400" />
+                <div className="mt-4 sm:mt-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl sm:rounded-2xl border border-blue-500/20 p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                        <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-blue-500/20">
+                            <ChartLineIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-white mb-1">
+                            <h3 className="text-base sm:text-lg font-semibold text-white mb-1">
                                 {t('educationalBanner.title')}
                             </h3>
-                            <p className="text-slate-300 text-sm leading-relaxed">
+                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                                 {t('educationalBanner.description')}
                             </p>
                         </div>
@@ -437,6 +352,9 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
 
             {/* Chat Bubble */}
             <ChatBubbleWrapper />
+
+            {/* First-time onboarding tips (day 1 only) */}
+            {challengeDay === 1 && <OnboardingTips />}
         </div>
     );
 }

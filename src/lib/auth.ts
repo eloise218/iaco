@@ -39,9 +39,10 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
+      const verificationUrl = url;
       console.error("\n========== EMAIL VERIFICATION LINK ==========");
       console.error("Email: " + user.email);
-      console.error("Link: " + url);
+      console.error("Link: " + verificationUrl);
       console.error("==============================================\n");
       await resend.emails.send({
         from: "IACO <onboarding@resend.dev>",
@@ -49,7 +50,7 @@ export const auth = betterAuth({
         subject: "Vérifie ton adresse email - IACO",
         html: `<h2>Bienvenue sur IACO !</h2>
           <p>Clique sur le lien ci-dessous pour vérifier ton adresse email :</p>
-          <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Vérifier mon email</a>
+          <a href="${verificationUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Vérifier mon email</a>
           <p style="margin-top:16px;color:#666;">Si tu n'as pas créé de compte, ignore cet email.</p>`,
       });
     },
@@ -64,6 +65,16 @@ export const auth = betterAuth({
   },
   redirects: {
     signIn: async (user: (typeof users)["$inferSelect"]) => {
+      // Refresh cookie consent timestamp on login (extends 6-month window)
+      try {
+        const { refreshCookieConsent } = await import(
+          "@/lib/actions/cookie-consent"
+        );
+        await refreshCookieConsent(user.id);
+      } catch {
+        // Non-blocking
+      }
+
       const { hasCompletedOnboarding, createUserProfile } = await import(
         "@/lib/actions/profile"
       );

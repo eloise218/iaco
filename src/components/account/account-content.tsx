@@ -13,6 +13,7 @@ import {
     CaretLeftIcon,
     SparkleIcon,
     BellIcon,
+    ScalesIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
@@ -49,6 +50,7 @@ export function AccountContent({ user, profile }: AccountContentProps) {
         { id: 'notifications', label: t('sections.notifications'), icon: BellIcon },
         { id: 'binance', label: t('sections.binance'), icon: KeyIcon },
         { id: 'security', label: t('sections.security'), icon: ShieldCheckIcon },
+        { id: 'legal', label: t('sections.legal'), icon: ScalesIcon },
     ];
 
     useEffect(() => {
@@ -304,6 +306,53 @@ export function AccountContent({ user, profile }: AccountContentProps) {
                                         >
                                             Delete Account
                                         </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Legal Section */}
+                        <section id="legal" className="settings-card scroll-mt-24">
+                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 overflow-hidden">
+                                <div className="px-6 py-5 border-b border-slate-800/50 flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-indigo-500/20">
+                                        <ScalesIcon className="w-5 h-5 text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-white">{t('legal.title')}</h2>
+                                        <p className="text-sm text-slate-400">{t('legal.description')}</p>
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    <div className="grid gap-3">
+                                        <Link
+                                            href="/privacy"
+                                            className="flex items-center justify-between bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:bg-slate-700/50 transition-colors group"
+                                        >
+                                            <span className="font-medium text-white">{t('legal.privacyPolicy')}</span>
+                                            <CaretLeftIcon className="w-4 h-4 text-slate-400 rotate-180 group-hover:text-white transition-colors" />
+                                        </Link>
+                                        <Link
+                                            href="/terms"
+                                            className="flex items-center justify-between bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:bg-slate-700/50 transition-colors group"
+                                        >
+                                            <span className="font-medium text-white">{t('legal.termsOfService')}</span>
+                                            <CaretLeftIcon className="w-4 h-4 text-slate-400 rotate-180 group-hover:text-white transition-colors" />
+                                        </Link>
+                                        <Link
+                                            href="/cookies"
+                                            className="flex items-center justify-between bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:bg-slate-700/50 transition-colors group"
+                                        >
+                                            <span className="font-medium text-white">{t('legal.cookiePolicy')}</span>
+                                            <CaretLeftIcon className="w-4 h-4 text-slate-400 rotate-180 group-hover:text-white transition-colors" />
+                                        </Link>
+                                        <Link
+                                            href="/disclaimer"
+                                            className="flex items-center justify-between bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:bg-slate-700/50 transition-colors group"
+                                        >
+                                            <span className="font-medium text-white">{t('legal.disclaimer')}</span>
+                                            <CaretLeftIcon className="w-4 h-4 text-slate-400 rotate-180 group-hover:text-white transition-colors" />
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

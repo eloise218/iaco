@@ -38,6 +38,8 @@ export default async function Home({ params }: Props) {
 
         if (profile[0]?.completedOnboarding) {
             redirect(`/${locale}/dashboard`);
+        } else {
+            redirect(`/${locale}/onboarding`);
         }
     }
 

@@ -1,5 +1,4 @@
-import { Link } from '@/i18n/navigation';
-import { ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr';
+import { BackButton } from '@/components/ui/back-button';
 import { setRequestLocale } from 'next-intl/server';
 
 type Props = {
@@ -13,13 +12,7 @@ export default async function TermsPage({ params }: Props) {
     return (
         <main className="min-h-screen bg-background">
             <div className="container mx-auto px-4 lg:px-8 py-12 max-w-4xl">
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
-                >
-                    <ArrowLeftIcon className="w-4 h-4" />
-                    {locale === 'fr' ? 'Retour' : 'Back'}
-                </Link>
+                <BackButton label={locale === 'fr' ? 'Retour' : 'Back'} />
 
                 <article className="prose prose-invert prose-sm max-w-none [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-2 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:text-muted-foreground [&_p]:mb-4 [&_p]:leading-relaxed [&_ul]:text-muted-foreground [&_ul]:mb-4 [&_ul]:space-y-2 [&_li]:leading-relaxed [&_ol]:text-muted-foreground [&_ol]:mb-4 [&_ol]:space-y-2 [&_strong]:text-foreground [&_a]:text-primary [&_a]:hover:underline [&_hr]:border-border [&_hr]:my-12">
                     {/* ========== FRENCH ========== */}

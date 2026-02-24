@@ -312,6 +312,19 @@ export const pushSubscriptions = mysqlTable(
   })
 );
 
+// Cookie consent tracking
+export const cookieConsent = mysqlTable("cookie_consent", {
+  userId: varchar("user_id", { length: 255 })
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+
+  consentedAt: timestamp("consented_at").notNull().defaultNow(),
+  lastRefreshedAt: timestamp("last_refreshed_at").notNull().defaultNow(),
+
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
+});
+
 // Note: Relations are commented out due to TypeScript compatibility issues with current Drizzle version
 // The foreign key constraints in the schema provide the necessary database-level relationships
 // Relations can be added back when using Drizzle queries if needed

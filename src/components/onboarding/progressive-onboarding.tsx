@@ -294,7 +294,7 @@ export function ProgressiveOnboarding() {
             duration: 0.4,
             ease: 'power2.in',
             onComplete: () => {
-              router.push('/dashboard');
+              router.push('/notifications-prompt');
             },
           });
         } else {
@@ -335,7 +335,7 @@ export function ProgressiveOnboarding() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div ref={containerRef} className="w-full max-w-lg relative z-10">
+      <div ref={containerRef} className="w-full max-w-lg relative z-10 opacity-0">
         {/* Progress indicator */}
         <div ref={progressRef} className="mb-8">
           <div className="flex items-center justify-between mb-3">

@@ -153,12 +153,12 @@ export function Footer() {
             <h3 className="font-semibold mb-4">{t('legal')}</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/privacy"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('privacyPolicy')}
-                </a>
+                </Link>
               </li>
               <li>
                 <Link
@@ -169,20 +169,20 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/cookies"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('cookiePolicy')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/disclaimer"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('disclaimer')}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
