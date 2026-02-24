@@ -30,8 +30,13 @@ export const users = mysqlTable("users", {
   name: varchar("name", { length: 255 }),
   image: text("image"),
 
+  // Stripe
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  isPremium: boolean("is_premium").default(false),
+  premiumSince: timestamp("premium_since"),
+
   createdAt: timestamp("created_at").defaultNow(),
-  // MySQL “ON UPDATE CURRENT_TIMESTAMP” support varies; safest is app-level updates.
+  // MySQL "ON UPDATE CURRENT_TIMESTAMP" support varies; safest is app-level updates.
   updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
 });
 
@@ -324,6 +329,36 @@ export const cookieConsent = mysqlTable("cookie_consent", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
 });
+
+// Payments (Stripe one-time payment audit trail)
+export const payments = mysqlTable(
+  "payments",
+  {
+    id: char("id", { length: 36 })
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+
+    userId: varchar("user_id", { length: 255 })
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+
+    stripeSessionId: varchar("stripe_session_id", { length: 255 }).notNull(),
+    stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }),
+
+    amount: int("amount").notNull(),
+    currency: varchar("currency", { length: 10 }).notNull().default("eur"),
+    status: varchar("status", { length: 50 }).notNull().default("pending"),
+
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
+  },
+  (table) => ({
+    userIdIdx: index("payments_user_id_idx").on(table.userId),
+    stripeSessionIdx: index("payments_stripe_session_idx").on(
+      table.stripeSessionId
+    ),
+  })
+);
 
 // Note: Relations are commented out due to TypeScript compatibility issues with current Drizzle version
 // The foreign key constraints in the schema provide the necessary database-level relationships

@@ -331,12 +331,23 @@
         "title": "Paramètres du compte",
         "subtitle": "Gère ton profil, tes préférences et tes paramètres de sécurité",
         "sections": {
+            "premium": "Premium",
             "profile": "Profil",
             "preferences": "Préférences",
             "notifications": "Notifications",
             "binance": "Binance",
             "security": "Sécurité",
             "legal": "Mentions légales"
+        },
+        "premium": {
+            "title": "Accès Premium",
+            "description": "Gérez votre accès premium",
+            "active": "Premium Actif",
+            "since": "Membre depuis le {date}",
+            "upgradeTitle": "Passez Premium",
+            "upgradeDescription": "Accédez à toutes les fonctionnalités premium avec un paiement unique.",
+            "upgradeCta": "Passer Premium",
+            "processing": "Redirection vers le paiement..."
         },
         "profile": {
             "title": "Informations personnelles",

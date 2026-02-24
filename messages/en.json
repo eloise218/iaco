@@ -331,12 +331,23 @@
         "title": "Account Settings",
         "subtitle": "Manage your profile, preferences, and security settings",
         "sections": {
+            "premium": "Premium",
             "profile": "Profile",
             "preferences": "Preferences",
             "notifications": "Notifications",
             "binance": "Binance",
             "security": "Security",
             "legal": "Legal"
+        },
+        "premium": {
+            "title": "Premium Access",
+            "description": "Manage your premium access",
+            "active": "Premium Active",
+            "since": "Member since {date}",
+            "upgradeTitle": "Unlock Premium",
+            "upgradeDescription": "Get access to all premium features with a one-time payment.",
+            "upgradeCta": "Upgrade Now",
+            "processing": "Redirecting to payment..."
         },
         "profile": {
             "title": "Personal Information",

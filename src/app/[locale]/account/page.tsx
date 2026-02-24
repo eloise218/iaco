@@ -1,4 +1,5 @@
 import { getUserProfile } from '@/lib/actions/profile';
+import { getPremiumStatus } from '@/lib/actions/payment';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -36,5 +37,19 @@ export default async function AccountPage({ params }: Props) {
         phone: (session.user as { phone?: string })?.phone || '',
     };
 
-    return <AccountContent user={user} profile={profile} />;
+    const premiumRes = await getPremiumStatus();
+    const isPremium = premiumRes.success ? premiumRes.data?.isPremium ?? false : false;
+    const premiumSince = premiumRes.success && premiumRes.data?.premiumSince
+        ? premiumRes.data.premiumSince.toISOString()
+        : null;
+
+    return (
+        <AccountContent
+            user={user}
+            profile={profile}
+            isPremium={isPremium}
+            premiumSince={premiumSince}
+            locale={locale}
+        />
+    );
 }

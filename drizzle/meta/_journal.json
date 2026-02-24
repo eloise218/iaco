@@ -15,6 +15,13 @@
       "when": 1771947481961,
       "tag": "0001_even_skreet",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1771962649745,
+      "tag": "0002_natural_thor",
+      "breakpoints": true
     }
   ]
 }

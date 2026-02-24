@@ -14,6 +14,7 @@ import {
     SparkleIcon,
     BellIcon,
     ScalesIcon,
+    CrownIcon,
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
@@ -21,6 +22,7 @@ import UserDetailsForm from '@/components/account/user-details-form';
 import ProfileSettingsForm from '@/components/account/profile-settings-form';
 import BinanceKeysForm from '@/components/account/binance-keys-form';
 import { PushPermission } from '@/components/push/push-permission';
+import { PremiumSection } from '@/components/account/premium-section';
 
 interface AccountContentProps {
     user: {
@@ -35,9 +37,12 @@ interface AccountContentProps {
         investmentObjectives: string[];
         riskTolerance: 'low' | 'medium' | 'high';
     } | null;
+    isPremium?: boolean;
+    premiumSince?: string | null;
+    locale?: string;
 }
 
-export function AccountContent({ user, profile }: AccountContentProps) {
+export function AccountContent({ user, profile, isPremium = false, premiumSince, locale = 'fr' }: AccountContentProps) {
     const t = useTranslations('account');
     const containerRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -45,6 +50,7 @@ export function AccountContent({ user, profile }: AccountContentProps) {
     const sectionsRef = useRef<HTMLDivElement>(null);
 
     const navItems = [
+        { id: 'premium', label: t('sections.premium'), icon: CrownIcon },
         { id: 'profile', label: t('sections.profile'), icon: UserIcon },
         { id: 'preferences', label: t('sections.preferences'), icon: GearIcon },
         { id: 'notifications', label: t('sections.notifications'), icon: BellIcon },
@@ -171,6 +177,28 @@ export function AccountContent({ user, profile }: AccountContentProps) {
 
                     {/* Content */}
                     <main ref={sectionsRef} className="flex-1 space-y-8">
+                        {/* Premium Section */}
+                        <section id="premium" className="settings-card scroll-mt-24">
+                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 overflow-hidden">
+                                <div className="px-6 py-5 border-b border-slate-800/50 flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-amber-500/20">
+                                        <CrownIcon className="w-5 h-5 text-amber-400" weight="fill" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-white">{t('premium.title')}</h2>
+                                        <p className="text-sm text-slate-400">{t('premium.description')}</p>
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    <PremiumSection
+                                        isPremium={isPremium}
+                                        premiumSince={premiumSince ?? null}
+                                        locale={locale}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+
                         {/* Profile Section */}
                         <section id="profile" className="settings-card scroll-mt-24">
                             <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 overflow-hidden">

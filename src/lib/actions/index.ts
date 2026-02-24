@@ -11,6 +11,7 @@ export * from './profile';
 export * from './account';
 export * from './chat';
 export * from './cookie-consent';
+export * from './payment';
 // Example: export * from './prices';
 // Example: export * from './portfolio';
 // Example: export * from './binance';

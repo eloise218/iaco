@@ -24,3 +24,8 @@ mkdir -p tmp
 touch tmp/restart.txt
 
 supprimer /home/lgcg11afcd/domains/iaco.app/public_html/index.html
+
+test PWA:
+---------
+cd iaco
+ngrok http 3000
