@@ -134,6 +134,7 @@ export default async function DashboardPage({ params }: Props) {
             challengeTitle={challengeTitle}
             userXp={userXp}
             streak={streak}
+            hasSeenDashboardTips={userProfile.hasSeenDashboardTips ?? false}
         />
     );
 }

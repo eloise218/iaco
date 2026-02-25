@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 
+const SIGNUP_STORAGE_KEY = "signup-form-draft";
+
 export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -27,6 +29,21 @@ export default function SignUpPage() {
     const [error, setError] = useState("");
     const [emailSent, setEmailSent] = useState(false);
     const t = useTranslations('auth.signUp');
+
+    // Restaurer nom et email depuis sessionStorage au montage
+    useEffect(() => {
+        const saved = sessionStorage.getItem(SIGNUP_STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            if (data.name) setName(data.name);
+            if (data.email) setEmail(data.email);
+        }
+    }, []);
+
+    // Sauvegarder nom et email à chaque changement (pas les mots de passe)
+    useEffect(() => {
+        sessionStorage.setItem(SIGNUP_STORAGE_KEY, JSON.stringify({ name, email }));
+    }, [name, email]);
 
     const onGoogle = async () => {
         if (!agreedToTerms) return;
@@ -73,6 +90,7 @@ export default function SignUpPage() {
             }
 
             // Inscription réussie - afficher le message de vérification
+            sessionStorage.removeItem(SIGNUP_STORAGE_KEY);
             setEmailSent(true);
             setLoading(false);
         } catch (e) {

@@ -4,13 +4,30 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import type { CryptoAlert } from "@/lib/types";
 
 const POLL_INTERVAL = 30_000; // 30 seconds
+const STORAGE_KEY = "notified_alert_ids";
+
+function loadNotifiedIds(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveNotifiedIds(ids: Set<string>) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids]));
+  } catch { /* quota exceeded or private browsing */ }
+}
 
 export function useAlertsPolling() {
   const [alerts, setAlerts] = useState<CryptoAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newlyTriggered, setNewlyTriggered] = useState<CryptoAlert[]>([]);
-  const previousTriggeredIds = useRef<Set<string>>(new Set());
+  const previousTriggeredIds = useRef<Set<string>>(loadNotifiedIds());
 
   const fetchAlerts = useCallback(async () => {
     try {
@@ -29,6 +46,17 @@ export function useAlertsPolling() {
           setNewlyTriggered(triggered);
           triggered.forEach((a) => previousTriggeredIds.current.add(a.id));
         }
+
+        // Clean up IDs of alerts that are no longer triggered (acknowledged or deleted)
+        const activeTriggeredIds = new Set(
+          currentAlerts.filter((a) => a.triggered).map((a) => a.id)
+        );
+        for (const id of previousTriggeredIds.current) {
+          if (!activeTriggeredIds.has(id)) {
+            previousTriggeredIds.current.delete(id);
+          }
+        }
+        saveNotifiedIds(previousTriggeredIds.current);
 
         setAlerts(currentAlerts);
         setError(null);

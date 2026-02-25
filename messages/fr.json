@@ -312,6 +312,9 @@
             "triggered": {
                 "notification": "{symbol} a croisé ton seuil d'alerte à {price} $ !"
             },
+            "toast": {
+                "dismiss": "Fermer"
+            },
             "empty": {
                 "title": "Aucune alerte",
                 "description": "Crée ta première alerte pour être notifié quand une crypto atteint un prix ou une variation cible."
@@ -330,6 +333,7 @@
     "account": {
         "title": "Paramètres du compte",
         "subtitle": "Gère ton profil, tes préférences et tes paramètres de sécurité",
+        "backToDashboard": "Tableau de bord",
         "sections": {
             "premium": "Premium",
             "profile": "Profil",
@@ -347,21 +351,56 @@
             "upgradeTitle": "Passez Premium",
             "upgradeDescription": "Accédez à toutes les fonctionnalités premium avec un paiement unique.",
             "upgradeCta": "Passer Premium",
-            "processing": "Redirection vers le paiement..."
+            "processing": "Redirection vers le paiement...",
+            "error": "Une erreur est survenue"
         },
         "profile": {
             "title": "Informations personnelles",
             "description": "Mets à jour ton nom et tes coordonnées",
-            "name": "Nom complet",
-            "email": "Adresse e-mail",
-            "phone": "Numéro de téléphone"
+            "name": "Nom",
+            "namePlaceholder": "Ton nom",
+            "email": "Email",
+            "emailReadonly": "L'email ne peut pas être modifié",
+            "phone": "Téléphone",
+            "phonePlaceholder": "ex. +33 6 12 34 56 78",
+            "saving": "Enregistrement...",
+            "saveChanges": "Enregistrer",
+            "updated": "Profil mis à jour",
+            "updateFailed": "Échec de la mise à jour",
+            "nameMinLength": "Le nom doit contenir au moins 2 caractères",
+            "phoneInvalid": "Numéro de téléphone invalide"
         },
         "preferences": {
             "title": "Préférences d'apprentissage",
             "description": "Personnalise ton expérience d'apprentissage",
-            "experienceLevel": "Niveau d'expérience",
-            "interests": "Centres d'intérêt",
-            "riskTolerance": "Tolérance au risque"
+            "experienceLabel": "Niveau d'expérience",
+            "experienceDescription": "Adapte le contenu à tes connaissances en crypto",
+            "objectivesLabel": "Objectifs d'investissement",
+            "objectivesDescription": "Sélectionne tous ceux qui s'appliquent",
+            "riskLabel": "Tolérance au risque",
+            "riskDescription": "Influence les recommandations et les alertes",
+            "saving": "Enregistrement...",
+            "savePreferences": "Enregistrer les préférences",
+            "updated": "Préférences mises à jour",
+            "updateFailed": "Échec de la mise à jour",
+            "experience": {
+                "beginner": "Débutant",
+                "beginnerDesc": "Nouveau dans les cryptos",
+                "intermediate": "Intermédiaire",
+                "intermediateDesc": "Un peu d'expérience"
+            },
+            "objectives": {
+                "learning": "Apprendre",
+                "longTermGrowth": "Croissance long terme",
+                "diversification": "Diversification",
+                "trading": "Trading actif",
+                "defi": "DeFi et rendement"
+            },
+            "risk": {
+                "low": "Faible",
+                "medium": "Moyen",
+                "high": "Élevé"
+            }
         },
         "notifications": {
             "title": "Notifications",
@@ -376,11 +415,36 @@
                 "connected": "Connecté",
                 "paused": "En pause",
                 "notConnected": "Non connecté"
-            }
+            },
+            "connectedTitle": "Connecté à Binance",
+            "connectedDescription": "Le suivi de portefeuille est actif",
+            "pausedTitle": "Connexion en pause",
+            "pausedDescription": "Reconnecte-toi pour reprendre le suivi",
+            "notConnectedTitle": "Non connecté",
+            "notConnectedDescription": "Ajoute tes clés API pour te connecter",
+            "apiKey": "Clé API",
+            "apiKeyPlaceholder": "Entrer la clé API",
+            "apiSecret": "Secret API",
+            "apiSecretPlaceholder": "Entrer le secret API",
+            "saving": "Enregistrement...",
+            "updateKeys": "Mettre à jour",
+            "connect": "Connecter",
+            "pause": "Mettre en pause",
+            "resume": "Reprendre",
+            "remove": "Supprimer",
+            "saved": "Identifiants enregistrés",
+            "saveFailed": "Échec de l'enregistrement",
+            "failed": "Échec",
+            "securityNote": "Note de sécurité :",
+            "securityDescription": "Tes clés API sont chiffrées et stockées en toute sécurité. Nous recommandons d'utiliser des clés API en lecture seule pour le suivi de portefeuille."
         },
         "security": {
             "title": "Sécurité",
-            "description": "Gère la sécurité de ton compte"
+            "description": "Gère la sécurité de ton compte",
+            "googleAuth": "Authentification Google",
+            "googleAuthDescription": "Tu t'es connecté avec Google. Ton compte est sécurisé par l'authentification Google.",
+            "signOut": "Se déconnecter",
+            "deleteAccount": "Supprimer le compte"
         },
         "legal": {
             "title": "Mentions légales",
@@ -409,17 +473,29 @@
         "goals": {
             "title": "Quels sont tes objectifs ?",
             "learning": "Apprendre",
+            "learningDesc": "Comprendre les concepts et la technologie crypto",
             "investing": "Investir",
+            "investingDesc": "Construire un portefeuille pour la croissance à long terme",
             "diversify": "Diversifier",
+            "diversifyDesc": "Ajouter les cryptos à mes investissements existants",
             "trading": "Trading",
             "defi": "DeFi",
             "nfts": "NFTs"
+        },
+        "progress": {
+            "step": "Étape {current} sur {total}",
+            "almostThere": "Presque fini !",
+            "subtextExperience": "Cela nous aide à personnaliser ton parcours d'apprentissage",
+            "subtextGoals": "On adapte les recommandations rien que pour toi",
+            "disclaimer": "À but éducatif uniquement. Pas un conseil financier.\nFais toujours tes propres recherches avant d'investir.",
+            "settingsNote": "Tu peux modifier ces préférences à tout moment dans les Réglages"
         },
         "complete": {
             "title": "Tu es prêt !",
             "subtitle": "Ton parcours d'apprentissage personnalisé est prêt",
             "cta": "Aller au tableau de bord"
-        }
+        },
+        "error": "Une erreur est survenue. Veuillez réessayer."
     },
     "notificationsPrompt": {
         "title": "Tu veux vraiment progresser en crypto ?",
@@ -435,10 +511,30 @@
     },
     "chat": {
         "title": "CryptoCoach",
-        "disclaimer": "Ceci est un assistant IA à but éducatif uniquement. Pas un conseil financier.",
         "placeholder": "Pose-moi n'importe quelle question sur les cryptos...",
         "send": "Envoyer",
-        "retry": "Réessayer"
+        "retry": "Réessayer",
+        "helperText": "Entrée pour envoyer, Maj+Entrée pour un retour à la ligne",
+        "disclaimer": {
+            "shortBold": "Éducatif uniquement",
+            "shortText": "— pas un conseil financier.",
+            "expandedBold": "À but éducatif uniquement.",
+            "expandedText": "Cet assistant fournit des informations éducatives sur les cryptomonnaies et la technologie blockchain. Il ne fournit pas de conseils financiers ni de recommandations d'investissement. Fais toujours tes propres recherches (DYOR) avant toute décision d'investissement."
+        },
+        "welcome": {
+            "title": "Bienvenue sur CryptoCoach ! 👋",
+            "description": "Je suis là pour t'aider à apprendre les cryptomonnaies et la technologie blockchain. Pose-moi n'importe quelle question sur les bases des cryptos, les wallets, les exchanges ou les concepts de trading.",
+            "tryAsking": "Essaie de demander :",
+            "example1": "C'est quoi une cryptomonnaie ?",
+            "example2": "Comment fonctionnent les wallets crypto ?",
+            "example3": "Quelle est la différence entre Bitcoin et Ethereum ?"
+        },
+        "errors": {
+            "signIn": "Connecte-toi pour utiliser l'assistant.",
+            "sendFailed": "Échec de l'envoi. Réessaie.",
+            "cancelled": "Message annulé",
+            "interrupted": "Réponse interrompue"
+        }
     },
     "auth": {
         "signIn": {
@@ -515,6 +611,10 @@
         "completed": {
             "title": "Bravo, tu as terminé les 14 défis !",
             "message": "Tu as complété tous les défis quotidiens. Continue ton apprentissage avec les vidéos et le coach IA !"
+        },
+        "tips": {
+            "chatAssistant": "Besoin d'aide ? Clique ici pour poser tes questions à Iaco, ton coach IA 🤖",
+            "dismiss": "Compris !"
         }
     },
     "learn": {

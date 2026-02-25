@@ -20,14 +20,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     >
       <div
         className={cn(
-          "max-w-[85%] rounded-lg px-4 py-3",
+          "max-w-[85%] rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3",
           isUser
-            ? "bg-blue-600 text-white"
-            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+            ? "bg-blue-600 text-white rounded-br-md"
+            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-md"
         )}
       >
         {isUser ? (
-          <p className="whitespace-pre-wrap break-words leading-relaxed">{message.content}</p>
+          <p className="whitespace-pre-wrap break-words leading-relaxed text-sm sm:text-base">{message.content}</p>
         ) : (
           <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
             <ReactMarkdown

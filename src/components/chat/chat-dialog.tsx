@@ -39,7 +39,7 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="h-[85vh]">
+        <DrawerContent className="h-[93vh]">
           <ChatInterface onClose={() => onOpenChange(false)} />
         </DrawerContent>
       </Drawer>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageBubble } from "./message-bubble";
 import { Message } from "./chat-interface";
@@ -8,24 +9,26 @@ import { Message } from "./chat-interface";
 interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
+  isInitialLoading?: boolean;
   streamingContent?: string;
 }
 
 function WelcomeMessage() {
+  const t = useTranslations("chat.welcome");
+
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center px-6 py-8">
-      <div className="max-w-md space-y-4">
-        <h3 className="text-xl font-semibold">Welcome to CryptoCoach! 👋</h3>
-        <p className="text-muted-foreground">
-          I&apos;m here to help you learn about cryptocurrency and blockchain technology.
-          Ask me anything about crypto basics, wallets, exchanges, or trading concepts.
+    <div className="flex flex-col items-center justify-center h-full text-center px-4 py-4 sm:px-6 sm:py-8">
+      <div className="max-w-md space-y-3 sm:space-y-4">
+        <h3 className="text-lg sm:text-xl font-semibold">{t("title")}</h3>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          {t("description")}
         </p>
         <div className="text-sm text-muted-foreground space-y-2">
-          <p className="font-medium">Try asking:</p>
+          <p className="font-medium">{t("tryAsking")}</p>
           <ul className="space-y-1 text-left">
-            <li>• What is cryptocurrency?</li>
-            <li>• How do crypto wallets work?</li>
-            <li>• What&apos;s the difference between Bitcoin and Ethereum?</li>
+            <li>• {t("example1")}</li>
+            <li>• {t("example2")}</li>
+            <li>• {t("example3")}</li>
           </ul>
         </div>
       </div>
@@ -35,8 +38,8 @@ function WelcomeMessage() {
 
 function TypingIndicator() {
   return (
-    <div className="flex items-center gap-2 mb-4">
-      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-3">
+    <div className="flex items-center gap-2">
+      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md px-3.5 py-2.5 sm:px-4 sm:py-3">
         <div className="size-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
         <div className="size-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
         <div className="size-2 rounded-full bg-gray-400 animate-bounce" />
@@ -45,7 +48,7 @@ function TypingIndicator() {
   );
 }
 
-export function MessageList({ messages, isLoading, streamingContent }: MessageListProps) {
+export function MessageList({ messages, isLoading, isInitialLoading, streamingContent }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to latest message
@@ -58,8 +61,8 @@ export function MessageList({ messages, isLoading, streamingContent }: MessageLi
   return (
     <div className="flex-1 overflow-hidden">
       <ScrollArea className="h-full">
-        <div className="p-4 space-y-4">
-          {messages.length === 0 && !isLoading ? (
+        <div className="p-3 space-y-2 sm:p-4 sm:space-y-3">
+          {isInitialLoading ? null : messages.length === 0 && !isLoading ? (
             <WelcomeMessage />
           ) : (
             <>

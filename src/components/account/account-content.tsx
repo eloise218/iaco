@@ -118,7 +118,7 @@ export function AccountContent({ user, profile, isPremium = false, premiumSince,
                         {/* Back Button */}
                         <Link href="/dashboard" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
                             <CaretLeftIcon className="w-5 h-5" />
-                            <span className="text-sm font-medium">Dashboard</span>
+                            <span className="text-sm font-medium">{t('backToDashboard')}</span>
                         </Link>
 
                         {/* User Info */}
@@ -307,9 +307,9 @@ export function AccountContent({ user, profile, isPremium = false, premiumSince,
                                                 <ShieldCheckIcon className="w-5 h-5 text-emerald-400" weight="fill" />
                                             </div>
                                             <div>
-                                                <p className="font-medium text-white">Google Authentication</p>
+                                                <p className="font-medium text-white">{t('security.googleAuth')}</p>
                                                 <p className="text-sm text-slate-400 mt-1">
-                                                    You signed in with Google. Your account is secured with Google&apos;s authentication.
+                                                    {t('security.googleAuthDescription')}
                                                 </p>
                                             </div>
                                         </div>
@@ -326,13 +326,13 @@ export function AccountContent({ user, profile, isPremium = false, premiumSince,
                                                 window.location.href = '/sign-in';
                                             }}
                                         >
-                                            Sign Out
+                                            {t('security.signOut')}
                                         </Button>
                                         <Button
                                             variant="ghost"
                                             className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                                         >
-                                            Delete Account
+                                            {t('security.deleteAccount')}
                                         </Button>
                                     </div>
                                 </div>

@@ -131,12 +131,18 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
           {triggered.map((alert) => (
             <div
               key={alert.id}
-              className="bg-amber-500/10 rounded-lg sm:rounded-xl border border-amber-500/30 p-3 sm:p-4"
+              className={`rounded-lg sm:rounded-xl border p-3 sm:p-4 ${
+                isVolatility(alert)
+                  ? "bg-purple-500/10 border-purple-500/30"
+                  : "bg-amber-500/10 border-amber-500/30"
+              }`}
             >
               <div className="flex items-start sm:items-center justify-between gap-2">
                 <div className="flex items-start sm:items-center gap-2 sm:gap-3 min-w-0">
                   <WarningCircleIcon
-                    className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0 mt-0.5 sm:mt-0"
+                    className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5 sm:mt-0 ${
+                      isVolatility(alert) ? "text-purple-400" : "text-amber-400"
+                    }`}
                     weight="fill"
                   />
                   <div className="min-w-0">
@@ -147,7 +153,11 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                       <TypeBadge alert={alert} />
                       <Badge
                         variant="outline"
-                        className="border-amber-500/50 text-amber-400 text-[10px] sm:text-xs"
+                        className={`text-[10px] sm:text-xs ${
+                          isVolatility(alert)
+                            ? "border-purple-500/50 text-purple-400"
+                            : "border-amber-500/50 text-amber-400"
+                        }`}
                       >
                         {t("status.triggered")}
                       </Badge>
@@ -158,7 +168,9 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                         : `${t("card.threshold")}: ${formatThreshold(alert)}`}
                     </p>
                     {alert.triggeredPrice && (
-                      <p className="text-[10px] sm:text-xs text-amber-400/80">
+                      <p className={`text-[10px] sm:text-xs ${
+                        isVolatility(alert) ? "text-purple-400/80" : "text-amber-400/80"
+                      }`}>
                         {t("card.triggeredAt", {
                           price: formatPrice(alert.triggeredPrice),
                           date: formatDate(alert.triggeredAt),
@@ -171,7 +183,11 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
                   <Button
                     size="sm"
                     onClick={() => handleAcknowledge(alert.id)}
-                    className="bg-amber-500 hover:bg-amber-600 text-black text-[10px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3"
+                    className={`text-[10px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3 ${
+                      isVolatility(alert)
+                        ? "bg-purple-500 hover:bg-purple-600 text-white"
+                        : "bg-amber-500 hover:bg-amber-600 text-black"
+                    }`}
                   >
                     <CheckCircleIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-0.5 sm:mr-1" />
                     <span className="hidden sm:inline">{t("actions.acknowledge")}</span>

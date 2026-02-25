@@ -33,7 +33,7 @@ export function PremiumSection({ isPremium, premiumSince, locale }: PremiumSecti
             }
         } catch (err) {
             console.error('Checkout error:', err);
-            setError('Une erreur est survenue');
+            setError(t('error'));
         } finally {
             setLoading(false);
         }

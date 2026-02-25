@@ -66,7 +66,7 @@ export function HeroSection() {
     return (
         <section
             ref={sectionRef}
-            className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-16"
+            className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-16 -mt-12"
         >
             {/* Background */}
             <div className="absolute inset-0 -z-10">
@@ -115,9 +115,9 @@ export function HeroSection() {
                         </div>
 
                         {/* Trust Signal - Below button */}
-                        <div className="hero-trust opacity-0 inline-flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="hero-trust opacity-0 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                             <ShieldCheckIcon className="w-5 h-5 text-emerald-500" weight="fill" />
-                            <span className="font-medium">{t('trust')}</span>
+                            <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">{t('trust')}</span>
                         </div>
                     </div>
 

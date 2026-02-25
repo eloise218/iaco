@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 import { useAlertsPolling } from "@/hooks/use-alerts-polling";
 import { CreateAlertForm } from "./create-alert-form";
 import { CreateVolatilityForm } from "./create-volatility-form";
@@ -11,23 +9,7 @@ import { BellIcon } from "@phosphor-icons/react";
 
 export function AlertsSection() {
   const t = useTranslations("dashboard.alerts");
-  const { alerts, isLoading, newlyTriggered, clearNewlyTriggered, refetch } =
-    useAlertsPolling();
-
-  useEffect(() => {
-    if (newlyTriggered.length > 0) {
-      newlyTriggered.forEach((alert) => {
-        toast.warning(
-          t("triggered.notification", {
-            symbol: alert.symbol,
-            price: alert.triggeredPrice ?? "N/A",
-          }),
-          { duration: 10000 }
-        );
-      });
-      clearNewlyTriggered();
-    }
-  }, [newlyTriggered, clearNewlyTriggered, t]);
+  const { alerts, isLoading, refetch } = useAlertsPolling();
 
   return (
     <div>

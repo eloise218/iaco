@@ -312,6 +312,9 @@
             "triggered": {
                 "notification": "{symbol} crossed your alert threshold at ${price}!"
             },
+            "toast": {
+                "dismiss": "Dismiss"
+            },
             "empty": {
                 "title": "No alerts yet",
                 "description": "Create your first alert to get notified when a crypto reaches a target price or variation."
@@ -330,6 +333,7 @@
     "account": {
         "title": "Account Settings",
         "subtitle": "Manage your profile, preferences, and security settings",
+        "backToDashboard": "Dashboard",
         "sections": {
             "premium": "Premium",
             "profile": "Profile",
@@ -347,21 +351,56 @@
             "upgradeTitle": "Unlock Premium",
             "upgradeDescription": "Get access to all premium features with a one-time payment.",
             "upgradeCta": "Upgrade Now",
-            "processing": "Redirecting to payment..."
+            "processing": "Redirecting to payment...",
+            "error": "An error occurred"
         },
         "profile": {
             "title": "Personal Information",
             "description": "Update your name and contact details",
-            "name": "Full Name",
-            "email": "Email Address",
-            "phone": "Phone Number"
+            "name": "Name",
+            "namePlaceholder": "Your name",
+            "email": "Email",
+            "emailReadonly": "Email cannot be changed",
+            "phone": "Phone",
+            "phonePlaceholder": "e.g. +1 555 555 5555",
+            "saving": "Saving...",
+            "saveChanges": "Save Changes",
+            "updated": "Profile updated",
+            "updateFailed": "Update failed",
+            "nameMinLength": "Name must be at least 2 characters",
+            "phoneInvalid": "Enter a valid phone number"
         },
         "preferences": {
             "title": "Learning Preferences",
             "description": "Customize your learning experience",
-            "experienceLevel": "Experience Level",
-            "interests": "Interests",
-            "riskTolerance": "Risk Tolerance"
+            "experienceLabel": "Experience Level",
+            "experienceDescription": "Tailor content to your crypto knowledge",
+            "objectivesLabel": "Investment Objectives",
+            "objectivesDescription": "Select all that apply",
+            "riskLabel": "Risk Tolerance",
+            "riskDescription": "Impacts recommendations and alerts",
+            "saving": "Saving...",
+            "savePreferences": "Save Preferences",
+            "updated": "Preferences updated",
+            "updateFailed": "Update failed",
+            "experience": {
+                "beginner": "Beginner",
+                "beginnerDesc": "New to crypto",
+                "intermediate": "Intermediate",
+                "intermediateDesc": "Some experience"
+            },
+            "objectives": {
+                "learning": "Learning",
+                "longTermGrowth": "Long-term growth",
+                "diversification": "Diversification",
+                "trading": "Active trading",
+                "defi": "DeFi and yield"
+            },
+            "risk": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High"
+            }
         },
         "notifications": {
             "title": "Notifications",
@@ -376,11 +415,36 @@
                 "connected": "Connected",
                 "paused": "Paused",
                 "notConnected": "Not Connected"
-            }
+            },
+            "connectedTitle": "Connected to Binance",
+            "connectedDescription": "Portfolio tracking is active",
+            "pausedTitle": "Connection Paused",
+            "pausedDescription": "Reconnect to resume tracking",
+            "notConnectedTitle": "Not Connected",
+            "notConnectedDescription": "Add your API keys to connect",
+            "apiKey": "API Key",
+            "apiKeyPlaceholder": "Enter API Key",
+            "apiSecret": "API Secret",
+            "apiSecretPlaceholder": "Enter API Secret",
+            "saving": "Saving...",
+            "updateKeys": "Update Keys",
+            "connect": "Connect",
+            "pause": "Pause",
+            "resume": "Resume",
+            "remove": "Remove",
+            "saved": "Credentials saved",
+            "saveFailed": "Save failed",
+            "failed": "Failed",
+            "securityNote": "Security Note:",
+            "securityDescription": "Your API keys are encrypted and stored securely. We recommend using read-only API keys for portfolio tracking."
         },
         "security": {
             "title": "Security",
-            "description": "Manage your account security"
+            "description": "Manage your account security",
+            "googleAuth": "Google Authentication",
+            "googleAuthDescription": "You signed in with Google. Your account is secured with Google's authentication.",
+            "signOut": "Sign Out",
+            "deleteAccount": "Delete Account"
         },
         "legal": {
             "title": "Legal",
@@ -409,17 +473,29 @@
         "goals": {
             "title": "What are your goals?",
             "learning": "Learning",
+            "learningDesc": "Understand crypto concepts and technology",
             "investing": "Investing",
+            "investingDesc": "Build a portfolio for long-term growth",
             "diversify": "Diversify",
+            "diversifyDesc": "Add crypto to my existing investments",
             "trading": "Trading",
             "defi": "DeFi",
             "nfts": "NFTs"
+        },
+        "progress": {
+            "step": "Step {current} of {total}",
+            "almostThere": "Almost there!",
+            "subtextExperience": "This helps us personalize your learning journey",
+            "subtextGoals": "We'll tailor recommendations just for you",
+            "disclaimer": "Educational purposes only. Not financial advice.\nAlways do your own research before investing.",
+            "settingsNote": "You can update these preferences anytime in Settings"
         },
         "complete": {
             "title": "You're all set!",
             "subtitle": "Your personalized learning journey is ready",
             "cta": "Go to Dashboard"
-        }
+        },
+        "error": "Something went wrong. Please try again."
     },
     "notificationsPrompt": {
         "title": "Do you really want to progress in crypto?",
@@ -435,10 +511,30 @@
     },
     "chat": {
         "title": "CryptoCoach",
-        "disclaimer": "This is an AI assistant for educational purposes only. Not financial advice.",
         "placeholder": "Ask me anything about crypto...",
         "send": "Send",
-        "retry": "Retry"
+        "retry": "Retry",
+        "helperText": "Press Enter to send, Shift+Enter for new line",
+        "disclaimer": {
+            "shortBold": "Educational only",
+            "shortText": "— not financial advice.",
+            "expandedBold": "Educational purposes only.",
+            "expandedText": "This assistant provides educational information about cryptocurrency and blockchain technology. It does not provide financial advice or investment recommendations. Always do your own research (DYOR) before making any investment decisions."
+        },
+        "welcome": {
+            "title": "Welcome to CryptoCoach! 👋",
+            "description": "I'm here to help you learn about cryptocurrency and blockchain technology. Ask me anything about crypto basics, wallets, exchanges, or trading concepts.",
+            "tryAsking": "Try asking:",
+            "example1": "What is cryptocurrency?",
+            "example2": "How do crypto wallets work?",
+            "example3": "What's the difference between Bitcoin and Ethereum?"
+        },
+        "errors": {
+            "signIn": "Please sign in to use the chat assistant.",
+            "sendFailed": "Failed to send message. Please try again.",
+            "cancelled": "Message cancelled",
+            "interrupted": "Response interrupted"
+        }
     },
     "auth": {
         "signIn": {
@@ -515,6 +611,10 @@
         "completed": {
             "title": "Congrats, you completed all 14 challenges!",
             "message": "You've completed all daily challenges. Keep learning with videos and the AI coach!"
+        },
+        "tips": {
+            "chatAssistant": "Need help? Click here to ask Iaco, your AI coach 🤖",
+            "dismiss": "Got it!"
         }
     },
     "learn": {

@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
+import { ChallengeOnboardingTip } from '@/components/challenge/challenge-onboarding-tip';
 
 interface ChallengeContentProps {
     challengeDay: number;
@@ -18,6 +19,7 @@ interface ChallengeContentProps {
     isCompleted: boolean;
     title: string;
     content: string;
+    hasSeenChallengeTip: boolean;
 }
 
 export function ChallengeContent({
@@ -26,6 +28,7 @@ export function ChallengeContent({
     isCompleted,
     title,
     content,
+    hasSeenChallengeTip,
 }: ChallengeContentProps) {
     const t = useTranslations('challenge');
     const progressPercent = Math.round((challengeDay / totalDays) * 100);
@@ -150,6 +153,7 @@ export function ChallengeContent({
 
             {/* AI Assistant bubble */}
             <ChatBubbleWrapper />
+            {challengeDay === 1 && !hasSeenChallengeTip && <ChallengeOnboardingTip />}
         </div>
     );
 }

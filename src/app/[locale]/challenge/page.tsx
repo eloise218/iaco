@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import db from '@/db/drizzle';
-import { challengeProgress } from '@/db/schema';
+import { challengeProgress, userProfiles } from '@/db/schema';
 import { eq, count, desc } from 'drizzle-orm';
 import { setRequestLocale } from 'next-intl/server';
 import { ChallengeContent } from '@/components/challenge/challenge-content';
@@ -82,6 +82,13 @@ export default async function ChallengePage({ params, searchParams }: Props) {
     const todayChallenge = challengesData.find((c) => c.day === currentDay);
     const lang = locale === 'fr' ? 'fr' : 'en';
 
+    // Check if user has seen the challenge onboarding tip
+    const profile = await db.select({ hasSeenChallengeTip: userProfiles.hasSeenChallengeTip })
+        .from(userProfiles)
+        .where(eq(userProfiles.userId, session.user.id))
+        .limit(1);
+    const hasSeenChallengeTip = profile[0]?.hasSeenChallengeTip ?? false;
+
     return (
         <ChallengeContent
             challengeDay={currentDay}
@@ -89,6 +96,7 @@ export default async function ChallengePage({ params, searchParams }: Props) {
             isCompleted={isCompleted}
             title={todayChallenge?.title[lang] || ''}
             content={todayChallenge?.content[lang] || ''}
+            hasSeenChallengeTip={hasSeenChallengeTip}
         />
     );
 }

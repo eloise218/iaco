@@ -1,7 +1,8 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useMemo, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateUserProfile } from '@/lib/actions/profile';
 import { updateUserProfileSchema, type UpdateUserProfileInput } from '@/lib/validations/profile';
@@ -16,26 +17,8 @@ import {
   TrendUpIcon,
 } from '@phosphor-icons/react';
 
-const options = {
-  experience: [
-    { id: 'beginner', label: 'Beginner', description: 'New to crypto', icon: GraduationCapIcon },
-    { id: 'intermediate', label: 'Intermediate', description: 'Some experience', icon: TrendUpIcon },
-  ],
-  objectives: [
-    { id: 'learning', label: 'Learning' },
-    { id: 'long-term-growth', label: 'Long-term growth' },
-    { id: 'diversification', label: 'Diversification' },
-    { id: 'trading', label: 'Active trading' },
-    { id: 'defi', label: 'DeFi and yield' },
-  ],
-  risk: [
-    { id: 'low', label: 'Low', color: 'emerald' },
-    { id: 'medium', label: 'Medium', color: 'amber' },
-    { id: 'high', label: 'High', color: 'red' },
-  ],
-};
-
 export default function ProfileSettingsForm({ defaultValues }: { defaultValues: UpdateUserProfileInput }) {
+  const t = useTranslations('account.preferences');
   const [isPending, startTransition] = useTransition();
   const form = useForm<UpdateUserProfileInput>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,15 +26,32 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
     defaultValues,
   });
 
+  const options = useMemo(() => ({
+    experience: [
+      { id: 'beginner', label: t('experience.beginner'), description: t('experience.beginnerDesc'), icon: GraduationCapIcon },
+      { id: 'intermediate', label: t('experience.intermediate'), description: t('experience.intermediateDesc'), icon: TrendUpIcon },
+    ],
+    objectives: [
+      { id: 'learning', label: t('objectives.learning') },
+      { id: 'long-term-growth', label: t('objectives.longTermGrowth') },
+      { id: 'diversification', label: t('objectives.diversification') },
+      { id: 'trading', label: t('objectives.trading') },
+      { id: 'defi', label: t('objectives.defi') },
+    ],
+    risk: [
+      { id: 'low', label: t('risk.low'), color: 'emerald' },
+      { id: 'medium', label: t('risk.medium'), color: 'amber' },
+      { id: 'high', label: t('risk.high'), color: 'red' },
+    ],
+  }), [t]);
+
   const onSubmit = (values: UpdateUserProfileInput) => {
     startTransition(async () => {
       const res = await updateUserProfile(values);
-      if (res.success) toast.success('Preferences updated');
-      else toast.error(res.error || 'Update failed');
+      if (res.success) toast.success(t('updated'));
+      else toast.error(res.error || t('updateFailed'));
     });
   };
-
-  const selectedObjectives = form.watch('investmentObjectives') || [];
 
   return (
     <Form {...form}>
@@ -62,14 +62,14 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
           name="experienceLevel"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white text-base">Experience Level</FormLabel>
+              <FormLabel className="text-white text-base">{t('experienceLabel')}</FormLabel>
               <FormDescription className="text-slate-400">
-                Tailor content to your crypto knowledge
+                {t('experienceDescription')}
               </FormDescription>
               <FormControl>
                 <RadioGroup
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => { if (val !== field.value) field.onChange(val); }}
                   className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3"
                 >
                   {options.experience.map(opt => {
@@ -110,12 +110,12 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
           name="investmentObjectives"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white text-base">Investment Objectives</FormLabel>
-              <FormDescription className="text-slate-400">Select all that apply</FormDescription>
+              <FormLabel className="text-white text-base">{t('objectivesLabel')}</FormLabel>
+              <FormDescription className="text-slate-400">{t('objectivesDescription')}</FormDescription>
               <FormControl>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                   {options.objectives.map(opt => {
-                    const isChecked = selectedObjectives.includes(opt.id);
+                    const isChecked = (field.value || []).includes(opt.id);
                     return (
                       <div
                         key={opt.id}
@@ -134,7 +134,6 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
                           className="border-slate-300 dark:border-slate-600 data-[state=checked]:bg-slate-900 dark:data-[state=checked]:bg-white data-[state=checked]:border-slate-900 dark:data-[state=checked]:border-white"
                         />
                         <Label
-                          htmlFor={`obj-${opt.id}`}
                           className={`cursor-pointer ${isChecked ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}
                         >
                           {opt.label}
@@ -155,14 +154,14 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
           name="riskTolerance"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white text-base">Risk Tolerance</FormLabel>
+              <FormLabel className="text-white text-base">{t('riskLabel')}</FormLabel>
               <FormDescription className="text-slate-400">
-                Impacts recommendations and alerts
+                {t('riskDescription')}
               </FormDescription>
               <FormControl>
                 <RadioGroup
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onValueChange={(val) => { if (val !== field.value) field.onChange(val); }}
                   className="grid grid-cols-3 gap-3 mt-3"
                 >
                   {options.risk.map(opt => {
@@ -203,7 +202,7 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
             disabled={isPending}
             className="bg-slate-100 hover:bg-slate-200 text-slate-900 shadow-sm"
           >
-            {isPending ? 'Saving...' : 'Save Preferences'}
+            {isPending ? t('saving') : t('savePreferences')}
           </Button>
         </div>
       </form>

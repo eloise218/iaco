@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent, useRef } from "react";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
@@ -22,9 +23,11 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ onClose }: ChatInterfaceProps) {
+  const t = useTranslations("chat");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [streamingContent, setStreamingContent] = useState("");
   const abortControllerRef = useRef<AbortController | null>(null);
   const router = useRouter();
@@ -38,6 +41,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       } else if (result.error) {
         toast.error(result.error);
       }
+      setIsInitialLoading(false);
     }
     loadMessages();
   }, []);
@@ -85,7 +89,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
 
       // Subtask 6.1: Handle authentication errors with redirect
       if (response.status === 401) {
-        toast.error("Please sign in to use the chat assistant.");
+        toast.error(t("errors.signIn"));
         router.push("/sign-in?returnUrl=/");
         return;
       }
@@ -93,10 +97,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       // Subtask 6.3: Handle error responses
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.error || "Failed to send message. Please try again.";
-
-        // Subtask 6.3: Display toast notifications for errors
-        toast.error(errorMessage);
+        const errorMessage = errorData.error || t("errors.sendFailed");
 
         // Remove optimistic message on error
         setMessages((prev) => prev.filter((msg) => msg.id !== optimisticMessage.id));
@@ -104,7 +105,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         // Subtask 6.3: Provide retry option on failure
         toast.error(errorMessage, {
           action: {
-            label: "Retry",
+            label: t("retry"),
             onClick: () => {
               setInput(userMessage);
             },
@@ -151,14 +152,14 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
     } catch (error: unknown) {
       // Subtask 6.3: Handle partial responses from interrupted streams
       if (error instanceof Error && error.name === "AbortError") {
-        toast.info("Message cancelled");
+        toast.info(t("errors.cancelled"));
 
         // If we have partial streaming content, save it
         if (streamingContent) {
           const partialMessage: Message = {
             id: `assistant-${Date.now()}`,
             role: "assistant",
-            content: streamingContent + "\n\n[Response interrupted]",
+            content: streamingContent + `\n\n[${t("errors.interrupted")}]`,
             createdAt: new Date(),
           };
           setMessages((prev) => [...prev, partialMessage]);
@@ -170,9 +171,9 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
         setMessages((prev) => prev.filter((msg) => msg.id !== optimisticMessage.id));
 
         // Subtask 6.3: Display toast notifications for errors with retry
-        toast.error("Failed to send message. Please try again.", {
+        toast.error(t("errors.sendFailed"), {
           action: {
-            label: "Retry",
+            label: t("retry"),
             onClick: () => {
               setInput(userMessage);
             },
@@ -188,13 +189,14 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-lg font-semibold">CryptoCoach</h2>
+      <div className="flex items-center justify-between px-4 py-2 sm:py-2.5 border-b border-slate-200 dark:border-slate-800">
+        <h2 className="text-sm sm:text-base font-semibold">{t("title")}</h2>
         <Button
           variant="ghost"
           size="icon"
+          className="size-8 sm:size-9"
           onClick={onClose}
           aria-label="Close chat"
         >
@@ -209,6 +211,7 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
       <MessageList
         messages={messages}
         isLoading={isLoading}
+        isInitialLoading={isInitialLoading}
         streamingContent={streamingContent}
       />
 

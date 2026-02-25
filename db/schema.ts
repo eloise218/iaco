@@ -110,6 +110,8 @@ export const userProfiles = mysqlTable(
 
     riskTolerance: varchar("risk_tolerance", { length: 50 }).default("low"),
     completedOnboarding: boolean("completed_onboarding").default(false),
+    hasSeenDashboardTips: boolean("has_seen_dashboard_tips").default(false),
+    hasSeenChallengeTip: boolean("has_seen_challenge_tip").default(false),
 
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),

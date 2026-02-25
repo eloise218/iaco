@@ -74,7 +74,7 @@ export function ProgressiveOnboarding() {
     {
       id: 'learn',
       label: t('goals.learning'),
-      description: 'Understand crypto concepts and technology', // Verify if this has a key
+      description: t('goals.learningDesc'),
       icon: BookOpenIcon,
       gradient: 'from-blue-500 to-cyan-600',
       iconBg: 'bg-blue-500/20',
@@ -82,25 +82,20 @@ export function ProgressiveOnboarding() {
     {
       id: 'invest',
       label: t('goals.investing'),
-      description: 'Build a portfolio for long-term growth',
+      description: t('goals.investingDesc'),
       icon: TrendUpIcon,
       gradient: 'from-amber-500 to-orange-600',
       iconBg: 'bg-amber-500/20',
     },
     {
       id: 'diversify',
-      label: t('goals.diversify'), // Assuming key exists or mapping 'diversify' to a key
-      description: 'Add crypto to my existing investments',
+      label: t('goals.diversify'),
+      description: t('goals.diversifyDesc'),
       icon: ChartPieIcon,
       gradient: 'from-rose-500 to-pink-600',
       iconBg: 'bg-rose-500/20',
     },
   ];
-  // Note: I will map 'diversify', 'learn', 'invest' to existing keys or generic ones if strictly matching json. 
-  // Looking at en.json (Step 1287):
-  // "goals": { "learning": "Learning", "investing": "Investing", "trading": "Trading", "defi": "DeFi", "nfts": "NFTs" }
-  // It seems "diversify" is missing in json or I should add it. I will hardcode for now or fallback to English if missing, but ideally I should add to JSON.
-  // Actually, I'll update the JSON later if needed. For now I'll use the provided structure.
 
   // Initial animation on mount
   useEffect(() => {
@@ -294,11 +289,11 @@ export function ProgressiveOnboarding() {
             duration: 0.4,
             ease: 'power2.in',
             onComplete: () => {
-              router.push('/notifications-prompt');
+              router.push('/challenge');
             },
           });
         } else {
-          toast.error(result.error || 'Something went wrong. Please try again.');
+          toast.error(result.error || t('error'));
           setIsSubmitting(false);
           setSelectedOption(null);
 
@@ -311,7 +306,7 @@ export function ProgressiveOnboarding() {
           });
         }
       } catch {
-        toast.error('Something went wrong. Please try again.');
+        toast.error(t('error'));
         setIsSubmitting(false);
         setSelectedOption(null);
       }
@@ -323,8 +318,8 @@ export function ProgressiveOnboarding() {
     ? t('experience.title')
     : t('goals.title');
   const currentSubtext = currentStep === 0
-    ? "This helps us personalize your learning journey" // Add translation key if needed
-    : "We'll tailor recommendations just for you";    // Add translation key if needed
+    ? t('progress.subtextExperience')
+    : t('progress.subtextGoals');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4 overflow-hidden">
@@ -340,11 +335,11 @@ export function ProgressiveOnboarding() {
         <div ref={progressRef} className="mb-8">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-slate-400">
-              Step {currentStep + 1} of {totalSteps}
+              {t('progress.step', { current: currentStep + 1, total: totalSteps })}
             </span>
             <div ref={sparklesRef} className="flex items-center gap-1.5 text-amber-400">
               <SparkleIcon className="w-4 h-4" weight="fill" />
-              <span className="text-sm font-medium">Almost there!</span>
+              <span className="text-sm font-medium">{t('progress.almostThere')}</span>
             </div>
           </div>
 
@@ -458,17 +453,15 @@ export function ProgressiveOnboarding() {
 
           {/* Educational disclaimer */}
           <div className="mt-8 pt-6 border-t border-slate-800/50">
-            <p className="text-center text-xs text-slate-500 leading-relaxed">
-              🎓 Educational purposes only. Not financial advice.
-              <br />
-              Always do your own research before investing.
+            <p className="text-center text-xs text-slate-500 leading-relaxed whitespace-pre-line">
+              🎓 {t('progress.disclaimer')}
             </p>
           </div>
         </div>
 
         {/* Bottom text */}
         <p className="text-center text-slate-600 text-sm mt-6">
-          You can update these preferences anytime in Settings
+          {t('progress.settingsNote')}
         </p>
       </div>
     </div>

@@ -5,8 +5,8 @@ import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
 import { dismissTip } from '@/lib/actions/profile';
 
-export function OnboardingTips() {
-    const t = useTranslations('dashboard.tips');
+export function ChallengeOnboardingTip() {
+    const t = useTranslations('challenge.tips');
     const [visible, setVisible] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const bubbleRef = useRef<HTMLDivElement>(null);
@@ -17,8 +17,8 @@ export function OnboardingTips() {
         const ctx = gsap.context(() => {
             gsap.fromTo(
                 bubbleRef.current,
-                { opacity: 0, y: -10 },
-                { opacity: 1, y: 0, duration: 0.5, delay: 0.5, ease: 'power2.out' }
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.5, delay: 0.7, ease: 'power2.out' }
             );
         }, containerRef);
 
@@ -28,11 +28,11 @@ export function OnboardingTips() {
     const handleDismiss = () => {
         gsap.to(bubbleRef.current, {
             opacity: 0,
-            y: -10,
+            y: 10,
             duration: 0.3,
             ease: 'power2.in',
             onComplete: () => {
-                dismissTip('dashboard');
+                dismissTip('challenge');
                 setVisible(false);
             },
         });
@@ -42,16 +42,14 @@ export function OnboardingTips() {
 
     return (
         <div ref={containerRef} className="pointer-events-none fixed inset-0 z-40">
-            {/* XP / Streak bubble */}
+            {/* Chat assistant bubble */}
             <div
                 ref={bubbleRef}
-                className="pointer-events-auto absolute top-20 right-32 sm:right-44 max-w-xs opacity-0"
+                className="pointer-events-auto absolute bottom-24 right-4 sm:right-6 max-w-xs opacity-0"
             >
                 <div className="relative bg-slate-800 border border-slate-700/50 rounded-2xl p-4 shadow-xl shadow-black/20">
-                    {/* Arrow pointing up */}
-                    <div className="absolute -top-2 right-16 w-4 h-4 bg-slate-800 border-l border-t border-slate-700/50 rotate-45" />
                     <p className="text-sm text-slate-200 leading-relaxed mb-3">
-                        {t('xpStreak')}
+                        {t('chatAssistant')}
                     </p>
                     <button
                         onClick={handleDismiss}
@@ -59,6 +57,8 @@ export function OnboardingTips() {
                     >
                         {t('dismiss')}
                     </button>
+                    {/* Arrow pointing down toward chat button */}
+                    <div className="absolute -bottom-2 right-10 w-4 h-4 bg-slate-800 border-r border-b border-slate-700/50 rotate-45" />
                 </div>
             </div>
         </div>

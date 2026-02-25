@@ -464,3 +464,32 @@ export async function deleteUserProfile(): Promise<ActionResponse> {
     };
   }
 }
+
+/**
+ * Mark an onboarding tip as seen for the current user
+ */
+export async function dismissTip(
+  tip: "dashboard" | "challenge"
+): Promise<ActionResponse> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user?.id) {
+      return { success: false, error: "Authentication required" };
+    }
+
+    const field =
+      tip === "dashboard" ? "hasSeenDashboardTips" : "hasSeenChallengeTip";
+
+    await db
+      .update(userProfiles)
+      .set({ [field]: true, updatedAt: new Date() })
+      .where(eq(userProfiles.userId, session.user.id));
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error dismissing tip:", error);
+    return { success: false, error: "Failed to dismiss tip" };
+  }
+}

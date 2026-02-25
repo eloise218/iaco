@@ -37,9 +37,10 @@ interface DashboardContentProps {
     challengeTitle: string;
     userXp: number;
     streak: number;
+    hasSeenDashboardTips: boolean;
 }
 
-export function DashboardContent({ user, profile, challengeDay, challengeCompleted, challengeTitle, userXp, streak }: DashboardContentProps) {
+export function DashboardContent({ user, profile, challengeDay, challengeCompleted, challengeTitle, userXp, streak, hasSeenDashboardTips }: DashboardContentProps) {
     const router = useRouter();
     const t = useTranslations('dashboard');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -354,7 +355,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
             <ChatBubbleWrapper />
 
             {/* First-time onboarding tips (day 1 only) */}
-            {challengeDay === 1 && <OnboardingTips />}
+            {challengeDay === 1 && !hasSeenDashboardTips && <OnboardingTips />}
         </div>
     );
 }
