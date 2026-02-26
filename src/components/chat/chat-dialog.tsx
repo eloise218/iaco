@@ -9,6 +9,7 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerTitle,
 } from "@/components/ui/drawer";
 import { ChatInterface } from "./chat-interface";
 

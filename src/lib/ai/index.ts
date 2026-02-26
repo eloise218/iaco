@@ -4,7 +4,7 @@
  * Central export point for all AI-related utilities.
  */
 
-export { AI_CONFIG, validateAIConfig, getChatModel } from './config';
+export { AI_CONFIG, getChatModel } from './config';
 export { buildSystemPrompt } from './system-prompt';
 export {
   formatMessagesForAI,
