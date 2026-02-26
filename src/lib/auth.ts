@@ -25,7 +25,7 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       console.log("🔑 RESET PASSWORD LINK:", url);
       await resend.emails.send({
-        from: "IACO <onboarding@resend.dev>",
+        from: "IACO <noreply@send.iaco.app>",
         to: user.email,
         subject: "Réinitialise ton mot de passe - IACO",
         html: `<h2>Réinitialisation de mot de passe</h2>
@@ -45,7 +45,7 @@ export const auth = betterAuth({
       console.error("Link: " + verificationUrl);
       console.error("==============================================\n");
       await resend.emails.send({
-        from: "IACO <onboarding@resend.dev>",
+        from: "IACO <noreply@send.iaco.app>",
         to: user.email,
         subject: "Vérifie ton adresse email - IACO",
         html: `<h2>Bienvenue sur IACO !</h2>
