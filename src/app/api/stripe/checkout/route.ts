@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import db from "@/db/drizzle";
 import { users, payments } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   try {
@@ -82,7 +83,7 @@ export async function POST(req: Request) {
 
     return Response.json({ url: checkoutSession.url });
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    logger.error("stripe", "Stripe checkout error", error);
     return Response.json(
       { error: error instanceof Error ? error.message : "Checkout failed" },
       { status: 500 }

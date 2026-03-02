@@ -6,6 +6,8 @@ import { Resend } from "resend";
 import db from "@/db/drizzle";
 import { users, session, account, verification } from "@/db/schema";
 
+import { logger } from "./logger";
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const auth = betterAuth({
@@ -23,36 +25,50 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
-      console.log("🔑 RESET PASSWORD LINK:", url);
-      await resend.emails.send({
-        from: "IACO <noreply@send.iaco.app>",
-        to: user.email,
-        subject: "Réinitialise ton mot de passe - IACO",
-        html: `<h2>Réinitialisation de mot de passe</h2>
-          <p>Clique sur le lien ci-dessous pour réinitialiser ton mot de passe :</p>
-          <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Réinitialiser mon mot de passe</a>
-          <p style="margin-top:16px;color:#666;">Si tu n'as pas demandé cette réinitialisation, ignore cet email.</p>`,
-      });
+      logger.info("auth", `Sending reset password email to: ${user.email}`);
+      try {
+        const { data, error } = await resend.emails.send({
+          from: "IACO <noreply@iaco.app>",
+          to: user.email,
+          subject: "Réinitialise ton mot de passe - IACO",
+          html: `<h2>Réinitialisation de mot de passe</h2>
+            <p>Clique sur le lien ci-dessous pour réinitialiser ton mot de passe :</p>
+            <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Réinitialiser mon mot de passe</a>
+            <p style="margin-top:16px;color:#666;">Si tu n'as pas demandé cette réinitialisation, ignore cet email.</p>`,
+        });
+        if (error) {
+          logger.error("auth", "Error sending reset email", error);
+        } else {
+          logger.info("auth", `Reset email sent successfully, id: ${data?.id}`);
+        }
+      } catch (err) {
+        logger.error("auth", "Exception sending reset email", err);
+      }
     },
   },
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      const verificationUrl = url;
-      console.error("\n========== EMAIL VERIFICATION LINK ==========");
-      console.error("Email: " + user.email);
-      console.error("Link: " + verificationUrl);
-      console.error("==============================================\n");
-      await resend.emails.send({
-        from: "IACO <noreply@send.iaco.app>",
-        to: user.email,
-        subject: "Vérifie ton adresse email - IACO",
-        html: `<h2>Bienvenue sur IACO !</h2>
-          <p>Clique sur le lien ci-dessous pour vérifier ton adresse email :</p>
-          <a href="${verificationUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Vérifier mon email</a>
-          <p style="margin-top:16px;color:#666;">Si tu n'as pas créé de compte, ignore cet email.</p>`,
-      });
+      logger.info("auth", `Sending verification email to: ${user.email}`);
+      try {
+        const { data, error } = await resend.emails.send({
+          from: "IACO <noreply@iaco.app>",
+          to: user.email,
+          subject: "Vérifie ton adresse email - IACO",
+          html: `<h2>Bienvenue sur IACO !</h2>
+            <p>Clique sur le lien ci-dessous pour vérifier ton adresse email :</p>
+            <a href="${url}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:white;text-decoration:none;border-radius:8px;">Vérifier mon email</a>
+            <p style="margin-top:16px;color:#666;">Si tu n'as pas créé de compte, ignore cet email.</p>`,
+        });
+        if (error) {
+          logger.error("auth", "Error sending verification email", error);
+        } else {
+          logger.info("auth", `Verification email sent successfully, id: ${data?.id}`);
+        }
+      } catch (err) {
+        logger.error("auth", "Exception sending verification email", err);
+      }
     },
   },
   socialProviders: {
@@ -89,14 +105,14 @@ export const auth = betterAuth({
           riskTolerance: "low",
         });
         // After creation, they need to go to onboarding.
-        return "/onboarding";
+        return "/fr/onboarding";
       }
 
       // Now check the onboarding status from the (potentially just created) profile.
       const finalStatus = await hasCompletedOnboarding(user.id);
-      return finalStatus.data ? "/dashboard" : "/onboarding";
+      return finalStatus.data ? "/fr/dashboard" : "/fr/onboarding";
     },
-    signUp: "/onboarding", // Fallback for direct sign-ups
+    signUp: "/fr/onboarding", // Fallback for direct sign-ups
   },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days

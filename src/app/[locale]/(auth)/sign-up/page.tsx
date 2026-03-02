@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,7 @@ export default function SignUpPage() {
     const [error, setError] = useState("");
     const [emailSent, setEmailSent] = useState(false);
     const t = useTranslations('auth.signUp');
+    const locale = useLocale();
 
     // Restaurer nom et email depuis sessionStorage au montage
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function SignUpPage() {
             setLoading(true);
             await authClient.signIn.social({
                 provider: "google",
-                callbackURL: "/onboarding",
+                callbackURL: `/${locale}/onboarding`,
             });
         } catch (e) {
             console.error(e);
@@ -149,6 +150,51 @@ export default function SignUpPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                    {/* Conditions d'utilisation */}
+                    <div className="flex items-start space-x-3 p-4 rounded-lg bg-gray-700/50 border border-gray-600">
+                        <Checkbox
+                            id="terms"
+                            checked={agreedToTerms}
+                            onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
+                            className="mt-1"
+                        />
+                        <div className="grid gap-1.5 leading-none">
+                            <Label
+                                htmlFor="terms"
+                                className="text-sm font-medium leading-none cursor-pointer text-white"
+                            >
+                                {t('termsLabel')}
+                            </Label>
+                            <p className="text-xs text-gray-400">
+                                {t('termsDescription')}{" "}
+                                <Link href="/terms" className="text-primary hover:underline">
+                                    {t('termsLink')}
+                                </Link>{" "}
+                                {t('and')}{" "}
+                                <Link href="/privacy" className="text-primary hover:underline">
+                                    {t('privacyLink')}
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Bouton Google */}
+                    <Button
+                        onClick={onGoogle}
+                        variant="outline"
+                        className="w-full h-11 rounded-xl border-gray-600 text-white hover:bg-gray-700 transition"
+                        disabled={loading || !agreedToTerms}
+                    >
+                        {loading ? t('loading') : t('google')}
+                    </Button>
+
+                    <div className="relative text-center">
+                        <span className="px-3 text-xs text-gray-400 bg-gray-800 relative z-10">
+                            {t('or')}
+                        </span>
+                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-gray-600" />
+                    </div>
+
                     {/* Formulaire Email/Password */}
                     <form onSubmit={onEmailSignUp} className="space-y-4">
                         <div className="space-y-2">
@@ -216,33 +262,6 @@ export default function SignUpPage() {
                             </p>
                         )}
 
-                        <div className="flex items-start space-x-3 p-4 rounded-lg bg-gray-700/50 border border-gray-600">
-                            <Checkbox
-                                id="terms"
-                                checked={agreedToTerms}
-                                onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
-                                className="mt-1"
-                            />
-                            <div className="grid gap-1.5 leading-none">
-                                <Label
-                                    htmlFor="terms"
-                                    className="text-sm font-medium leading-none cursor-pointer text-white"
-                                >
-                                    {t('termsLabel')}
-                                </Label>
-                                <p className="text-xs text-gray-400">
-                                    {t('termsDescription')}{" "}
-                                    <Link href="/terms" className="text-primary hover:underline">
-                                        {t('termsLink')}
-                                    </Link>{" "}
-                                    {t('and')}{" "}
-                                    <Link href="/privacy" className="text-primary hover:underline">
-                                        {t('privacyLink')}
-                                    </Link>
-                                </p>
-                            </div>
-                        </div>
-
                         <Button
                             type="submit"
                             className={`w-full h-11 rounded-xl transition ${agreedToTerms
@@ -254,23 +273,6 @@ export default function SignUpPage() {
                             {loading ? t('loading') : t('submitEmail')}
                         </Button>
                     </form>
-
-                    <div className="relative text-center">
-                        <span className="px-3 text-xs text-gray-400 bg-gray-800 relative z-10">
-                            {t('or')}
-                        </span>
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-gray-600" />
-                    </div>
-
-                    {/* Bouton Google */}
-                    <Button
-                        onClick={onGoogle}
-                        variant="outline"
-                        className="w-full h-11 rounded-xl border-gray-600 text-white hover:bg-gray-700 transition"
-                        disabled={loading || !agreedToTerms}
-                    >
-                        {loading ? t('loading') : t('google')}
-                    </Button>
 
                     <p className="text-sm text-gray-300 text-center">
                         {t('hasAccount')}{" "}

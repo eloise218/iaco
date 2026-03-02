@@ -2,6 +2,7 @@ import { stripe } from "@/lib/stripe";
 import db from "@/db/drizzle";
 import { users, payments } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
+    logger.error("stripe", "Webhook signature verification failed", err);
     return Response.json({ error: "Invalid signature" }, { status: 400 });
   }
 
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     const userId = session.metadata?.userId;
 
     if (!userId) {
-      console.error("No userId in session metadata");
+      logger.error("stripe", "No userId in session metadata");
       return Response.json({ error: "Missing userId" }, { status: 400 });
     }
 
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       })
       .where(eq(payments.stripeSessionId, session.id));
 
-    console.log(`Premium activated for user ${userId}`);
+    logger.info("stripe", `Premium activated for user ${userId}`);
   }
 
   if (event.type === "charge.refunded") {

@@ -15,6 +15,7 @@ import {
 } from '@/lib/validations/account';
 import { encrypt } from '@/lib/utils/encryption';
 import { ZodError } from 'zod';
+import { logger } from '@/lib/logger';
 
 export async function updateUserDetails(input: UpdateUserDetailsInput): Promise<ActionResponse> {
   try {
@@ -44,7 +45,7 @@ export async function updateUserDetails(input: UpdateUserDetailsInput): Promise<
     if (error instanceof ZodError) {
       return { success: false, error: 'Invalid input' };
     }
-    console.error('updateUserDetails error', error);
+    logger.error('account', 'updateUserDetails error', error);
     return { success: false, error: 'Failed to update account' };
   }
 }
@@ -88,7 +89,7 @@ export async function saveBinanceCredentials(input: BinanceCredentialsInput): Pr
     if (error instanceof ZodError) {
       return { success: false, error: 'Invalid input' };
     }
-    console.error('saveBinanceCredentials error', error);
+    logger.error('account', 'saveBinanceCredentials error', error);
     return { success: false, error: 'Failed to save credentials' };
   }
 }
@@ -106,7 +107,7 @@ export async function setBinanceActive(isActive: boolean): Promise<ActionRespons
     revalidatePath('/account');
     return { success: true, message: isActive ? 'Reconnected' : 'Disconnected' };
   } catch (error) {
-    console.error('setBinanceActive error', error);
+    logger.error('account', 'setBinanceActive error', error);
     return { success: false, error: 'Failed to update Binance status' };
   }
 }
@@ -120,7 +121,7 @@ export async function deleteBinance(): Promise<ActionResponse> {
     revalidatePath('/account');
     return { success: true, message: 'Binance credentials removed' };
   } catch (error) {
-    console.error('deleteBinance error', error);
+    logger.error('account', 'deleteBinance error', error);
     return { success: false, error: 'Failed to remove credentials' };
   }
 }
@@ -140,7 +141,7 @@ export async function getBinanceStatus(): Promise<ActionResponse<{ connected: bo
     const isActive = connected ? Boolean(rows[0].isActive) : false;
     return { success: true, data: { connected, isActive } };
   } catch (error) {
-    console.error('getBinanceStatus error', error);
+    logger.error('account', 'getBinanceStatus error', error);
     return { success: false, error: 'Failed to get status' };
   }
 }

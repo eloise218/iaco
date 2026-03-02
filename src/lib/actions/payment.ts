@@ -6,6 +6,7 @@ import db from "@/db/drizzle";
 import { users } from "@/db/schema";
 import { auth } from "../auth";
 import type { ActionResponse } from "../types";
+import { logger } from "../logger";
 
 export async function getPremiumStatus(): Promise<
   ActionResponse<{ isPremium: boolean; premiumSince: Date | null }>
@@ -33,7 +34,7 @@ export async function getPremiumStatus(): Promise<
       },
     };
   } catch (error) {
-    console.error("getPremiumStatus error:", error);
+    logger.error("payment", "getPremiumStatus error", error);
     return { success: false, error: "Failed to get premium status" };
   }
 }

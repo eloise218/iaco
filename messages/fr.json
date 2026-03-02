@@ -610,7 +610,7 @@
         "reading": "Lecture du jour",
         "completed": {
             "title": "Bravo, tu as terminé les 14 défis !",
-            "message": "Tu as complété tous les défis quotidiens. Continue ton apprentissage avec les vidéos et le coach IA !"
+            "message": "Tu as complété tous les défis quotidiens. Continue ton apprentissage avec le coach IA !"
         },
         "tips": {
             "chatAssistant": "Besoin d'aide ? Clique ici pour poser tes questions à Iaco, ton coach IA 🤖",

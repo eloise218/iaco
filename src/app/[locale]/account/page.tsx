@@ -1,10 +1,13 @@
-import { getUserProfile } from '@/lib/actions/profile';
-import { getPremiumStatus } from '@/lib/actions/payment';
+export const runtime = "nodejs";
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
+import db from '@/db/drizzle';
+import { userProfiles, users } from '@/db/schema';
 import { AccountContent } from '@/components/account/account-content';
 import { setRequestLocale } from 'next-intl/server';
+import { logger } from '@/lib/logger';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -20,14 +23,47 @@ export default async function AccountPage({ params }: Props) {
         redirect(`/${locale}/sign-in`);
     }
 
-    const profileRes = await getUserProfile();
-    const profile = profileRes.success && profileRes.data
-        ? {
-            experienceLevel: (profileRes.data as { experienceLevel?: 'beginner' | 'intermediate' }).experienceLevel || 'beginner',
-            investmentObjectives: (profileRes.data as { investmentObjectives?: string[] }).investmentObjectives || ['learning'],
-            riskTolerance: (profileRes.data as { riskTolerance?: 'low' | 'medium' | 'high' }).riskTolerance || 'low',
+    let profile: {
+        experienceLevel: 'beginner' | 'intermediate';
+        investmentObjectives: string[];
+        riskTolerance: 'low' | 'medium' | 'high';
+    } | null = null;
+    let isPremium = false;
+    let premiumSince: string | null = null;
+
+    try {
+        const [profileRow] = await db
+            .select()
+            .from(userProfiles)
+            .where(eq(userProfiles.userId, session.user.id))
+            .limit(1);
+
+        if (profileRow) {
+            profile = {
+                experienceLevel: (profileRow.experienceLevel as 'beginner' | 'intermediate') || 'beginner',
+                investmentObjectives: Array.isArray(profileRow.investmentObjectives)
+                    ? profileRow.investmentObjectives.filter((x): x is string => typeof x === 'string')
+                    : ['learning'],
+                riskTolerance: (profileRow.riskTolerance as 'low' | 'medium' | 'high') || 'low',
+            };
         }
-        : null;
+
+        const [userRow] = await db
+            .select({
+                isPremium: users.isPremium,
+                premiumSince: users.premiumSince,
+            })
+            .from(users)
+            .where(eq(users.id, session.user.id))
+            .limit(1);
+
+        if (userRow) {
+            isPremium = userRow.isPremium ?? false;
+            premiumSince = userRow.premiumSince ? userRow.premiumSince.toISOString() : null;
+        }
+    } catch (error) {
+        logger.error('account', 'Error fetching account data', error);
+    }
 
     const user = {
         id: session.user.id,
@@ -36,12 +72,6 @@ export default async function AccountPage({ params }: Props) {
         image: session.user.image || undefined,
         phone: (session.user as { phone?: string })?.phone || '',
     };
-
-    const premiumRes = await getPremiumStatus();
-    const isPremium = premiumRes.success ? premiumRes.data?.isPremium ?? false : false;
-    const premiumSince = premiumRes.success && premiumRes.data?.premiumSince
-        ? premiumRes.data.premiumSince.toISOString()
-        : null;
 
     return (
         <AccountContent

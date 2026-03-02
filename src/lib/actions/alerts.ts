@@ -23,6 +23,7 @@ import {
 import type { ActionResponse, CryptoAlert } from "../types";
 import { auth } from "../auth";
 import { revalidatePath } from "next/cache";
+import { logger } from "../logger";
 
 const MAX_ACTIVE_ALERTS = 10;
 
@@ -113,7 +114,7 @@ export async function createAlert(
       message: "Alert created successfully",
     };
   } catch (error) {
-    console.error("Error creating alert:", error);
+    logger.error("alerts", "Error creating alert", error);
 
     if (error instanceof Error && error.name === "ZodError") {
       return { success: false, error: "Invalid input data" };
@@ -143,7 +144,7 @@ export async function getUserAlerts(): Promise<ActionResponse<CryptoAlert[]>> {
 
     return { success: true, data: alerts as CryptoAlert[] };
   } catch (error) {
-    console.error("Error fetching alerts:", error);
+    logger.error("alerts", "Error fetching alerts", error);
     return { success: false, error: "Failed to fetch alerts" };
   }
 }
@@ -200,7 +201,7 @@ export async function acknowledgeAlert(
 
     return { success: true, message: "Alert acknowledged" };
   } catch (error) {
-    console.error("Error acknowledging alert:", error);
+    logger.error("alerts", "Error acknowledging alert", error);
     return { success: false, error: "Failed to acknowledge alert" };
   }
 }
@@ -243,7 +244,7 @@ export async function deleteAlert(
 
     return { success: true, message: "Alert deleted" };
   } catch (error) {
-    console.error("Error deleting alert:", error);
+    logger.error("alerts", "Error deleting alert", error);
     return { success: false, error: "Failed to delete alert" };
   }
 }
@@ -292,7 +293,7 @@ export async function toggleAlert(
       message: validated.isActive ? "Alert activated" : "Alert deactivated",
     };
   } catch (error) {
-    console.error("Error toggling alert:", error);
+    logger.error("alerts", "Error toggling alert", error);
     return { success: false, error: "Failed to toggle alert" };
   }
 }
@@ -429,7 +430,7 @@ export async function checkAndTriggerAlerts(
 
     return { success: true, data: newlyTriggered };
   } catch (error) {
-    console.error("Error checking alerts:", error);
+    logger.error("alerts", "Error checking alerts", error);
     return { success: false, error: "Failed to check alerts" };
   }
 }

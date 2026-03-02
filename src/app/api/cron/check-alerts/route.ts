@@ -2,6 +2,7 @@ import { eq, and } from 'drizzle-orm';
 import db from '@/db/drizzle';
 import { cryptoAlerts } from '@/db/schema';
 import { sendPushNotification } from '@/lib/push';
+import { logger } from '@/lib/logger';
 
 interface BinancePriceTicker {
   symbol: string;
@@ -116,7 +117,7 @@ export async function GET(req: Request) {
           ? `${alert.symbol} a atteint ${price.toLocaleString('fr-FR')}$ (seuil: ${parseFloat(alert.threshold).toLocaleString('fr-FR')}$)`
           : `${alert.symbol} a bougé de ${price}% en 24h`,
         url: '/dashboard',
-      }).catch((err) => console.error('Push error for user', alert.userId, err));
+      }).catch((err) => logger.error('cron', `Push error for user ${alert.userId}`, err));
     }
 
     return Response.json({
@@ -124,7 +125,7 @@ export async function GET(req: Request) {
       triggered: triggered.length,
     });
   } catch (error) {
-    console.error('Cron check-alerts error:', error);
+    logger.error('cron', 'Cron check-alerts error', error);
     return Response.json({ error: 'Internal error' }, { status: 500 });
   }
 }

@@ -6,6 +6,7 @@ import db from '@/db/drizzle';
 import { chatMessages, userProfiles } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { buildSystemPrompt } from '@/lib/ai/system-prompt';
+import { logger } from '@/lib/logger';
 
 /**
  * POST /api/chat
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
     try {
       body = await req.json();
     } catch (parseError) {
-      console.error('JSON parse error:', parseError);
+      logger.error('chat', 'JSON parse error', parseError);
       return new Response(
         JSON.stringify({ error: 'Invalid request format.' }),
         {
@@ -84,7 +85,7 @@ export async function POST(req: Request) {
         };
       }
     } catch (dbError) {
-      console.error('Error loading user profile:', dbError);
+      logger.error('chat', 'Error loading user profile', dbError);
       // Continue without profile - not critical for chat functionality
     }
 
@@ -97,7 +98,7 @@ export async function POST(req: Request) {
         limit: 20,
       });
     } catch (dbError) {
-      console.error('Error loading chat history:', dbError);
+      logger.error('chat', 'Error loading chat history', dbError);
       // Continue with empty history if database fails
       history = [];
     }
@@ -125,7 +126,7 @@ export async function POST(req: Request) {
         content: message,
       });
     } catch (dbError) {
-      console.error('Error saving user message to database:', dbError);
+      logger.error('chat', 'Error saving user message to database', dbError);
       return new Response(
         JSON.stringify({ error: 'Failed to save your message. Please try again.' }),
         {
@@ -150,7 +151,7 @@ export async function POST(req: Request) {
             content: text,
           });
         } catch (dbError) {
-          console.error('Error saving assistant message to database:', dbError);
+          logger.error('chat', 'Error saving assistant message to database', dbError);
         }
       },
     });
@@ -160,7 +161,7 @@ export async function POST(req: Request) {
 
   } catch (error) {
     // Subtask 3.5: Catch and log AI API errors
-    console.error('Unexpected chat API error:', error);
+    logger.error('chat', 'Unexpected chat API error', error);
 
     // Subtask 3.5: Return user-friendly error messages
     return new Response(

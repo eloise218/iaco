@@ -22,6 +22,7 @@ import {
 import { ActionResponse } from "../types";
 import { auth } from "../auth";
 import { revalidatePath } from "next/cache";
+import { logger } from "../logger";
 
 /**
  * Get user profile by user ID
@@ -61,7 +62,7 @@ export async function getUserProfile(userId?: string): Promise<ActionResponse> {
       data: profile[0],
     };
   } catch (error) {
-    console.error("Error fetching user profile:", error);
+    logger.error("profile", "Error fetching user profile", error);
     return {
       success: false,
       error: "Failed to fetch profile",
@@ -131,7 +132,7 @@ export async function createUserProfile(
       message: "Profile created successfully",
     };
   } catch (error) {
-    console.error("Error creating user profile:", error);
+    logger.error("profile", "Error creating user profile", error);
 
     if (error instanceof Error && error.name === "ZodError") {
       return {
@@ -207,7 +208,7 @@ export async function updateUserProfile(
       message: "Profile updated successfully",
     };
   } catch (error) {
-    console.error("Error updating user profile:", error);
+    logger.error("profile", "Error updating user profile", error);
 
     if (error instanceof Error && error.name === "ZodError") {
       return {
@@ -297,7 +298,7 @@ export async function completeOnboarding(
       message: "Onboarding completed successfully",
     };
   } catch (error) {
-    console.error("Error completing onboarding:", error);
+    logger.error("profile", "Error completing onboarding", error);
 
     if (error instanceof Error && error.name === "ZodError") {
       return {
@@ -375,7 +376,7 @@ export async function skipOnboarding(): Promise<ActionResponse> {
       message: "Onboarding skipped successfully",
     };
   } catch (error) {
-    console.error("Error skipping onboarding:", error);
+    logger.error("profile", "Error skipping onboarding", error);
     return {
       success: false,
       error: "Failed to skip onboarding",
@@ -419,7 +420,7 @@ export async function hasCompletedOnboarding(
       data: completed,
     };
   } catch (error) {
-    console.error("Error checking onboarding status:", error);
+    logger.error("profile", "Error checking onboarding status", error);
     return {
       success: false,
       error: "Failed to check onboarding status",
@@ -457,7 +458,7 @@ export async function deleteUserProfile(): Promise<ActionResponse> {
       message: "Profile deleted successfully",
     };
   } catch (error) {
-    console.error("Error deleting user profile:", error);
+    logger.error("profile", "Error deleting user profile", error);
     return {
       success: false,
       error: "Failed to delete profile",
@@ -489,7 +490,7 @@ export async function dismissTip(
 
     return { success: true };
   } catch (error) {
-    console.error("Error dismissing tip:", error);
+    logger.error("profile", "Error dismissing tip", error);
     return { success: false, error: "Failed to dismiss tip" };
   }
 }

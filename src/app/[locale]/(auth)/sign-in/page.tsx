@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,13 +16,14 @@ export default function SignInPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const t = useTranslations('auth.signIn');
+    const locale = useLocale();
 
     const onGoogle = async () => {
         try {
             setLoading(true);
             await authClient.signIn.social({
                 provider: "google",
-                callbackURL: "/dashboard",
+                callbackURL: `/${locale}/dashboard`,
             });
         } catch (e) {
             console.error(e);
@@ -47,7 +48,7 @@ export default function SignInPage() {
                 return;
             }
 
-            window.location.href = "/dashboard";
+            window.location.href = `/${locale}/dashboard`;
         } catch (e) {
             console.error(e);
             setError(t('genericError'));
