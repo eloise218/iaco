@@ -51,6 +51,11 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       logger.info("auth", `Sending verification email to: ${user.email}`);
+
+      if (process.env.NODE_ENV === "development") {
+        console.log(`\n✉️  Verification email for ${user.email}:\n👉 ${url}\n`);
+      }
+
       try {
         const { data, error } = await resend.emails.send({
           from: "IACO <noreply@iaco.app>",

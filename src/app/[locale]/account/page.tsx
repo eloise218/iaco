@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 import db from '@/db/drizzle';
-import { userProfiles, users } from '@/db/schema';
+import { users } from '@/db/schema';
 import { AccountContent } from '@/components/account/account-content';
 import { setRequestLocale } from 'next-intl/server';
 import { logger } from '@/lib/logger';
@@ -23,31 +23,10 @@ export default async function AccountPage({ params }: Props) {
         redirect(`/${locale}/sign-in`);
     }
 
-    let profile: {
-        experienceLevel: 'beginner' | 'intermediate';
-        investmentObjectives: string[];
-        riskTolerance: 'low' | 'medium' | 'high';
-    } | null = null;
     let isPremium = false;
     let premiumSince: string | null = null;
 
     try {
-        const [profileRow] = await db
-            .select()
-            .from(userProfiles)
-            .where(eq(userProfiles.userId, session.user.id))
-            .limit(1);
-
-        if (profileRow) {
-            profile = {
-                experienceLevel: (profileRow.experienceLevel as 'beginner' | 'intermediate') || 'beginner',
-                investmentObjectives: Array.isArray(profileRow.investmentObjectives)
-                    ? profileRow.investmentObjectives.filter((x): x is string => typeof x === 'string')
-                    : ['learning'],
-                riskTolerance: (profileRow.riskTolerance as 'low' | 'medium' | 'high') || 'low',
-            };
-        }
-
         const [userRow] = await db
             .select({
                 isPremium: users.isPremium,
@@ -76,7 +55,6 @@ export default async function AccountPage({ params }: Props) {
     return (
         <AccountContent
             user={user}
-            profile={profile}
             isPremium={isPremium}
             premiumSince={premiumSince}
             locale={locale}

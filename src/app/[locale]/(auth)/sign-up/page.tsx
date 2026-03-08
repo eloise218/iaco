@@ -82,6 +82,7 @@ export default function SignUpPage() {
                 email,
                 password,
                 name,
+                callbackURL: `/${locale}/onboarding`,
             });
 
             if (result.error) {

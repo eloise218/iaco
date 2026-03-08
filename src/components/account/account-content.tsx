@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
 import {
     UserIcon,
-    GearIcon,
     KeyIcon,
     ShieldCheckIcon,
     CaretLeftIcon,
@@ -19,7 +18,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import UserDetailsForm from '@/components/account/user-details-form';
-import ProfileSettingsForm from '@/components/account/profile-settings-form';
 import BinanceKeysForm from '@/components/account/binance-keys-form';
 import { PushPermission } from '@/components/push/push-permission';
 import { PremiumSection } from '@/components/account/premium-section';
@@ -32,17 +30,12 @@ interface AccountContentProps {
         image?: string;
         phone?: string;
     };
-    profile: {
-        experienceLevel: 'beginner' | 'intermediate';
-        investmentObjectives: string[];
-        riskTolerance: 'low' | 'medium' | 'high';
-    } | null;
     isPremium?: boolean;
     premiumSince?: string | null;
     locale?: string;
 }
 
-export function AccountContent({ user, profile, isPremium = false, premiumSince, locale = 'fr' }: AccountContentProps) {
+export function AccountContent({ user, isPremium = false, premiumSince, locale = 'fr' }: AccountContentProps) {
     const t = useTranslations('account');
     const containerRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +45,6 @@ export function AccountContent({ user, profile, isPremium = false, premiumSince,
     const navItems = [
         { id: 'premium', label: t('sections.premium'), icon: CrownIcon },
         { id: 'profile', label: t('sections.profile'), icon: UserIcon },
-        { id: 'preferences', label: t('sections.preferences'), icon: GearIcon },
         { id: 'notifications', label: t('sections.notifications'), icon: BellIcon },
         { id: 'binance', label: t('sections.binance'), icon: KeyIcon },
         { id: 'security', label: t('sections.security'), icon: ShieldCheckIcon },
@@ -216,30 +208,6 @@ export function AccountContent({ user, profile, isPremium = false, premiumSince,
                                         defaultName={user.name || ''}
                                         defaultEmail={user.email || ''}
                                         defaultPhone={user.phone || ''}
-                                    />
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* Preferences Section */}
-                        <section id="preferences" className="settings-card scroll-mt-24">
-                            <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-slate-800/50 overflow-hidden">
-                                <div className="px-6 py-5 border-b border-slate-800/50 flex items-center gap-3">
-                                    <div className="p-2 rounded-lg bg-purple-500/20">
-                                        <GearIcon className="w-5 h-5 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-white">{t('preferences.title')}</h2>
-                                        <p className="text-sm text-slate-400">{t('preferences.description')}</p>
-                                    </div>
-                                </div>
-                                <div className="p-6">
-                                    <ProfileSettingsForm
-                                        defaultValues={{
-                                            experienceLevel: profile?.experienceLevel || 'beginner',
-                                            investmentObjectives: profile?.investmentObjectives || ['learning'],
-                                            riskTolerance: profile?.riskTolerance || 'low',
-                                        }}
                                     />
                                 </div>
                             </div>
