@@ -470,7 +470,7 @@ export async function deleteUserProfile(): Promise<ActionResponse> {
  * Mark an onboarding tip as seen for the current user
  */
 export async function dismissTip(
-  tip: "dashboard" | "challenge"
+  tip: "dashboard" | "challenge" | "alerts"
 ): Promise<ActionResponse> {
   try {
     const session = await auth.api.getSession({
@@ -480,8 +480,12 @@ export async function dismissTip(
       return { success: false, error: "Authentication required" };
     }
 
-    const field =
-      tip === "dashboard" ? "hasSeenDashboardTips" : "hasSeenChallengeTip";
+    const fieldMap = {
+      dashboard: "hasSeenDashboardTips",
+      challenge: "hasSeenChallengeTip",
+      alerts: "hasSeenAlertsTip",
+    } as const;
+    const field = fieldMap[tip];
 
     await db
       .update(userProfiles)

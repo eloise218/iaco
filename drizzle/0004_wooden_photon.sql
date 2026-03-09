@@ -1,0 +1,1 @@
+ALTER TABLE `user_profiles` ADD `has_seen_alerts_tip` boolean DEFAULT false;

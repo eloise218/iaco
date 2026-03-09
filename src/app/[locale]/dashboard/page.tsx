@@ -135,6 +135,7 @@ export default async function DashboardPage({ params }: Props) {
             userXp={userXp}
             streak={streak}
             hasSeenDashboardTips={userProfile.hasSeenDashboardTips ?? false}
+            hasSeenAlertsTip={userProfile.hasSeenAlertsTip ?? false}
         />
     );
 }

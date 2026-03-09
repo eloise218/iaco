@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import { AlertsSection } from './alerts/alerts-section';
 import { authClient } from '@/lib/auth-client';
-import { OnboardingTips } from './onboarding-tips';
+import { OnboardingTips, AlertsOnboardingTip } from './onboarding-tips';
 
 interface DashboardContentProps {
     user: {
@@ -38,9 +38,10 @@ interface DashboardContentProps {
     userXp: number;
     streak: number;
     hasSeenDashboardTips: boolean;
+    hasSeenAlertsTip: boolean;
 }
 
-export function DashboardContent({ user, profile, challengeDay, challengeCompleted, challengeTitle, userXp, streak, hasSeenDashboardTips }: DashboardContentProps) {
+export function DashboardContent({ user, profile, challengeDay, challengeCompleted, challengeTitle, userXp, streak, hasSeenDashboardTips, hasSeenAlertsTip }: DashboardContentProps) {
     const router = useRouter();
     const t = useTranslations('dashboard');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -192,7 +193,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                                     className="object-contain"
                                 />
                             </div>
-                            <span className="text-xl font-bold text-white">IACO</span>
+                            <span className="text-xl font-bold text-teal-400">IACO</span>
                         </div>
 
                         {/* User Menu */}
@@ -329,6 +330,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                 </Link>
 
                 {/* Price Alerts Section */}
+                {challengeDay === 1 && !hasSeenAlertsTip && <AlertsOnboardingTip />}
                 <div className="mb-6 sm:mb-8">
                     <AlertsSection />
                 </div>

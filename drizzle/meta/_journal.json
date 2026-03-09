@@ -29,6 +29,13 @@
       "when": 1772010311387,
       "tag": "0003_chubby_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1773085042540,
+      "tag": "0004_wooden_photon",
+      "breakpoints": true
     }
   ]
 }

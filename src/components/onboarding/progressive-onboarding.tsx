@@ -12,7 +12,6 @@ import {
   BookOpenIcon,
   TrendUpIcon,
   ChartPieIcon,
-  SparkleIcon,
   ArrowRightIcon,
   CheckIcon
 } from '@phosphor-icons/react';
@@ -47,7 +46,6 @@ export function ProgressiveOnboarding() {
   const questionRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  const sparklesRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = 2;
 
@@ -136,14 +134,6 @@ export function ProgressiveOnboarding() {
         }
       );
 
-      // Floating sparkles animation
-      gsap.to(sparklesRef.current, {
-        y: -6,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power1.inOut',
-      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -337,10 +327,6 @@ export function ProgressiveOnboarding() {
             <span className="text-sm font-medium text-slate-400">
               {t('progress.step', { current: currentStep + 1, total: totalSteps })}
             </span>
-            <div ref={sparklesRef} className="flex items-center gap-1.5 text-amber-400">
-              <SparkleIcon className="w-4 h-4" weight="fill" />
-              <span className="text-sm font-medium">{t('progress.almostThere')}</span>
-            </div>
           </div>
 
           {/* Progress bar */}
@@ -458,11 +444,6 @@ export function ProgressiveOnboarding() {
             </p>
           </div>
         </div>
-
-        {/* Bottom text */}
-        <p className="text-center text-slate-600 text-sm mt-6">
-          {t('progress.settingsNote')}
-        </p>
       </div>
     </div>
   );
