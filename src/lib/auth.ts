@@ -53,7 +53,9 @@ export const auth = betterAuth({
       logger.info("auth", `Sending verification email to: ${user.email}`);
 
       if (process.env.NODE_ENV === "development") {
-        console.log(`\n✉️  Verification email for ${user.email}:\n👉 ${url}\n`);
+        console.log(`\n✉️  Verification email for ${user.email}:`);
+        console.log(url);
+        console.log();
       }
 
       try {
@@ -86,36 +88,43 @@ export const auth = betterAuth({
   },
   redirects: {
     signIn: async (user: (typeof users)["$inferSelect"]) => {
-      // Refresh cookie consent timestamp on login (extends 6-month window)
       try {
-        const { refreshCookieConsent } = await import(
-          "@/lib/actions/cookie-consent"
-        );
-        await refreshCookieConsent(user.id);
-      } catch {
-        // Non-blocking
-      }
+        // Refresh cookie consent timestamp on login (extends 6-month window)
+        try {
+          const { refreshCookieConsent } = await import(
+            "@/lib/actions/cookie-consent"
+          );
+          await refreshCookieConsent(user.id);
+        } catch {
+          // Non-blocking
+        }
 
-      const { hasCompletedOnboarding, createUserProfile } = await import(
-        "@/lib/actions/profile"
-      );
+        // Check onboarding status directly via DB (no headers() dependency)
+        const { eq } = await import("drizzle-orm");
+        const { userProfiles } = await import("@/db/schema");
+        const profile = await db
+          .select({ completedOnboarding: userProfiles.completedOnboarding })
+          .from(userProfiles)
+          .where(eq(userProfiles.userId, user.id))
+          .limit(1);
 
-      // Check if a profile exists. If not, create one.
-      const profileResult = await hasCompletedOnboarding(user.id);
-      if (!profileResult.success && profileResult.error === "Profile not found") {
-        // No profile exists, so create a default one.
-        await createUserProfile({
-          experienceLevel: "beginner",
-          investmentObjectives: ["learning"],
-          riskTolerance: "low",
-        });
-        // After creation, they need to go to onboarding.
+        if (profile.length === 0) {
+          // Create a default profile directly via DB
+          await db.insert(userProfiles).values({
+            userId: user.id,
+            experienceLevel: "beginner",
+            investmentObjectives: ["learning"],
+            riskTolerance: "low",
+            completedOnboarding: false,
+          });
+          return "/fr/onboarding";
+        }
+
+        return profile[0].completedOnboarding ? "/fr/dashboard" : "/fr/onboarding";
+      } catch (err) {
+        logger.error("auth", "Error in signIn redirect callback", err);
         return "/fr/onboarding";
       }
-
-      // Now check the onboarding status from the (potentially just created) profile.
-      const finalStatus = await hasCompletedOnboarding(user.id);
-      return finalStatus.data ? "/fr/dashboard" : "/fr/onboarding";
     },
     signUp: "/fr/onboarding", // Fallback for direct sign-ups
   },
