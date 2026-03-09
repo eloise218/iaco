@@ -152,8 +152,6 @@ export function ChatInterface({ onClose }: ChatInterfaceProps) {
     } catch (error: unknown) {
       // Subtask 6.3: Handle partial responses from interrupted streams
       if (error instanceof Error && error.name === "AbortError") {
-        toast.info(t("errors.cancelled"));
-
         // If we have partial streaming content, save it
         if (streamingContent) {
           const partialMessage: Message = {

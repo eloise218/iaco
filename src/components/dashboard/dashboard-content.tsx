@@ -14,8 +14,8 @@ import {
     PlayIcon,
     FireIcon,
     BookOpenIcon,
+    CaretDownIcon,
 } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import { AlertsSection } from './alerts/alerts-section';
 import { authClient } from '@/lib/auth-client';
@@ -51,6 +51,10 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
     const streakBadgeRef = useRef<HTMLDivElement>(null);
     const [displayedXp, setDisplayedXp] = useState(0);
     const [displayedStreak, setDisplayedStreak] = useState(0);
+    const [imgError, setImgError] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [bannerOpen, setBannerOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -60,9 +64,21 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
     };
 
     const handleSignOut = async () => {
+        setMenuOpen(false);
         await authClient.signOut();
         router.push('/');
     };
+
+    // Close menu on outside click
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setMenuOpen(false);
+            }
+        };
+        if (menuOpen) document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -180,7 +196,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
             </div>
 
             {/* Header */}
-            <header ref={headerRef} className="relative z-10 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl opacity-0">
+            <header ref={headerRef} className="relative z-20 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl opacity-0">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
@@ -208,33 +224,47 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                                     <span className="text-xs sm:text-sm font-semibold text-orange-300">{displayedStreak}</span>
                                 )}
                             </div>
-                            <div className="flex items-center gap-0">
-                                <Link href="/account">
-                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                                        <GearIcon className="w-5 h-5" />
-                                    </Button>
-                                </Link>
+                            <div ref={menuRef} className="relative">
                                 <button
-                                    onClick={handleSignOut}
-                                    className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors p-2"
+                                    onClick={() => setMenuOpen(!menuOpen)}
+                                    className="flex items-center gap-1.5 cursor-pointer"
                                 >
-                                    <SignOutIcon className="w-5 h-5" />
+                                    {user.image && !imgError ? (
+                                        <img
+                                            src={user.image}
+                                            alt={user.name}
+                                            width={40}
+                                            height={40}
+                                            className="rounded-full ring-2 ring-slate-700"
+                                            referrerPolicy="no-referrer"
+                                            onError={() => setImgError(true)}
+                                        />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                            <span className="text-white font-medium">
+                                                {user.name.charAt(0).toUpperCase()}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <CaretDownIcon className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${menuOpen ? 'rotate-180' : ''}`} />
                                 </button>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                {user.image ? (
-                                    <Image
-                                        src={user.image}
-                                        alt={user.name}
-                                        width={40}
-                                        height={40}
-                                        className="rounded-full ring-2 ring-slate-700"
-                                    />
-                                ) : (
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                        <span className="text-white font-medium">
-                                            {user.name.charAt(0).toUpperCase()}
-                                        </span>
+                                {menuOpen && (
+                                    <div className="absolute right-0 top-12 w-48 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl shadow-black/30 py-1 z-50">
+                                        <Link
+                                            href="/account"
+                                            onClick={() => setMenuOpen(false)}
+                                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-700/50 transition-colors"
+                                        >
+                                            <GearIcon className="w-4 h-4 text-slate-400" />
+                                            {t('menu.settings')}
+                                        </Link>
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-400 hover:bg-slate-700/50 transition-colors w-full"
+                                        >
+                                            <SignOutIcon className="w-4 h-4" />
+                                            {t('menu.signOut')}
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -300,10 +330,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                                     <BookOpenIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
                                     <span className="text-xs sm:text-sm text-slate-300">{t('dailyChallenge.duration')}</span>
                                 </div>
-                                <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10">
-                                    <SparkleIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" weight="fill" />
-                                    <span className="text-xs sm:text-sm text-emerald-300">{t('dailyChallenge.xp')}</span>
-                                </div>
                             </div>
 
                             <div className="mb-3 sm:mb-4">
@@ -314,10 +340,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                             </div>
 
                             <div className="max-w-md">
-                                <div className="flex justify-between text-xs sm:text-sm text-slate-400 mb-1.5 sm:mb-2">
-                                    <span>{challengeDay} / 14</span>
-                                    <span>{Math.round((challengeDay / 14) * 100)}%</span>
-                                </div>
                                 <div className="h-1.5 sm:h-2 bg-slate-800/80 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full rounded-full transition-all duration-700 ${challengeCompleted ? 'bg-gradient-to-r from-emerald-500 to-green-400 w-full' : 'bg-gradient-to-r from-purple-500 to-pink-500'}`}
@@ -335,22 +357,26 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                     <AlertsSection />
                 </div>
 
-                {/* Educational Banner */}
-                <div className="mt-4 sm:mt-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl sm:rounded-2xl border border-blue-500/20 p-4 sm:p-6">
-                    <div className="flex items-start gap-3 sm:gap-4">
+                {/* Educational Banner (collapsible) */}
+                <button
+                    onClick={() => setBannerOpen(!bannerOpen)}
+                    className="mt-4 sm:mt-8 w-full text-left bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl sm:rounded-2xl border border-blue-500/20 p-4 sm:p-6 transition-colors hover:from-blue-600/25 hover:to-purple-600/25"
+                >
+                    <div className="flex items-center gap-3 sm:gap-4">
                         <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-blue-500/20">
                             <ChartLineIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
                         </div>
-                        <div className="flex-1">
-                            <h3 className="text-base sm:text-lg font-semibold text-white mb-1">
-                                {t('educationalBanner.title')}
-                            </h3>
-                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                                {t('educationalBanner.description')}
-                            </p>
-                        </div>
+                        <h3 className="flex-1 text-base sm:text-lg font-semibold text-white">
+                            {t('educationalBanner.title')}
+                        </h3>
+                        <CaretDownIcon className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${bannerOpen ? 'rotate-180' : ''}`} />
                     </div>
-                </div>
+                    {bannerOpen && (
+                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-3 ml-[52px] sm:ml-[60px]">
+                            {t('educationalBanner.description')}
+                        </p>
+                    )}
+                </button>
             </main>
 
             {/* Chat Bubble */}

@@ -41,6 +41,7 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="h-[93vh]">
+          <DrawerTitle className="sr-only">CryptoCoach</DrawerTitle>
           <ChatInterface onClose={() => onOpenChange(false)} />
         </DrawerContent>
       </Drawer>

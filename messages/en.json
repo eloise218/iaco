@@ -324,6 +324,10 @@
             "title": "📚 Remember: Education First",
             "description": "This app is designed to help you learn about cryptocurrency. All content is for educational purposes only and should not be considered financial advice. Always do your own research before making any investment decisions."
         },
+        "menu": {
+            "settings": "Settings",
+            "signOut": "Sign out"
+        },
         "tips": {
             "xpStreak": "Here you can see how much XP you've earned and your consecutive challenge days! 🔥",
             "alerts": "Here you'll find your price alerts. You'll discover how and why to use them in the coming days! 🔔",

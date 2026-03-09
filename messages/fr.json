@@ -324,6 +324,10 @@
             "title": "📚 Rappel : L'éducation d'abord",
             "description": "Cette application est conçue pour t'aider à apprendre les cryptomonnaies. Tout le contenu est à but éducatif uniquement et ne doit pas être considéré comme un conseil financier. Fais toujours tes propres recherches avant de prendre des décisions d'investissement."
         },
+        "menu": {
+            "settings": "Réglages",
+            "signOut": "Déconnexion"
+        },
         "tips": {
             "xpStreak": "Ici tu peux voir le nombre d'XP que tu as gagné et le nombre de jours consécutifs où tu as suivi le challenge ! 🔥",
             "alerts": "Ici tu retrouveras tes alertes de prix. Tu découvriras comment et pourquoi les utiliser dans les prochains jours ! 🔔",

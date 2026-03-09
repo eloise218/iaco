@@ -63,7 +63,6 @@ export function OnboardingFlow({ onComplete, allowSkip = true }: OnboardingFlowP
       
       if (result.success) {
         setCurrentStep('complete');
-        toast.success('Profile created successfully!');
       } else {
         toast.error(result.error || 'Failed to create profile');
       }
@@ -83,7 +82,6 @@ export function OnboardingFlow({ onComplete, allowSkip = true }: OnboardingFlowP
       const result = await skipOnboarding();
       
       if (result.success) {
-        toast.success('Onboarding skipped - you can update your preferences later');
         onComplete?.();
         router.push('/');
       } else {

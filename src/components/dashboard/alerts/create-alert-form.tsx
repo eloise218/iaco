@@ -117,7 +117,6 @@ export function CreateAlertForm({ onAlertCreated }: CreateAlertFormProps) {
       });
 
       if (result.success) {
-        toast.success(t("success"));
         setOpen(false);
         resetForm();
         onAlertCreated?.();

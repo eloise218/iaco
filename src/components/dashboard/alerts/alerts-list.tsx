@@ -58,7 +58,6 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
   const handleAcknowledge = async (alertId: string) => {
     const result = await acknowledgeAlert({ alertId });
     if (result.success) {
-      toast.success(t("actions.acknowledgeSuccess"));
       onRefresh();
     } else {
       toast.error(result.error || t("actions.error"));
@@ -68,7 +67,6 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
   const handleDelete = async (alertId: string) => {
     const result = await deleteAlert({ alertId });
     if (result.success) {
-      toast.success(t("actions.deleteSuccess"));
       onRefresh();
     } else {
       toast.error(result.error || t("actions.error"));
@@ -78,7 +76,6 @@ export function AlertsList({ alerts, isLoading, onRefresh }: AlertsListProps) {
   const handleToggle = async (alertId: string, isActive: boolean) => {
     const result = await toggleAlert({ alertId, isActive });
     if (result.success) {
-      toast.success(result.message || t("actions.toggleSuccess"));
       onRefresh();
     } else {
       toast.error(result.error || t("actions.error"));

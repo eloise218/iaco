@@ -270,8 +270,6 @@ export function ProgressiveOnboarding() {
         });
 
         if (result.success) {
-          toast.success(t('complete.title'));
-
           // Final celebration animation
           gsap.to(containerRef.current, {
             scale: 0.95,

@@ -40,9 +40,7 @@ export function PushPermission() {
         body: JSON.stringify(subscription.toJSON()),
       });
 
-      if (res.ok) {
-        toast.success('Notifications activées');
-      } else {
+      if (!res.ok) {
         toast.error("Erreur lors de l'activation");
       }
     } catch (error) {

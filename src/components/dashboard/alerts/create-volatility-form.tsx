@@ -100,7 +100,6 @@ export function CreateVolatilityForm({
       });
 
       if (result.success) {
-        toast.success(t("success"));
         setOpen(false);
         resetForm();
         onAlertCreated?.();

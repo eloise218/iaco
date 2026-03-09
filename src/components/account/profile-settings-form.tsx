@@ -48,8 +48,7 @@ export default function ProfileSettingsForm({ defaultValues }: { defaultValues: 
   const onSubmit = (values: UpdateUserProfileInput) => {
     startTransition(async () => {
       const res = await updateUserProfile(values);
-      if (res.success) toast.success(t('updated'));
-      else toast.error(res.error || t('updateFailed'));
+      if (!res.success) toast.error(res.error || t('updateFailed'));
     });
   };
 

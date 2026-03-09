@@ -33,7 +33,6 @@ export default function BinanceKeysForm() {
     startTransition(async () => {
       const res = await saveBinanceCredentials(values);
       if (res.success) {
-        toast.success(t('saved'));
         setConnected(true);
         setActive(true);
         form.reset({ apiKey: '', apiSecret: '' });
@@ -125,7 +124,6 @@ export default function BinanceKeysForm() {
                   const res = await setBinanceActive(!active);
                   if (res.success) {
                     setActive(!active);
-                    toast.success(res.message);
                   } else toast.error(res.error || t('failed'));
                 })}
               >
@@ -140,7 +138,6 @@ export default function BinanceKeysForm() {
                   if (res.success) {
                     setConnected(false);
                     setActive(false);
-                    toast.success(res.message);
                   } else toast.error(res.error || t('failed'));
                 })}
               >

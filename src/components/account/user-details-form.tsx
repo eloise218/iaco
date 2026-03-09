@@ -38,8 +38,7 @@ export default function UserDetailsForm({
   const onSubmit = (values: FormValues) => {
     startTransition(async () => {
       const res = await updateUserDetails(values);
-      if (res.success) toast.success(t('updated'));
-      else toast.error(res.error || t('updateFailed'));
+      if (!res.success) toast.error(res.error || t('updateFailed'));
     });
   };
 
