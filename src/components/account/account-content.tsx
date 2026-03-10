@@ -145,18 +145,18 @@ export function AccountContent({ user, isPremium = false, premiumSince, locale =
                     {/* Side Navigation */}
                     <aside className="lg:w-64 flex-shrink-0">
                         <div className="sticky top-24">
-                            <div className="flex items-center gap-2 mb-6">
+                            <div className="flex items-center gap-2 mb-3">
                                 <SparkleIcon className="w-5 h-5 text-purple-400" weight="fill" />
                                 <h1 className="text-xl font-bold text-white">{t('title')}</h1>
                             </div>
-                            <nav ref={navRef} className="space-y-2">
+                            <nav ref={navRef} className="space-y-1">
                                 {navItems.map((item) => {
                                     const Icon = item.icon;
                                     return (
                                         <button
                                             key={item.id}
                                             onClick={() => scrollToSection(item.id)}
-                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200 group"
+                                            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200 group"
                                         >
                                             <Icon className="w-5 h-5 group-hover:text-purple-400 transition-colors" />
                                             <span className="font-medium">{item.label}</span>

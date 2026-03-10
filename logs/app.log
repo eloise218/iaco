@@ -89,3 +89,7 @@ TypeError: fetch failed
     at async Server.requestListener (/home/eloise/iaco/node_modules/.pnpm/next@15.5.11_@opentelemetry+api@1.9.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/server/lib/start-server.js:226:13)
 [2026-03-10T06:38:28.517Z] [INFO] [auth] Sending verification email to: aqw@free.fr
 [2026-03-10T06:38:28.846Z] [INFO] [auth] Verification email sent successfully, id: af2571f4-c545-4f75-b08c-735caeabd918
+[2026-03-10T16:02:59.028Z] [INFO] [auth] Sending verification email to: aze@free.fr
+[2026-03-10T16:02:59.472Z] [INFO] [auth] Verification email sent successfully, id: b3feb165-c327-4538-acd1-ec3f7c7dc96e
+[2026-03-10T16:10:08.738Z] [INFO] [auth] Sending verification email to: azqs@free.fr
+[2026-03-10T16:10:09.126Z] [INFO] [auth] Verification email sent successfully, id: 46cd2cde-897d-4c13-8942-3c1223c20220

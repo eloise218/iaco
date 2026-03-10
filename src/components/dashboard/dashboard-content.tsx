@@ -227,7 +227,7 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                             <div ref={menuRef} className="relative">
                                 <button
                                     onClick={() => setMenuOpen(!menuOpen)}
-                                    className="flex items-center gap-1.5 cursor-pointer"
+                                    className="cursor-pointer rounded-full transition-all duration-200 hover:ring-2 hover:ring-purple-500/50"
                                 >
                                     {user.image && !imgError ? (
                                         <img
@@ -246,7 +246,6 @@ export function DashboardContent({ user, profile, challengeDay, challengeComplet
                                             </span>
                                         </div>
                                     )}
-                                    <CaretDownIcon className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${menuOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {menuOpen && (
                                     <div className="absolute right-0 top-12 w-48 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl shadow-black/30 py-1 z-50">

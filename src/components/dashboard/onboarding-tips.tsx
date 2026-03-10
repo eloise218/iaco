@@ -45,11 +45,11 @@ export function OnboardingTips() {
             {/* XP / Streak bubble */}
             <div
                 ref={bubbleRef}
-                className="pointer-events-auto absolute top-20 right-32 sm:right-44 max-w-xs opacity-0"
+                className="pointer-events-auto absolute top-20 right-16 sm:right-28 max-w-xs opacity-0"
             >
                 <div className="relative bg-slate-800 border border-slate-700/50 rounded-2xl p-4 shadow-xl shadow-black/20">
                     {/* Arrow pointing up */}
-                    <div className="absolute -top-2 right-16 w-4 h-4 bg-slate-800 border-l border-t border-slate-700/50 rotate-45" />
+                    <div className="absolute -top-2 right-24 sm:right-28 w-4 h-4 bg-slate-800 border-l border-t border-slate-700/50 rotate-45" />
                     <p className="text-sm text-slate-200 leading-relaxed mb-3">
                         {t('xpStreak')}
                     </p>
