@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import {
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';
 import { ChatBubbleWrapper } from '@/components/chat/chat-bubble-wrapper';
 import { ChallengeOnboardingTip } from '@/components/challenge/challenge-onboarding-tip';
+import { FeedbackModal } from '@/components/challenge/feedback-modal';
 
 interface ChallengeContentProps {
     challengeDay: number;
@@ -20,6 +22,7 @@ interface ChallengeContentProps {
     title: string;
     content: string;
     hasSeenChallengeTip: boolean;
+    hasSeenFeedbackModal: boolean;
 }
 
 export function ChallengeContent({
@@ -29,9 +32,20 @@ export function ChallengeContent({
     title,
     content,
     hasSeenChallengeTip,
+    hasSeenFeedbackModal,
 }: ChallengeContentProps) {
     const t = useTranslations('challenge');
     const progressPercent = Math.round((challengeDay / totalDays) * 100);
+    const [feedbackOpen, setFeedbackOpen] = useState(false);
+
+    const showFeedback = challengeDay === 1 && !hasSeenFeedbackModal;
+
+    const handleBackClick = (e: React.MouseEvent) => {
+        if (showFeedback) {
+            e.preventDefault();
+            setFeedbackOpen(true);
+        }
+    };
 
     if (isCompleted) {
         return (
@@ -78,6 +92,7 @@ export function ChallengeContent({
                 {/* Back button */}
                 <Link
                     href="/dashboard"
+                    onClick={handleBackClick}
                     className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8"
                 >
                     <ArrowLeftIcon className="w-4 h-4" />
@@ -139,7 +154,7 @@ export function ChallengeContent({
 
                 {/* Bottom navigation */}
                 <div className="mt-8 flex justify-center">
-                    <Link href="/dashboard">
+                    <Link href="/dashboard" onClick={handleBackClick}>
                         <Button
                             variant="ghost"
                             className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
@@ -154,6 +169,9 @@ export function ChallengeContent({
             {/* AI Assistant bubble */}
             <ChatBubbleWrapper />
             {challengeDay === 1 && !hasSeenChallengeTip && <ChallengeOnboardingTip />}
+
+            {/* Feedback modal (day 1 only, once) */}
+            <FeedbackModal open={feedbackOpen} onOpenChange={setFeedbackOpen} />
         </div>
     );
 }

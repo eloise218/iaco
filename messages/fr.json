@@ -330,7 +330,7 @@
         },
         "tips": {
             "xpStreak": "Ici tu peux voir le nombre d'XP que tu as gagné et le nombre de jours consécutifs où tu as suivi le challenge ! 🔥",
-            "alerts": "Ici tu retrouveras tes alertes de prix. Tu découvriras comment et pourquoi les utiliser dans les prochains jours ! 🔔",
+            "alerts": "Ici tu retrouveras tes alertes. Tu découvriras comment et pourquoi les utiliser dans les prochains jours ! 🔔",
             "chatAssistant": "Si tu as des questions, tu peux les poser à IACO, notre assistant IA 🤖",
             "dismiss": "Compris !"
         }
@@ -620,6 +620,13 @@
         "tips": {
             "chatAssistant": "Besoin d'aide ? Clique ici pour poser tes questions à Iaco, ton coach IA 🤖",
             "dismiss": "Compris !"
+        },
+        "feedback": {
+            "message": "Salut ! Je suis la fondatrice de IACO. J'aimerais beaucoup savoir ce que tu penses de ce premier jour pour essayer de l'améliorer et qu'il délivre un maximum de valeur. Si tu peux laisser un petit commentaire... promis, je lis tout !",
+            "placeholder": "Ton avis sur ce premier jour...",
+            "send": "Envoyer",
+            "later": "Plus tard",
+            "thanks": "Merci pour ton retour !"
         }
     },
     "learn": {

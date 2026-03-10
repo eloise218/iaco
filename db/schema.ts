@@ -113,6 +113,7 @@ export const userProfiles = mysqlTable(
     hasSeenDashboardTips: boolean("has_seen_dashboard_tips").default(false),
     hasSeenChallengeTip: boolean("has_seen_challenge_tip").default(false),
     hasSeenAlertsTip: boolean("has_seen_alerts_tip").default(false),
+    hasSeenFeedbackModal: boolean("has_seen_feedback_modal").default(false),
 
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),

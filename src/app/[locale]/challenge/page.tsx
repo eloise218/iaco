@@ -83,11 +83,15 @@ export default async function ChallengePage({ params, searchParams }: Props) {
     const lang = locale === 'fr' ? 'fr' : 'en';
 
     // Check if user has seen the challenge onboarding tip
-    const profile = await db.select({ hasSeenChallengeTip: userProfiles.hasSeenChallengeTip })
+    const profile = await db.select({
+        hasSeenChallengeTip: userProfiles.hasSeenChallengeTip,
+        hasSeenFeedbackModal: userProfiles.hasSeenFeedbackModal,
+    })
         .from(userProfiles)
         .where(eq(userProfiles.userId, session.user.id))
         .limit(1);
     const hasSeenChallengeTip = profile[0]?.hasSeenChallengeTip ?? false;
+    const hasSeenFeedbackModal = profile[0]?.hasSeenFeedbackModal ?? false;
 
     return (
         <ChallengeContent
@@ -97,6 +101,7 @@ export default async function ChallengePage({ params, searchParams }: Props) {
             title={todayChallenge?.title[lang] || ''}
             content={todayChallenge?.content[lang] || ''}
             hasSeenChallengeTip={hasSeenChallengeTip}
+            hasSeenFeedbackModal={hasSeenFeedbackModal}
         />
     );
 }

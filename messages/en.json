@@ -620,6 +620,13 @@
         "tips": {
             "chatAssistant": "Need help? Click here to ask Iaco, your AI coach 🤖",
             "dismiss": "Got it!"
+        },
+        "feedback": {
+            "message": "Hi! I'm the founder of IACO. I'd love to know what you think of this first day so I can improve it and deliver maximum value. If you can leave a quick comment... I promise I read every single one!",
+            "placeholder": "Your thoughts on this first day...",
+            "send": "Send",
+            "later": "Later",
+            "thanks": "Thanks for your feedback!"
         }
     },
     "learn": {

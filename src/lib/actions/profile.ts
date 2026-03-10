@@ -498,3 +498,84 @@ export async function dismissTip(
     return { success: false, error: "Failed to dismiss tip" };
   }
 }
+
+/**
+ * Submit feedback from the day 1 challenge modal and send it via Resend
+ */
+export async function submitFeedback(
+  message: string
+): Promise<ActionResponse> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user?.id) {
+      return { success: false, error: "Authentication required" };
+    }
+
+    const trimmed = message.trim();
+    if (!trimmed) {
+      return { success: false, error: "Message is empty" };
+    }
+
+    // Send email via Resend
+    const { Resend } = await import("resend");
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    const userName = session.user.name || "Utilisateur";
+    const userEmail = session.user.email || "inconnu";
+
+    await resend.emails.send({
+      from: "IACO Feedback <noreply@iaco.app>",
+      to: "feedback@iaco.app",
+      subject: `Feedback Jour 1 — ${userName}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px;">
+          <h2>Nouveau feedback — Jour 1</h2>
+          <p><strong>Utilisateur :</strong> ${userName} (${userEmail})</p>
+          <p><strong>Date :</strong> ${new Date().toLocaleString("fr-FR")}</p>
+          <hr style="border: 1px solid #e2e8f0; margin: 16px 0;" />
+          <p><strong>Commentaire :</strong></p>
+          <blockquote style="border-left: 3px solid #8b5cf6; padding-left: 12px; color: #334155;">
+            ${trimmed.replace(/\n/g, "<br>")}
+          </blockquote>
+        </div>
+      `,
+    });
+
+    // Mark as seen
+    await db
+      .update(userProfiles)
+      .set({ hasSeenFeedbackModal: true, updatedAt: new Date() })
+      .where(eq(userProfiles.userId, session.user.id));
+
+    return { success: true };
+  } catch (error) {
+    logger.error("profile", "Error submitting feedback", error);
+    return { success: false, error: "Failed to submit feedback" };
+  }
+}
+
+/**
+ * Dismiss the feedback modal without sending feedback ("Plus tard")
+ */
+export async function dismissFeedbackModal(): Promise<ActionResponse> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user?.id) {
+      return { success: false, error: "Authentication required" };
+    }
+
+    await db
+      .update(userProfiles)
+      .set({ hasSeenFeedbackModal: true, updatedAt: new Date() })
+      .where(eq(userProfiles.userId, session.user.id));
+
+    return { success: true };
+  } catch (error) {
+    logger.error("profile", "Error dismissing feedback modal", error);
+    return { success: false, error: "Failed to dismiss feedback modal" };
+  }
+}
